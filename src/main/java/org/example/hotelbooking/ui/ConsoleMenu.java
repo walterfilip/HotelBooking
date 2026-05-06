@@ -13,12 +13,13 @@ public class ConsoleMenu {
         System.out.println("Det här är ett test");
 
         try {
-            Connection connection = DatabaseConnection.getConnection();
+            Connection connection = DatabaseConnection.connect();
 
             if (connection != null) {
-                System.out.println("connection successfull");
+                System.out.println("connection successful");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("connection failed");
         }
     }
