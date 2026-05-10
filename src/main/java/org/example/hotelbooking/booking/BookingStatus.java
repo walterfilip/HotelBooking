@@ -1,4 +1,4 @@
-package org.example.hotelbooking.models;
+package org.example.hotelbooking.booking;
 
 public enum BookingStatus {
     ACTIVE,
