@@ -23,9 +23,17 @@ public class Booking {
     @ManyToOne(optional = false)
     private Room room;
 
-    @NotNull(message = "StartDatum måste anges")
+    @NotNull(message = "Start datum måste anges")
     @FutureOrPresent(message = "Startdatum kan inte vara bakåt i tiden")
-    private LocalDate startDatum;
+    private LocalDate startDate;
+
+    @NotNull(message = "Slut datum måste anges")
+    @FutureOrPresent(message = "slut datum kan inte vara bakåt i tiden")
+    private LocalDate endDate;
+
+    // Kanske stämmer ??
+    @Column(nullable = false)
+    private boolean extraBed;
 
     @NotNull(message = "En booking måste ha en status")
     @Enumerated(EnumType.STRING)
@@ -34,33 +42,14 @@ public class Booking {
     protected Booking() {
     }
 
-    public Booking(Customer customer, Room room, LocalDate startDatum, BookingStatus status) {
+    public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, Boolean extraBed, BookingStatus status) {
         this.customer = customer;
         this.room = room;
-        this.startDatum = startDatum;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.extraBed = extraBed;
         this.status = status;
     }
 }
 
 
-
-
-
-
-
-
-
-
-//import lombok.Data;
-
-//import java.time.LocalDate;
-//@Data
-//public class Booking {
-//    private int id;
-//    private int customerId;
-//    private int roomId;
-//    private LocalDate startDate;
-//    private LocalDate endDate;
-//    private boolean extraBed;
-//    private boolean status;
-//}
