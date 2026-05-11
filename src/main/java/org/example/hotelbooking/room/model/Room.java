@@ -10,8 +10,7 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
+    private long id;
 
     @NotBlank(message = "Rumstyp måste anges")
     @Enumerated(EnumType.STRING)
@@ -33,15 +32,5 @@ public class Room {
     }
 
 }
-
-
-//public class Room {
-//
-//    private int id;
-//    private RoomType roomType;
-//    private int roomNr;
-//    private int price;
-//
-//}
 
 

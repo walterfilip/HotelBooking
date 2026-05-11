@@ -14,6 +14,6 @@ public record CreateCustomerRequest(
     @Email(message = "E-post måste vara giltig")
     String email,
 
-    int phoneNumber
+    String phoneNumber
 ){
 }
