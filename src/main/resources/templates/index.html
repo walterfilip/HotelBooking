@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hotellbokning</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="search-container">
+<h1 th:text="${title}"></h1>
+<p th:text="${subtitle}"></p>
+    <form th:action="@{/rooms/search}" method="get">
+
+    <div class="date-row">
+    <label>Incheckning</label>
+    <input type="date" name="startDate">
+
+    <label>Utcheckning</label>
+    <input type="date" name="endDate">
+    </div>
+
+    <div class="room-row">
+    <label>Rumstyp</label>
+    <select name="roomType">
+        <option value="SINGLE">Enkelrum</option>
+        <option value="DOUBLE">Dubbelrum</option>
+    </select>
+        </div>
+
+    <button type="submit">Sök lediga rum</button>
+</form>
+</div>
+</body>
+</html>

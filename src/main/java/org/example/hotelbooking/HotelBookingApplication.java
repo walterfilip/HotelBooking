@@ -1,3 +1,4 @@
+
 package org.example.hotelbooking;
 
 import org.example.hotelbooking.ui.ConsoleMenu;
