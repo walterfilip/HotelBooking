@@ -33,21 +33,77 @@ public class Booking {
 
     // Kanske stämmer ??
     @Column(nullable = false)
-    private boolean extraBed;
+    private boolean extraBed = false;
 
-    @NotNull(message = "En booking måste ha en status")
+    @NotNull(message = "En bokning måste ha en status")
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
     protected Booking() {
     }
 
-    public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, Boolean extraBed, BookingStatus status) {
+    public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, boolean extraBed, BookingStatus status) {
         this.customer = customer;
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;
         this.extraBed = extraBed;
+        this.status = status;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public boolean isExtraBed() {
+        return extraBed;
+    }
+
+    public void setExtraBed(boolean extraBed) {
+        this.extraBed = extraBed;
+    }
+
+    public BookingStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 }

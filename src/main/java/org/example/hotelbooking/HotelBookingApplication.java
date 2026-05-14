@@ -20,4 +20,10 @@ public class HotelBookingApplication {
     }
 
 
+    /*
+    TODO
+    CREATE CUSTOMER CONTROLLER
+    CREATE BOOKING CONTROLLER
+     */
+
 }

@@ -3,6 +3,7 @@ package org.example.hotelbooking.room.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.example.hotelbooking.room.RoomType;
 
 @Entity
@@ -10,14 +11,14 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
-    @NotBlank(message = "Rumstyp måste anges")
+    @NotNull(message = "Rumstyp måste anges")
     @Enumerated(EnumType.STRING)
     private RoomType roomType;
 
     @NotBlank(message = "Rumsnummer måste anges")
-    private int roomNr;
+    private String roomNr;
 
     @Min(value = 1, message = "Pris per natt måste vara större än 0")
     private int price;
@@ -25,12 +26,43 @@ public class Room {
     protected Room() {
     }
 
-    public Room(RoomType roomType, int roomNr, int price) {
+    public Room(RoomType roomType, String roomNr, int price) {
         this.roomType = roomType;
         this.roomNr = roomNr;
         this.price = price;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public RoomType getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
+    }
+
+    public String getRoomNr() {
+        return roomNr;
+    }
+
+    public void setRoomNr(String roomNr) {
+        this.roomNr = roomNr;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }
 
 
