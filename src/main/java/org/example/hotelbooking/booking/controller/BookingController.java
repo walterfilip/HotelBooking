@@ -12,4 +12,10 @@ public class BookingController {
     public String bookings(){
         return "bookings";
     }
+
+    @GetMapping("/form")
+    public String showBookingForm() {
+        return "booking-form";
+    }
 }
+

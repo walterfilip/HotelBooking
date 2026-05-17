@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hotellbokning</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="customer-form-container">
+<h1>Kundformulär</h1>
+
+    <form th:action="@{/customers}" method="post">
+
+
+        <div class="customer-contact-input">
+            <label for="firstName">Förnamn</label>
+            <input type="text"
+                   id="firstName"
+                   name="firstName"
+                   required>
+        </div>
+
+        <div class="customer-contact-input">
+            <label for="lastName">Efternamn</label>
+            <input type="text"
+                   id="lastName"
+                   name="lastName"
+                   required>
+        </div>
+
+        <div class="customer-contact-input">
+            <label for="email">E-post</label>
+            <input type="text"
+                   id="email"
+                   name="email"
+                   required>
+        </div>
+
+        <div class="customer-contact-input">
+            <label for="phoneNumber">Telefonnummer</label>
+            <input type="text"
+                   id="phoneNumber"
+                   name="phoneNumber"
+                   required>
+        </div>
+        <button type="submit">Registrera kund</button>
+
+
+
+
+
+    </form>
+
+
+<a href="/">Till startsidan</a>
+</div>
+</body>
+</html>

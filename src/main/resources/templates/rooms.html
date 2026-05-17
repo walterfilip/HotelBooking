@@ -9,8 +9,38 @@
 </head>
 
 <body>
-<h1>Rum</h1>
+<div class="rooms-container">
+<h1>Tillgängliga Rum</h1>
 <p>Här visas de rum som är bokningsbara.</p>
+
+
+<!--TODO: Ersätta det hårdkodade med thymeleaf-loop och data från db-->
+<table>
+    <thead>
+    <tr>
+        <th>Rumstyp</th>
+        <th>Pris per natt</th>
+        <th>Boka</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td>Enkelrum</td>
+        <td>800 kr</td>
+      <td> <a th:href="@{/customers/form}">Boka rum</a> </td>
+    </tr>
+
+
+    <tr>
+        <td>Dubbelrum</td>
+        <td>1100 kr</td>
+        <td><a th:href="@{/customers/form}">Boka rum</a> </td>
+    </tr>
+    </tbody>
+</table>
+
 <a href="/">Till startsidan</a>
+</div>
 </body>
 </html>
