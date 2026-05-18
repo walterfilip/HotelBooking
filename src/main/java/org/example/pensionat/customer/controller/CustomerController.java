@@ -11,6 +11,15 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {
+   private final CustomerService customerService;
+
+
+
+   public CustomerController(CustomerService customerService) {
+       this.customerService = customerService;
+   }
+
+
     @GetMapping
     public String customers(){
         return "customers";

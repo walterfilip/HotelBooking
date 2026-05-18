@@ -14,6 +14,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
+    public Customer activeCustomer;
 
     public CustomerService(CustomerRepository customerRepository, BookingRepository bookingRepository) {
         this.customerRepository = customerRepository;
