@@ -1,4 +1,4 @@
-package org.example.hotelbooking.room.controller;
+package org.example.pensionat.room.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
