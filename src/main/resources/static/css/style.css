@@ -2,6 +2,8 @@ body {
     background-color: lightblue;
 }
 
+
+/* ============ STARTSIDAN ==========*/
 .search-container {
     display: flex;
     flex-direction: column;
@@ -28,5 +30,54 @@ button {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+
+}
+
+.rooms-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 15px 25px;
+    text-align: center;
+}
+
+a {
+   margin-top: 20px;
+}
+.empty-head {
+    background: lightblue;
+}
+
+/* ============ KUNDFORMULÄR ==========*/
+
+.customer-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.customer-contact-input {
+    margin-top: 20px;
+}
+
+
+/* ============ BOKNINGSBEKRÄFTELSE ==========*/
+
+.booking-summary-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
 }

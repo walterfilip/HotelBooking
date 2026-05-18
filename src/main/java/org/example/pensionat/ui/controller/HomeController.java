@@ -5,7 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class HomeController {
+public class
+HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
@@ -20,18 +21,4 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/rooms")
-    public String rooms() {
-        return "rooms";
-    }
-
-    @GetMapping("/customers")
-    public String customers() {
-        return "customers";
-    }
-
-    @GetMapping("/bookings")
-    public String bookings() {
-        return "bookings";
-    }
 }

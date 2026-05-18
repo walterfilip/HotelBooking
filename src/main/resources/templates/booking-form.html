@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hotellbokning - Boka rum</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+ <!--HÅRDKODAR SÅLÄNGE-->
+
+<div class="booking-summary-container">
+    <h1>Bekräfta bokning</h1>
+    <p><strong>Namn:</strong>Anna</p>
+   <p><strong>Rum:</strong>Dubbelrum</p>
+    <p><strong>Extrasäng:</strong>Ingår</p>
+    <p><strong>Incheckning:</strong>2026-05-15</p>
+    <p><strong>Utcheckning:</strong>2026-05-16</p>
+
+
+<form th:action="@{/bookings}" method="post">
+    <input type="hidden" name="roomId" value="2">
+    <input type="hidden" name="startDate" value="2006-10-15">
+    <input type="hidden" name="endDate" value="2006-10-16">
+
+    <button type="submit">Bekräfta bokning</button>
+
+
+</form>
+
+    <a href="/">Till startsidan</a>
+
+</div>
+
+
+</body>
+</html>
