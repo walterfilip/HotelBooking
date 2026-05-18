@@ -29,4 +29,38 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+
+    public boolean loginCustomer(String email, String password) {
+
+
+            if (email == null || email.isBlank()) {
+               return false;
+            }
+            if (password == null || password.isBlank()) {
+                return false;
+            }
+
+            try{
+                Customer customer = customerRepository.findByEmail(email);
+                String dbPassword = customer.getPhoneNumber(); // provar med telefonnummer som password
+                if (!password.equals(dbPassword)) {
+                    System.out.println("login failed");
+                    return false;
+                }
+                if (customer == null) {
+                    return false;
+                }
+                activeCustomer = customer;
+            }catch(NullPointerException e){
+
+                System.out.println("login failed");
+                return false;
+            }
+
+
+        System.out.println("login successful");
+            return true;
+        }
+
+
 }

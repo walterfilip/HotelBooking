@@ -29,9 +29,32 @@
         <option value="DOUBLE">Dubbelrum</option>
     </select>
         </div>
-
-    <button type="submit">Sök lediga rum</button>
-</form>
+        <button type="submit">Sök lediga rum</button>
+    </form>
 </div>
+
+
+
+<br>
+
+<div class="login">
+    <form th:action="@{/customers/login}" th:object="${costumer}" method="post">
+        <p>Logga in</p>
+        <div>
+            <label>Användarnamn:</label>
+            <input type="text" name="email">
+        </div>
+        <br>
+        <div>
+            <label>Lösenord:</label>
+
+<!--            <input type="text" th:field="*{}" />-->
+            <input type="text" name="password">
+            <button type="submit">Logga in</button>
+        </div>
+
+    </form>
+</div>
+
 </body>
 </html>
