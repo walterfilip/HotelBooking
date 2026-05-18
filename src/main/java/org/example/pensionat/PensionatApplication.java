@@ -29,11 +29,18 @@ public class PensionatApplication {
     Startsida - knapp för login, spara inloggad som bool?
     Formulär - if inlogad inget formulär,
     bekräftelse av bokning - gå till ens egen hemsida, lösen?
+    Display idividuella rum, lägga till beskrivning
 
     Rumsval ?
+    Bara se tillgängliga rum
 
 
     skriva 5 enhetstester?
+
+    Linda + Filip - login
+    Stina - kopplar rum
+    Nils -
+
 
      */
 }
