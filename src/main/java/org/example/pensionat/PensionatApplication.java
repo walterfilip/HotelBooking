@@ -25,6 +25,14 @@ public class PensionatApplication {
 
     Fortsätta med att koppla allt till frontend
 
+
+    Startsida - knapp för login, spara inloggad som bool?
+    Formulär - if inlogad inget formulär,
+    bekräftelse av bokning - gå till ens egen hemsida, lösen?
+
+    Rumsval ?
+
+
     skriva 5 enhetstester?
 
      */
