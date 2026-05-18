@@ -84,9 +84,7 @@ public class BookingService {
     private void validateExtraBed(Room room, boolean extraBedRequested){
 
         if(extraBedRequested && room.getRoomType() != RoomType.DOUBLE){
-            throw new BadRequestException(
-                    "Detta rum stödjer inte extrasäng"
-            );
+            throw new BadRequestException("Detta rum stödjer inte extrasäng");
         }
     }
 }
