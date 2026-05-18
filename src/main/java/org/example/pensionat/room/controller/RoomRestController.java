@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rooms")
 @CrossOrigin(origins = "*")
-public class RoomController {
+public class RoomRestController {
 
     private final RoomService roomService;
 
-    public RoomController(RoomService roomService) {
+    public RoomRestController(RoomService roomService) {
         this.roomService = roomService;
     }
 
