@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import org.example.hotelbooking.room.RoomType;
+import org.example.pensionat.room.RoomType;
 import org.springframework.ui.Model;
 
 @Controller
