@@ -14,12 +14,18 @@ public class PensionatApplication {
     }
 
 
-    /* todo
-    Update booking
-    Delete customer
-    Update customer
+    /* Todo
+    GREJER VI INTE HAR GJORT ÄN:
+
+    Registrera användare
+    Användare ska kunna ändra sina uppgifter
+    Användare ska kunna ändra sin bokning
+    Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig. Måste ha tydligt felmeddelande).
+
+
     Fortsätta med att koppla allt till frontend
-    --> vg grejer
+
+    skriva 5 enhetstester?
 
      */
 }
