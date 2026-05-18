@@ -56,6 +56,15 @@ public class BookingService {
 
     }
 
+    @Transactional
+    public Booking cancelBooking(Long bookingId){
+
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
+
+        booking.setStatus(BookingStatus.CANCELLED);
+        return bookingRepository.save(booking);
+    }
+
     private void validateRoomAvailability(Long roomId, LocalDate start, LocalDate end, Long bookingIdToIgnore) {
         List<Booking> bookings = bookingRepository.findByRoom_IdAndStatus(roomId, BookingStatus.ACTIVE);
 
@@ -64,7 +73,7 @@ public class BookingService {
                 continue;
             }
 
-            boolean overlap = start.isBefore(existingBooking.getEndDate()) && end.isAfter(existingBooking.getStartDate());
+            boolean overlap = !start.isAfter(existingBooking.getEndDate()) && !end.isBefore(existingBooking.getStartDate());
 
             if(overlap){
                 throw new BadRequestException("Rummet är redan bokat under valt datum");

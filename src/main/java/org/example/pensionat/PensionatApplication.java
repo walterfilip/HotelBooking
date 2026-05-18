@@ -14,10 +14,12 @@ public class PensionatApplication {
     }
 
 
-    /*
-    TODO
-    CREATE CUSTOMER CONTROLLER
-    CREATE BOOKING CONTROLLER
-     */
+    /* todo
+    Update booking
+    Delete customer
+    Update customer
+    Fortsätta med att koppla allt till frontend
+    --> vg grejer
 
+     */
 }
