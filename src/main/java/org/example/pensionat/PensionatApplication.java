@@ -19,6 +19,7 @@ public class PensionatApplication {
     Delete customer
     Update customer
     Fortsätta med att koppla allt till frontend
+    room search?
     --> vg grejer
 
      */
