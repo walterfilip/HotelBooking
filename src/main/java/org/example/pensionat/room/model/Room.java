@@ -20,15 +20,19 @@ public class Room {
     @NotBlank(message = "Rumsnummer måste anges")
     private String roomNr;
 
+    @NotBlank(message = "Rumsbeskrivning måste anges")
+    private String description;
+
     @Min(value = 1, message = "Pris per natt måste vara större än 0")
     private int price;
 
     protected Room() {
     }
 
-    public Room(RoomType roomType, String roomNr, int price) {
+    public Room(RoomType roomType, String roomNr, String description, int price) {
         this.roomType = roomType;
         this.roomNr = roomNr;
+        this.description = description;
         this.price = price;
     }
 
@@ -50,6 +54,12 @@ public class Room {
 
     public String getRoomNr() {
         return roomNr;
+    }
+
+    public String getDescription() {return description;}
+
+    public void setDescription(String description){
+        this.description =  description;
     }
 
     public void setRoomNr(String roomNr) {
