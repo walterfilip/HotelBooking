@@ -2,6 +2,7 @@ package org.example.pensionat.customer.service;
 
 
 import org.example.pensionat.booking.repository.BookingRepository;
+import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
@@ -65,6 +66,29 @@ public class CustomerServiceTest {
 
         verifyNoMoreInteractions(bookingRepository);
 
+    }
+    @Test
+    void testForCreateCustomer() {
+        CreateCustomerRequest request =
+                new CreateCustomerRequest(
+                        "Jens",
+                        "Kodbengtsson",
+                        "kodarjesse@mail.com",
+                        "070132546"
+                );
+        Customer savedCustomer = new Customer(
+                request.firstName(),
+                request.lastName(),
+                request.email(),
+                request.phoneNumber()
+        );
+
+        when(customerRepository.save(any(Customer.class)))
+                .thenReturn(savedCustomer);
+        Customer result = customerService.createCustomer(request);
+        assertThat(result.getFirstName()).isEqualTo("Jens");
+        verify(customerRepository)
+                .save(any(Customer.class));
     }
 
 
