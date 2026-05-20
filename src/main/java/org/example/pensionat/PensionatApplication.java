@@ -14,13 +14,33 @@ public class PensionatApplication {
     }
 
 
-    /* todo
-    Update booking
-    Delete customer
-    Update customer
+    /* Todo
+    GREJER VI INTE HAR GJORT ÄN:
+
+    Registrera användare
+    Användare ska kunna ändra sina uppgifter
+    Användare ska kunna ändra sin bokning
+    Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig. Måste ha tydligt felmeddelande).
+
+
     Fortsätta med att koppla allt till frontend
-    room search?
-    --> vg grejer
+
+
+    Startsida - knapp för login, spara inloggad som bool?
+    Formulär - if inlogad inget formulär,
+    bekräftelse av bokning - gå till ens egen hemsida, lösen?
+    Display idividuella rum, lägga till beskrivning
+
+    Rumsval ?
+    Bara se tillgängliga rum
+
+
+    skriva 5 enhetstester?
+
+    Linda + Filip - login
+    Stina - kopplar rum
+    Nils -
+
 
      */
 }
