@@ -30,9 +30,40 @@
        <td th:text="${room.price} + ' kr'"></td>
 
        <td>
+           <!-- skippar customer formen bara för att testa booking implementation
            <a th:href="@{/customers/form}">
                Boka rum
            </a>
+           -->
+           <form th:action="@{/bookings}" method="post">
+
+               <input
+                       type="hidden"
+                       name="roomId"
+                       th:value="${room.id}">
+
+               <!--CustomerId hårdkodad till 1 just nu -->
+               <input
+                       type="hidden"
+                       name="customerId"
+                       value="1">
+
+               <input
+                       type="hidden"
+                       name="startDate"
+                       th:value="${startDate}">
+
+               <input
+                       type="hidden"
+                       name="endDate"
+                       th:value="${endDate}">
+
+               <button type="submit">
+                   Boka rum
+
+               </button>
+
+           </form>
        </td>
 
    </tr>
