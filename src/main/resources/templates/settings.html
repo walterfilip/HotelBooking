@@ -9,12 +9,11 @@
 </head>
 
 <body>
-<h1>Sidan för kunder</h1>
+<h1>Sidan för instälningar</h1>
 <table>
     <tr>
         <th>Booking</th>
-        <th>Room</th>
-        <th>Date</th>
+
     </tr>
     <tr th:each="bookings : ${booking}">
         <td th:text="${bookings.startDate}"></td>

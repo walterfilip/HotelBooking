@@ -10,28 +10,51 @@
 
 <body>
 <div class="search-container">
-<h1 th:text="${title}"></h1>
-<p th:text="${subtitle}"></p>
+    <h1 th:text="${title}"></h1>
+    <p th:text="${subtitle}"></p>
     <form th:action="@{/rooms/search}" method="get">
 
-    <div class="date-row">
-    <label>Incheckning</label>
-    <input type="date" name="startDate">
+        <div class="date-row">
+            <label>Incheckning</label>
+            <input type="date" name="startDate">
 
-    <label>Utcheckning</label>
-    <input type="date" name="endDate">
-    </div>
-
-    <div class="room-row">
-    <label>Rumstyp</label>
-    <select name="roomType">
-        <option value="SINGLE">Enkelrum</option>
-        <option value="DOUBLE">Dubbelrum</option>
-    </select>
+            <label>Utcheckning</label>
+            <input type="date" name="endDate">
         </div>
 
-    <button type="submit">Sök lediga rum</button>
-</form>
+        <div class="room-row">
+            <label>Rumstyp</label>
+            <select name="roomType">
+                <option value="SINGLE">Enkelrum</option>
+                <option value="DOUBLE">Dubbelrum</option>
+            </select>
+        </div>
+        <button type="submit">Sök lediga rum</button>
+    </form>
 </div>
+
+
+
+<br>
+
+<div class="login">
+    <form th:action="@{/customers/login}" th:object="${costumer}" method="post">
+        <p>Logga in</p>
+        <div>
+            <label>Användarnamn:</label>
+            <input type="text" name="email">
+        </div>
+        <br>
+        <div>
+            <label>Lösenord:</label>
+
+<!--            <input type="text" th:field="*{}" />-->
+            <input type="text" name="password">
+            <button type="submit">Logga in</button>
+        </div>
+
+    </form>
+</div>
+
 </body>
 </html>

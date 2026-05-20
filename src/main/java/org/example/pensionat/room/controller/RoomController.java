@@ -27,6 +27,12 @@ public class RoomController {
     model.addAttribute("rooms", roomService.getAllRooms());
     return "rooms";
     }
+//    @GetMapping("/rooms")
+//    public String getRooms(Model model){
+//        model.addAttribute("rooms", roomService.getAllRooms());
+//        return "rooms";
+//
+//    }
 
     @GetMapping("/search")
      public String searchRooms (

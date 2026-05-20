@@ -14,6 +14,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
+    public Customer activeCustomer;
 
     public CustomerService(CustomerRepository customerRepository, BookingRepository bookingRepository) {
         this.customerRepository = customerRepository;
@@ -28,5 +29,39 @@ public class CustomerService {
         Customer customer = new  Customer(request.firstName(),request.lastName(),request.email(),request.phoneNumber());
         return customerRepository.save(customer);
     }
+
+
+    public boolean loginCustomer(String email, String password) {
+
+
+            if (email == null || email.isBlank()) {
+               return false;
+            }
+            if (password == null || password.isBlank()) {
+                return false;
+            }
+
+            try{
+                Customer customer = customerRepository.findByEmail(email);
+                String dbPassword = customer.getPhoneNumber(); // provar med telefonnummer som password
+                if (!password.equals(dbPassword)) {
+                    System.out.println("login failed");
+                    return false;
+                }
+                if (customer == null) {
+                    return false;
+                }
+                activeCustomer = customer;
+            }catch(NullPointerException e){
+
+                System.out.println("login failed");
+                return false;
+            }
+
+
+        System.out.println("login successful");
+            return true;
+        }
+
 
 }
