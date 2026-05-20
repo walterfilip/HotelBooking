@@ -25,6 +25,12 @@ body {
     margin-top: 20px;
 
 }
+.login-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
 
 button {
     display: flex;

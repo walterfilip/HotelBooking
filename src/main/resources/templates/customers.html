@@ -16,10 +16,10 @@
         <th>Room</th>
         <th>Date</th>
     </tr>
-    <tr th:each="bookings : ${booking}">
-        <td th:text="${bookings.startDate}"></td>
-        <td th:text="${bookings.price}"></td>
-        <td th:text="${bookings.isActive}"></td>
+    <tr th:each="booking : ${bookings}">
+        <td th:text="${booking.getId()}"></td>
+        <td th:text="*{booking.getRoom().getRoomNr()}"></td>
+        <td th:text="${booking.getStartDate()}"></td>
     </tr>
 
     <!--    <tr th:each="book : "></tr>-->
