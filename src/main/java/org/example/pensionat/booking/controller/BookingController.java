@@ -1,12 +1,25 @@
 package org.example.pensionat.booking.controller;
 
+import org.example.pensionat.booking.model.CreateBookingRequest;
+import org.example.pensionat.booking.service.BookingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
+
 
 @Controller
 @RequestMapping("/bookings")
 public class BookingController {
+
+    private final BookingService bookingService;
+
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
 
     @GetMapping
     public String bookings(){
@@ -16,6 +29,29 @@ public class BookingController {
     @GetMapping("/form")
     public String showBookingForm() {
         return "booking-form";
+    }
+
+    @PostMapping
+    public String createBooking(
+            //customerid hårdkodad till 1 just nu i rooms.html
+            @RequestParam Long customerId,
+            @RequestParam Long roomId,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate
+    ) {
+
+        CreateBookingRequest request =
+                new CreateBookingRequest(
+                        customerId,
+                        roomId,
+                        startDate,
+                        endDate,
+                        false
+                );
+
+        bookingService.createBooking(request);
+
+        return "bookings";
     }
 }
 
