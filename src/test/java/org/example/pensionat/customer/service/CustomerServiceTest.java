@@ -66,16 +66,13 @@ class CustomerServiceTest {
         // Arrange
         when(customerRepository.findAll())
                 .thenReturn(fakeCustomers);
-
         //Act
         List<Customer> result = customerService.getAllCustomers();
 
         //assert
         assertThat(result)
                 .hasSize(2);
-
 //          assertEquals(result, fakeCustomers); //??
-
         assertThat(result)
                 .containsExactly(
                         customer1,
@@ -86,12 +83,8 @@ class CustomerServiceTest {
 
         verify(customerRepository)
                 .findAll();
-
         verifyNoMoreInteractions(customerRepository);
-
         verifyNoMoreInteractions(bookingRepository);
-
-
 
     }
     @Test
@@ -116,13 +109,13 @@ class CustomerServiceTest {
         assertThat(result.getFirstName()).isEqualTo("Jens");
         verify(customerRepository)
                 .save(any(Customer.class));
-
+    }
 //        when(customerRepository.save(testCustomer))
 //                .thenReturn(testCustomer);
 //        assertThat(testCustomer.getFirstName()).isEqualTo("Jens");
 //        assertThat(testCustomer.getLastName()).isEqualTo("Kodbengtsson");
 
-    }
+
 
     //TODO create test for createUser Method
 
