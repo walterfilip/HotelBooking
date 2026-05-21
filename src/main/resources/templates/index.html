@@ -37,20 +37,21 @@
 
 <br>
 
-<div class="login">
+<div >
     <form th:action="@{/customers/login}" th:object="${costumer}" method="post">
-        <p>Logga in</p>
-        <div>
+        <h1 class="login-row">Logga in</h1>
+        <div class="login-row">
             <label>Användarnamn:</label>
             <input type="text" name="email">
         </div>
-        <br>
-        <div>
-            <label>Lösenord:</label>
 
-<!--            <input type="text" th:field="*{}" />-->
+        <div class="login-row">
+            <label>Lösenord:</label>
             <input type="text" name="password">
-            <button type="submit">Logga in</button>
+        </div>
+        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}"></small>
+        <div class="login-row">
+            <button type="submit">Login</button>
         </div>
 
     </form>
