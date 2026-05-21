@@ -31,7 +31,6 @@ public class Booking {
     @FutureOrPresent(message = "slut datum kan inte vara bakåt i tiden")
     private LocalDate endDate;
 
-    // Kanske stämmer ??
     @Column(nullable = false)
     private boolean extraBed = false;
 

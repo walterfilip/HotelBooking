@@ -30,11 +30,11 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args){
         if (roomRepository.count()==0){
-            roomRepository.save(new Room(RoomType.SINGLE, "101", 500));
-            roomRepository.save(new Room(RoomType.SINGLE, "102", 500));
-            roomRepository.save(new Room(RoomType.SINGLE, "103", 500));
-            roomRepository.save(new Room(RoomType.DOUBLE, "104", 750));
-            roomRepository.save(new Room(RoomType.DOUBLE, "105", 1000));
+            roomRepository.save(new Room(RoomType.SINGLE, "101", "Utan fönster", 500));
+            roomRepository.save(new Room(RoomType.SINGLE, "102", "Havsutsikt", 600));
+            roomRepository.save(new Room(RoomType.SINGLE, "103", "Balkong", 600));
+            roomRepository.save(new Room(RoomType.DOUBLE, "104", "Familjerum", 750));
+            roomRepository.save(new Room(RoomType.DOUBLE, "105", "Lyxsvit", 1000));
         }
         if (customerRepository.count()==0){
             customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777"));

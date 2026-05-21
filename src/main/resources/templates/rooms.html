@@ -11,10 +11,7 @@
 <body>
 <div class="rooms-container">
 <h1>Tillgängliga Rum</h1>
-<p>Här visas de rum som är bokningsbara.</p>
 
-
-<!--TODO: Ersätta det hårdkodade med thymeleaf-loop och data från db-->
 <table>
     <thead>
     <tr>
@@ -24,20 +21,53 @@
     </tr>
     </thead>
 
-    <tbody>
-    <tr>
-        <td>Enkelrum</td>
-        <td>800 kr</td>
-      <td> <a th:href="@{/customers/form}">Boka rum</a> </td>
-    </tr>
+   <tbody>
+   <tr th:each="room : ${rooms}">
+     <td>
+         <span th:text="${room.roomType.name() == 'SINGLE' ? 'Enkelrum' : 'Dubbelrum'}"></span>
+         <span th:text="' (' + ${room.description} + ')'"></span>
+     </td>
+       <td th:text="${room.price} + ' kr'"></td>
 
+       <td>
+           <!-- skippar customer formen bara för att testa booking implementation
+           <a th:href="@{/customers/form}">
+               Boka rum
+           </a>
+           -->
+           <form th:action="@{/bookings}" method="post">
 
-    <tr>
-        <td>Dubbelrum</td>
-        <td>1100 kr</td>
-        <td><a th:href="@{/customers/form}">Boka rum</a> </td>
-    </tr>
-    </tbody>
+               <input
+                       type="hidden"
+                       name="roomId"
+                       th:value="${room.id}">
+
+               <!--CustomerId hårdkodad till 1 just nu -->
+               <input
+                       type="hidden"
+                       name="customerId"
+                       value="1">
+
+               <input
+                       type="hidden"
+                       name="startDate"
+                       th:value="${startDate}">
+
+               <input
+                       type="hidden"
+                       name="endDate"
+                       th:value="${endDate}">
+
+               <button type="submit">
+                   Boka rum
+
+               </button>
+
+           </form>
+       </td>
+
+   </tr>
+   </tbody>
 </table>
 
 <a href="/">Till startsidan</a>
