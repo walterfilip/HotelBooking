@@ -4,6 +4,7 @@ import org.apache.catalina.User;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
+import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
 import org.springframework.http.ResponseEntity;
@@ -47,9 +48,23 @@ public class CustomerController {
     }
 
     @PostMapping
-    public String createCustomer() {
+    public String createCustomer(
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String email,
+            @RequestParam String phoneNumber
+    ) {
 
-        return "redirect:/bookings/form";
+       CreateCustomerRequest request = new CreateCustomerRequest(
+               firstName,
+               lastName,
+               email,
+               phoneNumber
+       );
+
+       customerService.createCustomer(request);
+
+       return "customers";
     }
 
     @PostMapping("/login")
@@ -68,7 +83,7 @@ public class CustomerController {
     }
 
 
-    @GetMapping("/logedinpage") // ändra namn
+    @GetMapping("/loggedinpage") // ändra namn
     public void customer(Model model) {
         Customer active = customerService.activeCustomer;
 

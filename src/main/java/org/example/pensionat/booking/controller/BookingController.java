@@ -2,7 +2,10 @@ package org.example.pensionat.booking.controller;
 
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.service.BookingService;
+import org.example.pensionat.customer.model.Customer;
+import org.example.pensionat.customer.service.CustomerService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -13,9 +16,11 @@ import java.time.LocalDate;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final CustomerService customerService;
 
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingService bookingService, CustomerService customerService) {
         this.bookingService = bookingService;
+        this.customerService = customerService;
     }
 
     @GetMapping
@@ -30,16 +35,24 @@ public class BookingController {
 
     @PostMapping
     public String createBooking(
-            //customerid hårdkodad till 1 just nu i rooms.html
-            @RequestParam Long customerId,
+
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate
+            @RequestParam LocalDate endDate,
+
+            Model model
     ) {
+
+        Customer activeCustomer = customerService.activeCustomer;
+
+        if(activeCustomer == null){
+
+            return "customer-form";
+        }
 
         CreateBookingRequest request =
                 new CreateBookingRequest(
-                        customerId,
+                        activeCustomer.getId(),
                         roomId,
                         startDate,
                         endDate,
@@ -47,6 +60,8 @@ public class BookingController {
                 );
 
         bookingService.createBooking(request);
+
+        model.addAttribute("customer", activeCustomer);
 
         return "bookings";
     }
