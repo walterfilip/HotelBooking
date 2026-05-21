@@ -34,7 +34,8 @@ public class PensionatApplication {
     Update login: funkar(loggas in via check mot db(user och password(just nu via phonenumber) ) kollar även boknignar mot customerid mot db och displayar
     * kvar att göra en koppling för att hålla koll att man är inloggad
     * eventuellt ändra meny i index så om man är inloggad kan det vara en knapp logga ut?
-    * bygga vidare på "kundsida" skapa funktioner för ändringar av kundinfo, avboka bokningar.
+    * sortera bokningar i datumordning.
+    * bygga vidare på "kundsida" skapa funktioner för ändringar av kundinfo, avboka bokningar(knapp inlagd som avbokar)
 
 
     Rumsval ?
