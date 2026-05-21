@@ -4,6 +4,7 @@ import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.service.BookingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 import java.time.LocalDate;
 
@@ -24,7 +25,11 @@ public class BookingController {
     }
 
     @GetMapping("/form")
-    public String showBookingForm() {
+    public String showBookingForm(
+            @RequestParam(defaultValue = "false") boolean extraBed,
+            Model model
+      ) {
+        model.addAttribute("extraBed", extraBed);
         return "booking-form";
     }
 

@@ -29,18 +29,27 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args){
+        Room firstRoom = null;
+        Customer savedCustomer = null;
+
         if (roomRepository.count()==0){
-            roomRepository.save(new Room(RoomType.SINGLE, "101", "Utan fönster", 500));
+            firstRoom = roomRepository.save(new Room(RoomType.SINGLE, "101", "Utan fönster", 500));
             roomRepository.save(new Room(RoomType.SINGLE, "102", "Havsutsikt", 600));
             roomRepository.save(new Room(RoomType.SINGLE, "103", "Balkong", 600));
             roomRepository.save(new Room(RoomType.DOUBLE, "104", "Familjerum", 750));
             roomRepository.save(new Room(RoomType.DOUBLE, "105", "Lyxsvit", 1000));
+        } else {
+            firstRoom = roomRepository.findById(1L);
         }
         if (customerRepository.count()==0){
-            customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777"));
+            savedCustomer = customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777"));
+        } else {
+            savedCustomer = customerRepository.findByEmail("nils@fakemail.se");
         }
         if (bookingRepository.count()==0){
-            bookingRepository.save(new Booking(customerRepository.findByEmail("nils@fakemail.se"),roomRepository.getById(1L), LocalDate.now(),LocalDate.now(),false, BookingStatus.ACTIVE));
+            if (firstRoom != null && savedCustomer != null) {
+                bookingRepository.save(new Booking(savedCustomer, firstRoom, LocalDate.now(), LocalDate.now(), false, BookingStatus.ACTIVE));
+            }
         }
     }
 
