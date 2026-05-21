@@ -1,6 +1,7 @@
 package org.example.pensionat.customer.controller;
 
 import org.apache.catalina.User;
+import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
 import org.example.pensionat.customer.model.Customer;
@@ -31,8 +32,11 @@ public class CustomerController {
         List<Booking> currentBooking = bookingService.getBookingByCustomerId(active.getId());
             model.addAttribute(
                     "bookings", currentBooking
-
             );
+            model.addAttribute(
+                    "customer", active
+            );
+            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
 
         return "customers";
     }
