@@ -39,7 +39,8 @@ public class BookingController {
             @RequestParam Long customerId,
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate
+            @RequestParam LocalDate endDate,
+            @RequestParam (defaultValue = "false") boolean extraBed
     ) {
 
         CreateBookingRequest request =
@@ -48,7 +49,7 @@ public class BookingController {
                         roomId,
                         startDate,
                         endDate,
-                        false
+                        extraBed
                 );
 
         bookingService.createBooking(request);
