@@ -15,7 +15,9 @@
     <h1>Bekräfta bokning</h1>
     <p><strong>Namn:</strong>Anna</p>
    <p><strong>Rum:</strong>Dubbelrum</p>
-    <p><strong>Extrasäng:</strong>Ingår</p>
+    <p><strong>Extrasäng:</strong>
+    <span th:text="${extraBed} ? 'Ja' : 'Nej'"></span>
+        </p>
     <p><strong>Incheckning:</strong>2026-05-15</p>
     <p><strong>Utcheckning:</strong>2026-05-16</p>
 
@@ -24,6 +26,7 @@
     <input type="hidden" name="roomId" value="2">
     <input type="hidden" name="startDate" value="2006-10-15">
     <input type="hidden" name="endDate" value="2006-10-16">
+    <input type="hidden" name="extraBed" th:value="${extraBed}">
 
     <button type="submit">Bekräfta bokning</button>
 
