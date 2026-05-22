@@ -17,13 +17,13 @@ public class PensionatApplication {
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
-    Registrera användare   - Nils
+    Registrera användare   - KLAR, men behöver felhantering av kundregistrering i customer-form, just nu kan man skriva vadsom tror jag.
     Användare ska kunna ändra sina uppgifter  - Filip
     Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
     Måste ha tydligt felmeddelande).
 
     Startsida - knapp för logout actrive user null?
-    bekräftelse av bokning - mappa till riktig bokning
+    bekräftelse av bokning - mappa till riktig bokning - KLAR, typ, just nu displayas bara priset per dag och tar inte extrasäng i hänsyn.
     Knappar på startsidan, mina bokningar/min sida och logga ut
     Datumsök - Stina
     Räkna ut toatalpris, rum+extrasäng*dagar=total
