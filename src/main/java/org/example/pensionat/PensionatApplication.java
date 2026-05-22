@@ -28,13 +28,20 @@ public class PensionatApplication {
     Knappar på startsidan, mina bokningar/min sida och logga ut
     lägga in lösenord i SQL - Filip
     Datumsök - Stina
+    Räkna ut toatalpris, rum+extrasäng*dagar=total
 
 
     Update login: funkar(loggas in via check mot db(user och password(just nu via phonenumber)
      ) kollar även boknignar mot customerid mot db och displayar
     * sortera bokningar i datumordning.
 
-    skriva 4 enhetstester?
+
+
+    minst 10 rum
+    Tydliga felmedelanden som visas för användaren
+
+VG
+skriva 4 enhetstester?
 
      */
 }
