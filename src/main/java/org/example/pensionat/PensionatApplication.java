@@ -26,13 +26,12 @@ public class PensionatApplication {
     Startsida - knapp för logout actrive user null?
     bekräftelse av bokning - mappa till riktig bokning
     Knappar på startsidan, mina bokningar/min sida och logga ut
-    lägga in lösenord i SQL - Filip
     Datumsök - Stina
     Räkna ut toatalpris, rum+extrasäng*dagar=total
+    skapa en kryptering? för password
 
 
-    Update login: funkar(loggas in via check mot db(user och password(just nu via phonenumber)
-     ) kollar även boknignar mot customerid mot db och displayar
+
     * sortera bokningar i datumordning.
 
 

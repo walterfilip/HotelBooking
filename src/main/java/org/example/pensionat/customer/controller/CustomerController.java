@@ -30,14 +30,16 @@ public class CustomerController {
     @GetMapping
     public String customers(Model model) {
         Customer active = customerService.activeCustomer;
-        List<Booking> currentBooking = bookingService.getBookingByCustomerId(active.getId());
+        List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
         model.addAttribute(
-                "bookings", currentBooking
+                "bookings", currentBookings
         );
         model.addAttribute(
                 "customer", active
         );
-        model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+        model.addAttribute("activeStatus",
+                BookingStatus.ACTIVE
+        );
 
         return "customers";
     }
@@ -45,6 +47,15 @@ public class CustomerController {
     @GetMapping("/form")
     public String showCustomerForm() {
         return "customer-form";
+    }
+
+    @PostMapping("/edit")
+    public String editCustomer(@RequestParam String firstName,
+                               @RequestParam String lastName,
+                               @RequestParam String password,
+                               Model model) {
+        model.addAttribute("customer", customerService.activeCustomer);
+        return "customer-edit";
     }
 
     @PostMapping
@@ -77,8 +88,9 @@ public class CustomerController {
             model.addAttribute("loginError", "Invalid username and/or password");
             return "index";
         }
-        return "redirect:/customers"; // ???
+        return "redirect:/customers";
     }
+
 
 }
 

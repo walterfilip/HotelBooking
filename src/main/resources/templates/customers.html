@@ -14,10 +14,10 @@
 <h2 th:text="'Välkommen ' + ${customer.getFirstName()}"></h2>
 <table>
     <tr>
-        <th>Booking</th>
-        <th>Room</th>
-        <th>Date</th>
-        <th>Edit booking</th>
+        <th>Bokning</th>
+        <th>Rum</th>
+        <th>Datum</th>
+        <th>Avboka?</th>
     </tr>
     <tr th:each="booking : ${bookings}">
         <td th:text="${booking.getId()}"></td>
@@ -38,6 +38,11 @@
     <!--    <tr th:each="book : "></tr>-->
 </table>
 
+<br>
+<form th:action="@{/customers/edit}" method="post">
+    <button type="submit">Ändra uppgifter</button>
+</form>
+<br>
 <a href="/">Till startsidan</a>
 </body>
 </html>
