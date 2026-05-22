@@ -1,11 +1,9 @@
 package org.example.pensionat.customer.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Customer {
@@ -26,6 +24,11 @@ public class Customer {
 
     private String phoneNumber;
 
+    @NotBlank(message = "lösenord måste anges")
+    @Column(nullable = false)
+    private String password;
+
+
 
     public Customer() {
 
@@ -36,6 +39,14 @@ public class Customer {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public long getId() {

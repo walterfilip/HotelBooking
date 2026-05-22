@@ -43,7 +43,7 @@ public class CustomerService {
 
             try{
                 Customer customer = customerRepository.findByEmail(email);
-                String dbPassword = customer.getPhoneNumber(); // provar med telefonnummer som password
+                String dbPassword = customer.getPassword();
                 if (!password.equals(dbPassword)) {
                     System.out.println("login failed");
                     return false;
