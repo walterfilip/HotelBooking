@@ -36,6 +36,9 @@ public class PensionatApplication {
     * eventuellt ändra meny i index så om man är inloggad kan det vara en knapp logga ut?
     * sortera bokningar i datumordning.
     * bygga vidare på "kundsida" skapa funktioner för ändringar av kundinfo, avboka bokningar(knapp inlagd som avbokar)
+    * lägga in lösenord i SQL
+    * skapa en logout(start och i Customer
+
 
 
     Rumsval ?
