@@ -17,23 +17,31 @@ public class PensionatApplication {
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
-    Registrera användare
-    Användare ska kunna ändra sina uppgifter
-    Användare ska kunna ändra sin bokning
-    Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig. Måste ha tydligt felmeddelande).
+    Registrera användare   - Nils
+    Användare ska kunna ändra sina uppgifter  - Filip
+    Användare ska kunna ändra sin bokning (Datum) - Linda
+    Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
+    Måste ha tydligt felmeddelande).
+
+    Startsida - knapp för logout actrive user null?
+    bekräftelse av bokning - mappa till riktig bokning
+    Knappar på startsidan, mina bokningar/min sida och logga ut
+    lägga in lösenord i SQL - Filip
+    Datumsök - Stina
+    Räkna ut toatalpris, rum+extrasäng*dagar=total
 
 
-    Fortsätta med att koppla allt till frontend
+    Update login: funkar(loggas in via check mot db(user och password(just nu via phonenumber)
+     ) kollar även boknignar mot customerid mot db och displayar
+    * sortera bokningar i datumordning.
 
 
-    Startsida - knapp för login, spara inloggad som bool?
-    Formulär - if inlogad inget formulär,
-    bekräftelse av bokning - gå till ens egen hemsida, lösen?
 
-    Rumsval ?
+    minst 10 rum
+    Tydliga felmedelanden som visas för användaren
 
-
-    skriva 5 enhetstester?
+VG
+skriva 4 enhetstester?
 
      */
 }

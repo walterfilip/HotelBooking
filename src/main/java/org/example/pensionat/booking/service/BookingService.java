@@ -37,6 +37,9 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
+    public List<Booking> getBookingByCustomerId(long customerId) {
+        return bookingRepository.findByCustomerId(customerId);
+    }
 
 
     @Transactional
@@ -87,4 +90,6 @@ public class BookingService {
             throw new BadRequestException("Detta rum stödjer inte extrasäng");
         }
     }
+
+
 }

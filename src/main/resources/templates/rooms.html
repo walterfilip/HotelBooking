@@ -11,33 +11,70 @@
 <body>
 <div class="rooms-container">
 <h1>Tillgängliga Rum</h1>
-<p>Här visas de rum som är bokningsbara.</p>
 
-
-<!--TODO: Ersätta det hårdkodade med thymeleaf-loop och data från db-->
 <table>
     <thead>
     <tr>
         <th>Rumstyp</th>
+        <th th:if="${roomType.name() == 'DOUBLE'}">Extrasäng</th>
         <th>Pris per natt</th>
         <th>Boka</th>
     </tr>
     </thead>
 
-    <tbody>
-    <tr>
-        <td>Enkelrum</td>
-        <td>800 kr</td>
-      <td> <a th:href="@{/customers/form}">Boka rum</a> </td>
-    </tr>
+   <tbody>
+   <tr th:each="room : ${rooms}">
+     <td>
+         <span th:text="${room.roomType.name() == 'SINGLE' ? 'Enkelrum' : 'Dubbelrum'}"></span>
+         <span th:text="' (' + ${room.description} + ')'"></span>
+     </td>
+       <td th:if="${room.roomType.name() == 'DOUBLE'}">
+           <input type="checkbox"
+                  name="extraBed"
+                    value="true"
+                  th:form="'bookingForm-' + ${room.id}">
 
+       </td>
+       <td th:text="${room.price} + ' kr'"></td>
 
-    <tr>
-        <td>Dubbelrum</td>
-        <td>1100 kr</td>
-        <td><a th:href="@{/customers/form}">Boka rum</a> </td>
-    </tr>
-    </tbody>
+           <td>
+               <!-- skippar customer formen bara för att testa booking implementation
+               <a th:href="@{/customers/form}">
+                   Boka rum
+               </a>
+               -->
+
+               <!--Navigerar till bekräftelsesidan för bokning innan bokning sparas sålänge -->
+               <form th:id="'bookingForm-' + ${room.id}"
+                     th:action="@{/bookings/form}"
+                     method="get">
+            <!--   <form th:action="@{/bookings}" method="post"> -->
+
+                   <input
+                           type="hidden"
+                           name="roomId"
+                           th:value="${room.id}">
+
+               <input
+                       type="hidden"
+                       name="startDate"
+                       th:value="${startDate}">
+
+               <input
+                       type="hidden"
+                       name="endDate"
+                       th:value="${endDate}">
+
+               <button type="submit">
+                   Boka rum
+
+               </button>
+
+           </form>
+       </td>
+
+   </tr>
+   </tbody>
 </table>
 
 <a href="/">Till startsidan</a>
