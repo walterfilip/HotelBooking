@@ -18,26 +18,26 @@ import java.util.List;
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {
-   private final CustomerService customerService;
-   private final BookingService bookingService;
+    private final CustomerService customerService;
+    private final BookingService bookingService;
 
-   public CustomerController(CustomerService customerService, BookingService bookingService) {
-       this.customerService = customerService;
-       this.bookingService = bookingService;
-   }
+    public CustomerController(CustomerService customerService, BookingService bookingService) {
+        this.customerService = customerService;
+        this.bookingService = bookingService;
+    }
 
 
     @GetMapping
     public String customers(Model model) {
         Customer active = customerService.activeCustomer;
         List<Booking> currentBooking = bookingService.getBookingByCustomerId(active.getId());
-            model.addAttribute(
-                    "bookings", currentBooking
-            );
-            model.addAttribute(
-                    "customer", active
-            );
-            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+        model.addAttribute(
+                "bookings", currentBooking
+        );
+        model.addAttribute(
+                "customer", active
+        );
+        model.addAttribute("activeStatus", BookingStatus.ACTIVE);
 
         return "customers";
     }
@@ -55,51 +55,50 @@ public class CustomerController {
             @RequestParam String phoneNumber
     ) {
 
-       CreateCustomerRequest request = new CreateCustomerRequest(
-               firstName,
-               lastName,
-               email,
-               phoneNumber
-       );
+        CreateCustomerRequest request = new CreateCustomerRequest(
+                firstName,
+                lastName,
+                email,
+                phoneNumber
+        );
 
-       customerService.createCustomer(request);
+        customerService.createCustomer(request);
 
-       return "customers";
+        return "customers";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
-                        Model model) {
-        System.out.println("email: " + email);
-        System.out.println("password: " + password);
-
+    public String login(
+            @RequestParam String email,
+            @RequestParam String password,
+            Model model
+    ) {
         if (!customerService.loginCustomer(email, password)) {
             model.addAttribute("loginError", "Invalid username and/or password");
             return "index";
-        }  // ska bo i restControler?
-
+        }
         return "redirect:/customers"; // ???
     }
 
-
-    @GetMapping("/loggedinpage") // ändra namn
-    public void customer(Model model) {
-        Customer active = customerService.activeCustomer;
-
-        model.addAttribute(
-                "customer",
-                active.getFirstName()
-        );
-    }
-
-    @GetMapping("/settingspage") // ändra namn
-    public void settings(Model model) {
-        Customer active = customerService.activeCustomer;
-
-        model.addAttribute(
-                "customer",
-                active.getFirstName()
-        );
-    }
 }
+
+//    @GetMapping("/loggedinpage") // ändra namn
+//    public void customer(Model model) {
+//        Customer active = customerService.activeCustomer;
+//
+//        model.addAttribute(
+//                "customer",
+//                active.getFirstName()
+//        );
+//    }
+//
+//    @GetMapping("/settingspage") // ändra namn
+//    public void settings(Model model) {
+//        Customer active = customerService.activeCustomer;
+//
+//        model.addAttribute(
+//                "customer",
+//                active.getFirstName()
+//        );
+//    }
+
