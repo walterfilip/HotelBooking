@@ -37,23 +37,43 @@
        </td>
        <td th:text="${room.price} + ' kr'"></td>
 
-           <td>
-               <!-- skippar customer formen bara för att testa booking implementation
-               <a th:href="@{/customers/form}">
+       <td>
+           <!-- Om man inte är inloggad: -->
+           <form
+                   th:if="${activeCustomer == null}"
+                   th:id="'bookingForm-' + ${room.id}"
+                   th:action="@{/customers/form}"
+                   method="get">
+
+               <input type="hidden"
+                      name="roomId"
+                      th:value="${room.id}">
+
+               <input type="hidden"
+                      name="startDate"
+                      th:value="${startDate}">
+
+               <input type="hidden"
+                      name="endDate"
+                      th:value="${endDate}">
+
+               <button type="submit">
                    Boka rum
-               </a>
-               -->
+               </button>
 
-               <!--Navigerar till bekräftelsesidan för bokning innan bokning sparas sålänge -->
-               <form th:id="'bookingForm-' + ${room.id}"
-                     th:action="@{/bookings/form}"
-                     method="get">
-            <!--   <form th:action="@{/bookings}" method="post"> -->
+           </form>
 
-                   <input
-                           type="hidden"
-                           name="roomId"
-                           th:value="${room.id}">
+           <!-- Om man är inloggad: -->
+           <form
+                   th:if="${activeCustomer != null}"
+                   th:id="'loggedInBookingForm-' + ${room.id}"
+                   th:action="@{/bookings/form}"
+                   method="get">
+
+               <input
+                       type="hidden"
+                       name="roomId"
+                       th:value="${room.id}">
 
                <input
                        type="hidden"
@@ -67,7 +87,6 @@
 
                <button type="submit">
                    Boka rum
-
                </button>
 
            </form>

@@ -7,6 +7,8 @@ import org.example.pensionat.booking.service.BookingService;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
+import org.example.pensionat.room.model.Room;
+import org.example.pensionat.room.service.RoomService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,14 +20,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {
+
    private final CustomerService customerService;
    private final BookingService bookingService;
+   private final RoomService roomService;
 
-   public CustomerController(CustomerService customerService, BookingService bookingService) {
+   public CustomerController(CustomerService customerService, BookingService bookingService, RoomService roomService) {
        this.customerService = customerService;
        this.bookingService = bookingService;
+       this.roomService = roomService;
    }
-
 
     @GetMapping
     public String customers(Model model) {
@@ -43,12 +47,27 @@ public class CustomerController {
     }
 
     @GetMapping("/form")
-    public String showCustomerForm() {
+    public String showCustomerForm(
+
+             @RequestParam Long roomId,
+             @RequestParam String startDate,
+             @RequestParam String endDate,
+             @RequestParam(defaultValue = "false") boolean extraBed,
+
+             Model model
+    ) {
+
+       model.addAttribute("roomId", roomId);
+       model.addAttribute("startDate", startDate);
+       model.addAttribute("endDate", endDate);
+       model.addAttribute("extraBed", extraBed);
+
         return "customer-form";
     }
 
     @PostMapping
     public String createCustomer(
+
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String email,
@@ -64,7 +83,48 @@ public class CustomerController {
 
        customerService.createCustomer(request);
 
-       return "customers";
+       return "redirect:/customers";
+    }
+
+    @PostMapping("/booking")
+    public String createCustomerWhileBooking(
+
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String email,
+            @RequestParam String phoneNumber,
+
+            @RequestParam Long roomId,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam boolean extraBed,
+
+            Model model
+
+    ){
+
+        CreateCustomerRequest request = new CreateCustomerRequest(
+                firstName,
+                lastName,
+                email,
+                phoneNumber
+        );
+
+        Customer customer = customerService.createCustomer(request);
+
+        customerService.activeCustomer = customer;
+
+        Room room = roomService.getRoomById(roomId);
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("room", room);
+
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("extraBed", extraBed);
+
+        return "booking-form";
     }
 
     @PostMapping("/login")

@@ -12,7 +12,7 @@
 <div class="customer-form-container">
 <h1>Kundformulär</h1>
 
-    <form th:action="@{/customers}" method="post">
+    <form th:action="@{/customers/booking}" method="post">
 
 
         <div class="customer-contact-input">
@@ -46,10 +46,27 @@
                    name="phoneNumber"
                    required>
         </div>
-        <button type="submit">Registrera kund</button>
+
+        <!-- Inputs från bokningen som följer med hidden -->
+        <input type="hidden"
+               name="roomId"
+               th:value="${roomId}">
+
+        <input type="hidden"
+               name="startDate"
+               th:value="${startDate}">
+
+        <input type="hidden"
+               name="endDate"
+               th:value="${endDate}">
+
+        <input type="hidden"
+               name="extraBed"
+               th:value="${extraBed}">
+
+        <button type="submit">Registrera och fortsätt</button>
 
     </form>
-
 
 <a href="/">Till startsidan</a>
 </div>

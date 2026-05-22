@@ -1,5 +1,6 @@
 package org.example.pensionat.room.controller;
 
+import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -17,9 +18,13 @@ import java.time.LocalDate;
 public class RoomController {
 
     private final RoomService roomService;
+    private final CustomerService customerService;
 
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, CustomerService customerService) {
+
     this.roomService = roomService;
+    this.customerService = customerService;
+
     }
 
     @GetMapping
@@ -52,6 +57,7 @@ public class RoomController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("roomType", roomType);
+        model.addAttribute("activeCustomer", customerService.activeCustomer);
 
 
         return "rooms";

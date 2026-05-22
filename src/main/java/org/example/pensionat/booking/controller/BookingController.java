@@ -4,10 +4,11 @@ import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.service.BookingService;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
+import org.example.pensionat.room.model.Room;
+import org.example.pensionat.room.service.RoomService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
 
 import java.time.LocalDate;
 
@@ -18,10 +19,12 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final CustomerService customerService;
+    private final RoomService roomService;
 
-    public BookingController(BookingService bookingService, CustomerService customerService) {
+    public BookingController(BookingService bookingService, CustomerService customerService , RoomService roomService) {
         this.bookingService = bookingService;
         this.customerService = customerService;
+        this.roomService = roomService;
     }
 
     @GetMapping
@@ -31,11 +34,33 @@ public class BookingController {
 
     @GetMapping("/form")
     public String showBookingForm(
+
+            @RequestParam Long roomId,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
             @RequestParam(defaultValue = "false") boolean extraBed,
+
             Model model
       ) {
+
+        Customer activeCustomer = customerService.activeCustomer;
+
+        if (activeCustomer == null) {
+            return "customer-form";
+        }
+
+        Room room = roomService.getRoomById(roomId);
+
+        model.addAttribute("customer", activeCustomer);
+        model.addAttribute("room", room);
+
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
         model.addAttribute("extraBed", extraBed);
+
         return "booking-form";
+
     }
 
     @PostMapping
@@ -44,8 +69,7 @@ public class BookingController {
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
-            @RequestParam (defaultValue = "false") boolean extraBed,
-            Model model
+            @RequestParam (defaultValue = "false") boolean extraBed
     )
     {
 
@@ -67,9 +91,7 @@ public class BookingController {
 
         bookingService.createBooking(request);
 
-        model.addAttribute("customer", activeCustomer);
-
-        return "bookings";
+        return "redirect:/customers";
     }
 
     @PostMapping("/cancel/{id}")
