@@ -30,6 +30,9 @@ public class PensionatApplication {
     Formulär - if inlogad inget formulär,
     bekräftelse av bokning - gå till ens egen hemsida, lösen?
     Display idividuella rum, lägga till beskrivning
+    Knappar på startsidan, mina bokningar och logga ut
+    löseord
+
 
     Update login: funkar(loggas in via check mot db(user och password(just nu via phonenumber) ) kollar även boknignar mot customerid mot db och displayar
     * kvar att göra en koppling för att hålla koll att man är inloggad
