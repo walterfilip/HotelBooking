@@ -1,13 +1,11 @@
 package org.example.pensionat.customer.controller;
 
-import org.apache.catalina.User;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +39,8 @@ public class CustomerController {
 
         return "customers";
     }
+
+
 
     @GetMapping("/form")
     public String showCustomerForm() {
@@ -77,7 +77,7 @@ public class CustomerController {
         if (!customerService.loginCustomer(email, password)) {
             model.addAttribute("loginError", "Invalid username and/or password");
             return "index";
-        }  // ska bo i restControler?
+        }  // ska bo i restController?
 
         return "redirect:/customers"; // ???
     }
