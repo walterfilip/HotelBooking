@@ -33,11 +33,9 @@
     </form>
 </div>
 
-
-
 <br>
 
-<div >
+<div th:if="${activeCustomer == null}">
     <form th:action="@{/customers/login}" th:object="${costumer}" method="post">
         <h1 class="login-row">Logga in</h1>
         <div class="login-row">
@@ -53,8 +51,15 @@
         <div class="login-row">
             <button type="submit">Login</button>
         </div>
-
     </form>
+</div>
+
+<div th:if="${activeCustomer != null}">
+
+    <h2 th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
+
+    <p>Du kan nu boka rum.</p>
+
 </div>
 
 </body>
