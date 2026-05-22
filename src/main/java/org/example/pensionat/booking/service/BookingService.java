@@ -91,5 +91,22 @@ public class BookingService {
         }
     }
 
+    @Transactional
+    public Booking changeBookingDate (CreateBookingRequest request, Long bookingId){
 
+        validateDateRange(request.startDate(), request.endDate());
+        validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), bookingId);
+
+
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
+        booking.setStartDate(request.startDate());
+        booking.setEndDate(request.endDate());
+
+        return bookingRepository.save(booking);
+    }
+
+
+    public Booking getBookingById(Long bookingId) {
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
+    }
 }

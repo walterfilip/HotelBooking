@@ -1,5 +1,6 @@
 package org.example.pensionat.booking.controller;
 
+import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.service.BookingService;
 import org.example.pensionat.customer.model.Customer;
@@ -7,8 +8,6 @@ import org.example.pensionat.customer.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
-
 import java.time.LocalDate;
 
 
@@ -77,6 +76,42 @@ public class BookingController {
         bookingService.cancelBooking(id);
         return "bookings";
     }
+
+    @GetMapping ("/changedate/{id}")
+    public String changedate(@PathVariable Long id, Model model){
+        Booking booking =bookingService.getBookingById(id);
+        model.addAttribute("booking", booking);
+        return "customers-date-selection";
+    }
+
+    @PostMapping("/changedate/{id}")
+    public String changedateBooking(
+
+        @PathVariable("id") Long bookingId,
+        @RequestParam LocalDate startDate,
+        @RequestParam LocalDate endDate,
+        Model model
+    )
+        {
+            Booking booking = bookingService.getBookingById(bookingId);
+
+            CreateBookingRequest request =
+                    new CreateBookingRequest(
+                            booking.getCustomer().getId(),
+                            booking.getRoom().getId(),
+                            startDate,
+                            endDate,
+                            booking.isExtraBed()
+                    );
+
+            bookingService.changeBookingDate(request, bookingId);
+
+            model.addAttribute("customer", booking.getCustomer());
+
+            return "bookings";
+
+    }
+
 
 }
 

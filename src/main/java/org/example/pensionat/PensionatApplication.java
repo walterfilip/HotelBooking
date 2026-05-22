@@ -19,7 +19,6 @@ public class PensionatApplication {
 
     Registrera användare   - Nils
     Användare ska kunna ändra sina uppgifter  - Filip
-    Användare ska kunna ändra sin bokning (Datum) - Linda
     Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
     Måste ha tydligt felmeddelande).
 
@@ -42,6 +41,8 @@ public class PensionatApplication {
 
 VG
 skriva 4 enhetstester?
+
+Extra? spärra fullbokade datum och ändra datumdagar?
 
      */
 }
