@@ -19,20 +19,19 @@ public class PensionatApplication {
 
     Registrera användare   - Nils
     Användare ska kunna ändra sina uppgifter  - Filip
-    Användare ska kunna ändra sin bokning (Datum) - Linda
     Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
     Måste ha tydligt felmeddelande).
 
     Startsida - knapp för logout actrive user null?
     bekräftelse av bokning - mappa till riktig bokning
     Knappar på startsidan, mina bokningar/min sida och logga ut
-    lägga in lösenord i SQL - Filip
     Datumsök - Stina
     Räkna ut toatalpris, rum+extrasäng*dagar=total
 
+    pw inlagt- merge till dev?
 
-    Update login: funkar(loggas in via check mot db(user och password(just nu via phonenumber)
-     ) kollar även boknignar mot customerid mot db och displayar
+
+
     * sortera bokningar i datumordning.
 
 
@@ -42,6 +41,8 @@ public class PensionatApplication {
 
 VG
 skriva 4 enhetstester?
+
+Extra? spärra fullbokade datum och ändra datumdagar?
 
      */
 }

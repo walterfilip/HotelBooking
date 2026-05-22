@@ -1,6 +1,5 @@
 package org.example.pensionat.customer.controller;
 
-import org.apache.catalina.User;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
@@ -45,6 +44,8 @@ public class CustomerController {
 
         return "customers";
     }
+
+
 
     @GetMapping("/form")
     public String showCustomerForm(
@@ -137,7 +138,7 @@ public class CustomerController {
         if (!customerService.loginCustomer(email, password)) {
             model.addAttribute("loginError", "Invalid username and/or password");
             return "index";
-        }  // ska bo i restControler?
+        }  // ska bo i restController?
 
         return "redirect:/customers"; // ???
     }

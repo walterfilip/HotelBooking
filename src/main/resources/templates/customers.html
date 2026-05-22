@@ -17,6 +17,7 @@
         <th>Booking</th>
         <th>Room</th>
         <th>Date</th>
+        <th>Cancel booking</th>
         <th>Edit booking</th>
     </tr>
     <tr th:each="booking : ${bookings}">
@@ -30,6 +31,16 @@
                         th:id="'btn-' + ${booking.id}"
                         type="submit">
                         Avboka
+                </button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/bookings/changedate/{id}(id=${booking.id})}" method="get">
+                <button
+                        th:if="${booking.status == activeStatus}"
+                        th:id="'btn-' + ${booking.id}"
+                        type="submit">
+                    Ändra
                 </button>
             </form>
         </td>

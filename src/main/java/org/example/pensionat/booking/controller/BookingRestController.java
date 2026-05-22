@@ -37,4 +37,9 @@ public class BookingRestController {
         return bookingService.cancelBooking(id);
     }
 
+    @PatchMapping("/{id}/changedate")
+    public Booking changedateBooking( @RequestBody @Valid CreateBookingRequest request,@PathVariable Long id){
+        return bookingService.changeBookingDate(request,id);
+    }
+
 }
