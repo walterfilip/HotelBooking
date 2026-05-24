@@ -16,21 +16,32 @@
     <tr>
         <th>Bokning</th>
         <th>Rum</th>
-        <th>Datum</th>
+        <th>Start datum</th>
+        <th>Slut datum</th>
         <th>Avboka?</th>
     </tr>
     <tr th:each="booking : ${bookings}">
         <td th:text="${booking.getId()}"></td>
-        <td th:text="${booking.getRoom().getRoomNr()}"></td>
+        <td th:text="${booking.getRoom().getRoomType()}"></td>
         <td th:text="${booking.getStartDate()}"></td>
+        <td th:text="${booking.getEndDate()}"></td>
         <td>
             <form th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post">
+
                 <button
-                        th:if="${booking.status == activeStatus}"
+                        th:if="${booking.status == activeStatus and !booking.datePassed()}"
                         th:id="'btn-' + ${booking.id}"
                         type="submit">
-                        Avboka
+                    Avboka
                 </button>
+                <span
+                     th:if="${booking.status != activeStatus and !booking.datePassed()}">
+                    Avbokad
+                </span>
+                <span th:if="${booking.datePassed()}">
+                    Avslutad
+                </span>
+
             </form>
         </td>
     </tr>
