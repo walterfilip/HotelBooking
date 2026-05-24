@@ -1,13 +1,11 @@
 package org.example.pensionat.customer.controller;
 
-import org.apache.catalina.User;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +50,13 @@ public class CustomerController {
     @PostMapping("/edit")
     public String editCustomer(@RequestParam String firstName,
                                @RequestParam String lastName,
-                               @RequestParam String password,
+//                               @RequestParam String password,
                                Model model) {
+        model.addAttribute("customer", customerService.activeCustomer);
+        return "customer-edit";
+    }
+    @GetMapping("/edit")
+    public String editCustomer(Model model) {
         model.addAttribute("customer", customerService.activeCustomer);
         return "customer-edit";
     }
