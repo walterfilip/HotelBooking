@@ -30,6 +30,10 @@ public class PensionatApplication {
 
     pw inlagt- merge till dev?
 
+    kolla igenom så felmeddelanden skrivs ut i  frontend, just nu crashar programmet om man försöker boka om datum till ett datum som varit.
+    även ändra i avboka så det inte går avboka bokningar som varit.
+
+
 
 
     * sortera bokningar i datumordning.
