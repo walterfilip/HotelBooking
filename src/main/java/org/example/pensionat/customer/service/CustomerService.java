@@ -68,13 +68,11 @@ public class CustomerService {
         Customer customer = customerRepository.findByEmail(request.email());
         customer.setFirstName(request.firstName());
         customer.setLastName(request.lastName());
-        customer.setEmail(request.email());
+        customer.setPhoneNumber(request.phoneNumber());
         customer.setPassword(request.password());
         customerRepository.save(customer);
 
         activeCustomer = customer;
-
-
     }
 
 
