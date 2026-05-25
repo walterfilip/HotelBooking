@@ -64,4 +64,36 @@ public class CustomerService {
         }
 
 
+    public void updateProfile(CreateCustomerRequest request) {
+        Customer customer = customerRepository.findByEmail(request.email());
+        customer.setFirstName(request.firstName());
+        customer.setLastName(request.lastName());
+        customer.setEmail(request.email());
+        customer.setPassword(request.password());
+        customerRepository.save(customer);
+
+        activeCustomer = customer;
+
+
+    }
+
+
+    public boolean checkPassword(String password, String repeatPassword) {
+
+        if (password == null || password.isBlank()) {
+         return false;
+
+        }
+        if (repeatPassword == null || repeatPassword.isBlank()) {
+            return false;
+
+        }
+        Customer customer = customerRepository.findByEmail(activeCustomer.getEmail());
+        if (!password.equals(customer.getPassword())) {
+            System.out.println(customer.getPassword() + " " +  password);
+            throw new IllegalArgumentException("passwords don't match");
+
+        }
+        return true;
+    }
 }

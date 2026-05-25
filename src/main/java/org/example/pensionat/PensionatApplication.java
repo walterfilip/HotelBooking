@@ -24,6 +24,8 @@ public class PensionatApplication {
 
     Lösenord  skapa en kryptering? för password  Filip
 
+    Skapa en autoupdate funktion?
+
     Startsida - knapp för logout actrive user null? linda
     bekräftelse av bokning - mappa till riktig bokning - KLAR, typ, just nu displayas bara priset per dag och tar inte extrasäng i hänsyn.
     Knappar på startsidan, mina bokningar/min sida och logga ut
