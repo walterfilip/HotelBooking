@@ -60,7 +60,9 @@ public class BookingController {
         model.addAttribute("endDate", endDate);
         model.addAttribute("extraBed", extraBed);
 
+        System.out.println("extraBed = " + extraBed);
         return "booking-form";
+
 
     }
 
