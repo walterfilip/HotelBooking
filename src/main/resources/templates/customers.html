@@ -20,6 +20,8 @@
         <th>Start datum</th>
         <th>Slut datum</th>
         <th>Avboka?</th>
+        <th>Ändra Datum</th>
+
     </tr>
     <tr th:each="booking : ${bookings}">
         <td th:text="${booking.getId()}"></td>
@@ -36,7 +38,17 @@
                         Avboka
                 </button>
             </form>
+
+                 <span
+                         th:if="${booking.status != activeStatus and !booking.datePassed()}">
+                    Avbokad
+                </span>
+                  <span th:if="${booking.datePassed()}">
+                    Avslutad
+                </span>
+
         </td>
+
         <td>
             <form th:action="@{/bookings/changedate/{id}(id=${booking.id})}" method="get">
                 <button
@@ -45,13 +57,7 @@
                         type="submit">
                     Ändra
                 </button>
-                <span
-                     th:if="${booking.status != activeStatus and !booking.datePassed()}">
-                    Avbokad
-                </span>
-                <span th:if="${booking.datePassed()}">
-                    Avslutad
-                </span>
+
 
             </form>
         </td>

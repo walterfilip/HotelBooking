@@ -46,14 +46,16 @@ class CustomerServiceTest {
                 "Yayha",
                 "hussien",
                 "yahja@test.se",
-                "0701111111"
+                "0701111111",
+                "hoppa"
         );
 
         customer2 = new Customer(
                 "klas",
                 "jensen",
                 "klasse@test.se",
-                "0701221111"
+                "0701221111",
+                "loppa"
         );
 
         fakeCustomers = List.of(
@@ -74,14 +76,16 @@ class CustomerServiceTest {
                 "Nils",
                 "Modig",
                 "nils@fakemail.se",
-                "0767777777"
+                "0767777777",
+                "loppa"
         );
 
         Customer customer2 = new Customer(
                 "Rebecca",
                 "Eriksson",
                 "rebecca@fakemail.se",
-                "0767777776"
+                "0767777776",
+                "loppa"
         );
 
 
@@ -121,13 +125,15 @@ class CustomerServiceTest {
                         "Jens",
                         "Kodbengtsson",
                         "kodarjesse@mail.com",
-                        "070132546"
+                        "070132546",
+                        "loppa"
                 );
         Customer savedCustomer = new Customer(
                 request.firstName(),
                 request.lastName(),
                 request.email(),
-                request.phoneNumber()
+                request.phoneNumber(),
+                request.password()
         );
 
         when(customerRepository.save(any(Customer.class)))

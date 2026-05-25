@@ -87,14 +87,16 @@ public class CustomerController {
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String email,
-            @RequestParam String phoneNumber
+            @RequestParam String phoneNumber,
+            @RequestParam String password
     ) {
 
         CreateCustomerRequest request = new CreateCustomerRequest(
                 firstName,
                 lastName,
                 email,
-                phoneNumber
+                phoneNumber,
+                password
         );
 
         customerService.createCustomer(request);
@@ -109,6 +111,7 @@ public class CustomerController {
             @RequestParam String lastName,
             @RequestParam String email,
             @RequestParam String phoneNumber,
+            @RequestParam String password,
 
             @RequestParam Long roomId,
             @RequestParam String startDate,
@@ -123,7 +126,8 @@ public class CustomerController {
                 firstName,
                 lastName,
                 email,
-                phoneNumber
+                phoneNumber,
+                password
         );
 
         Customer customer = customerService.createCustomer(request);

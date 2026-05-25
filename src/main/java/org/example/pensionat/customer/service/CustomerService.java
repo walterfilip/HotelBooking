@@ -26,7 +26,7 @@ public class CustomerService {
     }
 
     public Customer createCustomer(CreateCustomerRequest request) {
-        Customer customer = new  Customer(request.firstName(),request.lastName(),request.email(),request.phoneNumber());
+        Customer customer = new  Customer(request.firstName(),request.lastName(),request.email(),request.phoneNumber(), request.password());
         return customerRepository.save(customer);
     }
 
