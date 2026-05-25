@@ -17,33 +17,35 @@ public class PensionatApplication {
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
-    Registrera användare   - KLAR, men behöver felhantering av kundregistrering i customer-form, just nu kan man skriva vadsom tror jag.
-    Användare ska kunna ändra sina uppgifter  - Filip
-    Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
-    Måste ha tydligt felmeddelande).
+     KLAR, Registrera användare   - KLAR, men behöver felhantering av kundregistrering i customer-form, just nu kan man skriva vadsom tror jag.
+     KLAR, Användare ska kunna ändra sina uppgifter  - Filip KLAR går ändra namn och telefon, även byta lösenord.
+     Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
+     Måste ha tydligt felmeddelande).
 
-    Lösenord  skapa en kryptering? för password  Filip
+     skapa en kryptering Filip
 
-    Skapa en autoupdate funktion?
-
-    Startsida - knapp för logout actrive user null? linda
+    Startsida - Knappar på startsidan, mina bokningar/min sida och logga ut, active user null? linda
     bekräftelse av bokning - mappa till riktig bokning - KLAR, typ, just nu displayas bara priset per dag och tar inte extrasäng i hänsyn.
-    Knappar på startsidan, mina bokningar/min sida och logga ut
     Datumsök - Stina
     Räkna ut toatalpris, rum+extrasäng*dagar=total Stina
+
+    minst 10 rum
+   Tydliga felmedelanden som visas för användaren
+
 
     kolla igenom så felmeddelanden skrivs ut i  frontend, just nu crashar programmet om man försöker boka om datum till ett datum som varit.
     även ändra i avboka så det inte går avboka bokningar som varit.
 
-    * sortera bokningar i datumordning.
-
-    minst 10 rum
-    Tydliga felmedelanden som visas för användaren
 
 VG
 skriva 4 enhetstester?
 
-Extra? spärra fullbokade datum och ändra datumdagar?
+
+    Extras?
+    * sortera bokningar i datumordning.
+    *Skapa en autoupdate funktion?
+    *spärra fullbokade datum och ändra datumdagar?
+
 
      */
 }
