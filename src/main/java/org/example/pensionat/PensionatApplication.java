@@ -36,6 +36,8 @@ public class PensionatApplication {
 
 
 
+
+//test
     minst 10 rum
     Tydliga felmedelanden som visas för användaren
 
