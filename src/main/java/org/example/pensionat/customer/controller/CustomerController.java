@@ -71,10 +71,34 @@ public class CustomerController {
     @PostMapping("/edit")
     public String editCustomer(@RequestParam String firstName,
                                @RequestParam String lastName,
-//                               @RequestParam String password,
+                               @RequestParam String phoneNumber,
+                               @RequestParam String password,
+                               @RequestParam String newPassword,
                                Model model) {
         model.addAttribute("customer", customerService.activeCustomer);
-        return "customer-edit";
+
+        if (customerService.checkPassword(password,newPassword)) {
+
+            CreateCustomerRequest request = new CreateCustomerRequest(
+                    firstName,
+                    lastName,
+                    customerService.activeCustomer.getEmail(),
+                    phoneNumber,
+                    newPassword
+            );
+            customerService.updateProfile(request);
+        }else{
+            CreateCustomerRequest request = new CreateCustomerRequest(
+                    firstName,
+                    lastName,
+                    customerService.activeCustomer.getEmail(),
+                    phoneNumber,
+                    customerService.activeCustomer.getPassword()
+            );
+            customerService.updateProfile(request);
+        }
+
+        return "redirect:/customers/edit";
     }
     @GetMapping("/edit")
     public String editCustomer(Model model) {
