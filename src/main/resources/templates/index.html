@@ -36,7 +36,7 @@
 <br>
 
 <div th:if="${activeCustomer == null}">
-    <form th:action="@{/customers/login}" th:object="${costumer}" method="post">
+    <form th:action="@{/customers/login}" th:object="${custumer}" method="post">
         <h1 class="login-row">Logga in</h1>
         <div class="login-row">
             <label>Användarnamn:</label>
@@ -57,9 +57,12 @@
 <div th:if="${activeCustomer != null}">
 
     <h2 th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
-
-    <p>Du kan nu boka rum.</p>
-
+    <a th:href="@{/customers}">
+    <button type="button">Min sida</button>
+    </a>
+    <a th:href="@{/customers/logout}">
+        <button type="button">logga ut</button>
+    </a>
 </div>
 
 </body>
