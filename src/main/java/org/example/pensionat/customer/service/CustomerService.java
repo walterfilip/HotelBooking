@@ -5,6 +5,7 @@ import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.repository.CustomerRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,13 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
     public Customer activeCustomer;
+    private final BCryptPasswordEncoder encoder;
+
 
     public CustomerService(CustomerRepository customerRepository, BookingRepository bookingRepository) {
         this.customerRepository = customerRepository;
         this.bookingRepository = bookingRepository;
+        this.encoder = new BCryptPasswordEncoder();
     }
 
     public List<Customer> getAllCustomers() {
@@ -26,13 +30,12 @@ public class CustomerService {
     }
 
     public Customer createCustomer(CreateCustomerRequest request) {
-        Customer customer = new  Customer(request.firstName(),request.lastName(),request.email(),request.phoneNumber(), request.password());
+        Customer customer = new  Customer(request.firstName(),request.lastName(),request.email(),request.phoneNumber(),encoder.encode(request.password()));
         return customerRepository.save(customer);
     }
 
 
     public boolean loginCustomer(String email, String password) {
-
 
             if (email == null || email.isBlank()) {
                return false;
@@ -44,10 +47,13 @@ public class CustomerService {
             try{
                 Customer customer = customerRepository.findByEmail(email);
                 String dbPassword = customer.getPassword();
-                if (!password.equals(dbPassword)) {
-                    System.out.println("login failed");
+                if (!encoder.matches(password, dbPassword)) {
                     return false;
                 }
+//                if (!password.equals(dbPassword)) {
+//                    System.out.println("login failed");
+//                    return false;
+//                }
                 if (customer == null) {
                     return false;
                 }
@@ -69,29 +75,33 @@ public class CustomerService {
         customer.setFirstName(request.firstName());
         customer.setLastName(request.lastName());
         customer.setPhoneNumber(request.phoneNumber());
-        customer.setPassword(request.password());
+        customer.setPassword(encoder.encode(request.password()));
         customerRepository.save(customer);
 
         activeCustomer = customer;
     }
 
 
-    public boolean checkPassword(String password, String repeatPassword) {
+    public boolean checkPassword(String password, String newPassword) {
 
         if (password == null || password.isBlank()) {
          return false;
 
         }
-        if (repeatPassword == null || repeatPassword.isBlank()) {
+        if (newPassword == null || newPassword.isBlank()) {
             return false;
 
         }
         Customer customer = customerRepository.findByEmail(activeCustomer.getEmail());
-        if (!password.equals(customer.getPassword())) {
+        if (!encoder.matches(password, customer.getPassword())) {
             System.out.println(customer.getPassword() + " " +  password);
             throw new IllegalArgumentException("passwords don't match");
-
         }
+//        if (!password.equals(customer.getPassword())) {
+//            System.out.println(customer.getPassword() + " " +  password);
+//            throw new IllegalArgumentException("passwords don't match");
+//
+//        }
         return true;
     }
 }
