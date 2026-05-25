@@ -27,6 +27,8 @@ public class PensionatApplication {
     Knappar på startsidan, mina bokningar/min sida och logga ut
     Datumsök - Stina
     Räkna ut toatalpris, rum+extrasäng*dagar=total
+    skapa en kryptering? för password
+
 
     pw inlagt- merge till dev?
 
