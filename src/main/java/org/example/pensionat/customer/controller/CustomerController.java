@@ -8,7 +8,6 @@ import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +32,16 @@ public class CustomerController {
     @GetMapping
     public String customers(Model model) {
         Customer active = customerService.activeCustomer;
-        List<Booking> currentBooking = bookingService.getBookingByCustomerId(active.getId());
-            model.addAttribute(
-                    "bookings", currentBooking
-            );
-            model.addAttribute(
-                    "customer", active
-            );
-            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+        List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
+        model.addAttribute(
+                "bookings", currentBookings
+        );
+        model.addAttribute(
+                "customer", active
+        );
+        model.addAttribute("activeStatus",
+                BookingStatus.ACTIVE
+        );
 
         return "customers";
     }
@@ -66,23 +67,62 @@ public class CustomerController {
         return "customer-form";
     }
 
+    @PostMapping("/edit")
+    public String editCustomer(@RequestParam String firstName,
+                               @RequestParam String lastName,
+                               @RequestParam String phoneNumber,
+                               @RequestParam String password,
+                               @RequestParam String newPassword,
+                               Model model) {
+        model.addAttribute("customer", customerService.activeCustomer);
+
+        if (customerService.checkPassword(password,newPassword)) {
+
+            CreateCustomerRequest request = new CreateCustomerRequest(
+                    firstName,
+                    lastName,
+                    customerService.activeCustomer.getEmail(),
+                    phoneNumber,
+                    newPassword
+            );
+            customerService.updateProfile(request);
+        }else{
+            CreateCustomerRequest request = new CreateCustomerRequest(
+                    firstName,
+                    lastName,
+                    customerService.activeCustomer.getEmail(),
+                    phoneNumber,
+                    customerService.activeCustomer.getPassword()
+            );
+            customerService.updateProfile(request);
+        }
+
+        return "redirect:/customers/edit";
+    }
+    @GetMapping("/edit")
+    public String editCustomer(Model model) {
+        model.addAttribute("customer", customerService.activeCustomer);
+        return "customer-edit";
+    }
+
     @PostMapping
     public String createCustomer(
-
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String email,
-            @RequestParam String phoneNumber
+            @RequestParam String phoneNumber,
+            @RequestParam String password
     ) {
 
-       CreateCustomerRequest request = new CreateCustomerRequest(
-               firstName,
-               lastName,
-               email,
-               phoneNumber
-       );
+        CreateCustomerRequest request = new CreateCustomerRequest(
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                password
+        );
 
-       customerService.createCustomer(request);
+        customerService.createCustomer(request);
 
        return "redirect:/customers";
     }
@@ -94,6 +134,7 @@ public class CustomerController {
             @RequestParam String lastName,
             @RequestParam String email,
             @RequestParam String phoneNumber,
+            @RequestParam String password,
 
             @RequestParam Long roomId,
             @RequestParam String startDate,
@@ -108,7 +149,8 @@ public class CustomerController {
                 firstName,
                 lastName,
                 email,
-                phoneNumber
+                phoneNumber,
+                password
         );
 
         Customer customer = customerService.createCustomer(request);
@@ -129,38 +171,25 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
-                        Model model) {
-        System.out.println("email: " + email);
-        System.out.println("password: " + password);
-
+    public String login(
+            @RequestParam String email,
+            @RequestParam String password,
+            Model model
+    ) {
         if (!customerService.loginCustomer(email, password)) {
             model.addAttribute("loginError", "Invalid username and/or password");
             return "index";
-        }  // ska bo i restController?
-
-        return "redirect:/customers"; // ???
+        }
+        return "redirect:/customers";
     }
 
-
-    @GetMapping("/loggedinpage") // ändra namn
-    public void customer(Model model) {
-        Customer active = customerService.activeCustomer;
-
-        model.addAttribute(
-                "customer",
-                active.getFirstName()
-        );
+    @GetMapping("/logout")
+    public String logout() {
+        Customer customer = null;
+        return "index";
     }
 
-    @GetMapping("/settingspage") // ändra namn
-    public void settings(Model model) {
-        Customer active = customerService.activeCustomer;
-
-        model.addAttribute(
-                "customer",
-                active.getFirstName()
-        );
-    }
 }
+
+
+

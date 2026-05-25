@@ -105,6 +105,9 @@ public class Booking {
     public void setStatus(BookingStatus status) {
         this.status = status;
     }
+    public boolean datePassed() {
+        return startDate.isBefore(LocalDate.now());
+    }
 }
 
 

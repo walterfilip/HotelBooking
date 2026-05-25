@@ -14,26 +14,41 @@
 <h2 th:text="'Välkommen ' + ${customer.getFirstName()}"></h2>
 <table>
     <tr>
-        <th>Booking</th>
-        <th>Room</th>
-        <th>Date</th>
-        <th>Cancel booking</th>
-        <th>Edit booking</th>
+        <th>Bokning</th>
+        <th>Rum</th>
+        <th>Rumstyp</th>
+        <th>Start datum</th>
+        <th>Slut datum</th>
+        <th>Avboka?</th>
+        <th>Ändra Datum</th>
+
     </tr>
     <tr th:each="booking : ${bookings}">
         <td th:text="${booking.getId()}"></td>
         <td th:text="${booking.getRoom().getRoomNr()}"></td>
+        <td th:text="${booking.getRoom().getRoomType()}"></td>
         <td th:text="${booking.getStartDate()}"></td>
+        <td th:text="${booking.getEndDate()}"></td>
         <td>
             <form th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post">
                 <button
-                        th:if="${booking.status == activeStatus}"
+                        th:if="${booking.status == activeStatus and !booking.datePassed()}"
                         th:id="'btn-' + ${booking.id}"
                         type="submit">
-                        Avboka
+                    Avboka
                 </button>
             </form>
+
+            <span
+                    th:if="${booking.status != activeStatus and !booking.datePassed()}">
+                    Avbokad
+                </span>
+            <span th:if="${booking.datePassed()}">
+                    Avslutad
+                </span>
+
         </td>
+
         <td>
             <form th:action="@{/bookings/changedate/{id}(id=${booking.id})}" method="get">
                 <button
@@ -42,13 +57,25 @@
                         type="submit">
                     Ändra
                 </button>
+
+
             </form>
         </td>
     </tr>
 
     <!--    <tr th:each="book : "></tr>-->
 </table>
+<br>
+<br>
+<form th:action="@{/customers/edit}" method="get">
+    <button type="submit">Ändra uppgifter</button>
+</form>
 
-<a href="/">Till startsidan</a>
+<a href="/">
+    <button type="button">Till startsidan</button>
+</a>
+<a th:href="@{/customers/logout}">
+    <button type="button">Logga ut</button>
+</a>
 </body>
 </html>

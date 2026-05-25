@@ -42,8 +42,8 @@ public class DataSeeder implements CommandLineRunner {
             firstRoom = roomRepository.findById(1L);
         }
         if (customerRepository.count()==0){
-            savedCustomer = customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777"));
-            customerRepository.save(new Customer("Peter", "Peterstein", "peter@fakemail.se", "0767777776"));
+            savedCustomer = customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777", "hej"));
+            customerRepository.save(new Customer("Peter", "Peterstein", "peter@fakemail.se", "0767777776","hej"));
 
         } else {
             savedCustomer = customerRepository.findByEmail("nils@fakemail.se");

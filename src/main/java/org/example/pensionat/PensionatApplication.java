@@ -17,34 +17,37 @@ public class PensionatApplication {
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
-    Registrera användare   - Nils
-    Användare ska kunna ändra sina uppgifter  - Filip
-    Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
-    Måste ha tydligt felmeddelande).
+     KLAR, Registrera användare   - KLAR, men behöver felhantering av kundregistrering i customer-form, just nu kan man skriva vadsom tror jag.
+     KLAR, Användare ska kunna ändra sina uppgifter  - Filip KLAR går ändra namn och telefon, även byta lösenord.
+     Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
+     Måste ha tydligt felmeddelande).
 
-    Startsida - knapp för logout actrive user null?
-    bekräftelse av bokning - mappa till riktig bokning
-    Knappar på startsidan, mina bokningar/min sida och logga ut
+     skapa en kryptering Filip
+
+    bekräftelse av bokning - mappa till riktig bokning - KLAR, typ, just nu displayas bara priset per dag och tar inte extrasäng i hänsyn.
     Datumsök - Stina
-    Räkna ut toatalpris, rum+extrasäng*dagar=total
-
-    pw inlagt- merge till dev?
-
-
-
-    * sortera bokningar i datumordning.
-
-
+    Räkna ut toatalpris, rum+extrasäng*dagar=total Stina
 
 
 //test
     minst 10 rum
-    Tydliga felmedelanden som visas för användaren
+   Tydliga felmedelanden som visas för användaren
+
+
+    kolla igenom så felmeddelanden skrivs ut i  frontend, just nu crashar programmet om man försöker boka om datum till ett datum som varit.
+    även ändra i avboka så det inte går avboka bokningar som varit.
+
 
 VG
 skriva 4 enhetstester?
 
-Extra? spärra fullbokade datum och ändra datumdagar?
+
+    Extras?
+    * sortera bokningar i datumordning.
+    *Skapa en autoupdate funktion?
+    *spärra fullbokade datum och ändra datumdagar?
+    *jag gjorde 2 sidor så det står rätt när bokning är gjord/ändrad/borttagen, -
+    kanske snyggare med en ifsatts och bara skicka med en motsvarande siffra eller nått
 
      */
 }
