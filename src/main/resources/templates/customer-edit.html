@@ -12,8 +12,7 @@
 
     <form th:action="@{/customers/edit}"
           th:object="${customer}"
-          method="post"
-          id="customer-form">
+          method="post">
 
 <!--        <div class="customer-contact-input">-->
 <!--            <label >E-post: </label>-->
@@ -33,8 +32,6 @@
                    name="firstName"
                    th:value="*{firstName}"
                    required>
-            <small id="firstNameError" class="text-danger"></small>
-
         </div>
 
         <div class="customer-contact-input">
@@ -44,7 +41,6 @@
                    name="lastName"
                    th:value="*{lastName}"
                    required>
-            <small id="lastNameError" class="text-danger"></small>
 
         </div>
 
@@ -55,7 +51,6 @@
                    name="phoneNumber"
                    th:value="*{phoneNumber}"
                    required>
-            <small id="phoneNumberError" class="text-danger"></small>
 
         </div>
 
