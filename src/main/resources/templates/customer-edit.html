@@ -6,13 +6,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div>
+<div class="customer-form-container">
     <h1>Ändra dina uppgifter</h1>
     <h2 th:text="'Konto ' + ${customer.email} "></h2>
 
     <form th:action="@{/customers/edit}"
           th:object="${customer}"
-          method="post">
+          method="post"
+          id="customer-form">
 
 <!--        <div class="customer-contact-input">-->
 <!--            <label >E-post: </label>-->
@@ -32,6 +33,8 @@
                    name="firstName"
                    th:value="*{firstName}"
                    required>
+            <small id="firstNameError" class="text-danger"></small>
+
         </div>
 
         <div class="customer-contact-input">
@@ -41,6 +44,8 @@
                    name="lastName"
                    th:value="*{lastName}"
                    required>
+            <small id="lastNameError" class="text-danger"></small>
+
         </div>
 
         <div class="customer-contact-input">
@@ -50,6 +55,8 @@
                    name="phoneNumber"
                    th:value="*{phoneNumber}"
                    required>
+            <small id="phoneNumberError" class="text-danger"></small>
+
         </div>
 
         <div class="customer-contact-input">
