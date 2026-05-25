@@ -35,15 +35,15 @@
                         th:if="${booking.status == activeStatus and !booking.datePassed()}"
                         th:id="'btn-' + ${booking.id}"
                         type="submit">
-                        Avboka
+                    Avboka
                 </button>
             </form>
 
-                 <span
-                         th:if="${booking.status != activeStatus and !booking.datePassed()}">
+            <span
+                    th:if="${booking.status != activeStatus and !booking.datePassed()}">
                     Avbokad
                 </span>
-                  <span th:if="${booking.datePassed()}">
+            <span th:if="${booking.datePassed()}">
                     Avslutad
                 </span>
 
@@ -65,12 +65,17 @@
 
     <!--    <tr th:each="book : "></tr>-->
 </table>
-
+<br>
 <br>
 <form th:action="@{/customers/edit}" method="get">
     <button type="submit">Ändra uppgifter</button>
 </form>
-<br>
-<a href="/">Till startsidan</a>
+
+<a href="/">
+    <button type="button">Till startsidan</button>
+</a>
+<a th:href="@{/customers/logout}">
+    <button type="button">Logga ut</button>
+</a>
 </body>
 </html>

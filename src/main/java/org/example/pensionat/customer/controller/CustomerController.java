@@ -8,7 +8,6 @@ import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -184,7 +183,11 @@ public class CustomerController {
         return "redirect:/customers";
     }
 
-
+    @GetMapping("/logout")
+    public String logout() {
+        Customer customer = null;
+        return "index";
+    }
 
 }
 

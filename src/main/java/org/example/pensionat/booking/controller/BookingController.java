@@ -99,7 +99,7 @@ public class BookingController {
     @PostMapping("/cancel/{id}")
     public String cancelBooking(@PathVariable Long id){
         bookingService.cancelBooking(id);
-        return "bookings";
+        return "bookings-cancelled";
     }
 
     @GetMapping ("/changedate/{id}")
@@ -133,7 +133,7 @@ public class BookingController {
 
             model.addAttribute("customer", booking.getCustomer());
 
-            return "bookings";
+            return "bookings-changed";
 
     }
 

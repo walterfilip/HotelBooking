@@ -24,7 +24,6 @@ public class PensionatApplication {
 
      skapa en kryptering Filip
 
-    Startsida - Knappar på startsidan, mina bokningar/min sida och logga ut, active user null? linda
     bekräftelse av bokning - mappa till riktig bokning - KLAR, typ, just nu displayas bara priset per dag och tar inte extrasäng i hänsyn.
     Datumsök - Stina
     Räkna ut toatalpris, rum+extrasäng*dagar=total Stina
@@ -45,7 +44,8 @@ skriva 4 enhetstester?
     * sortera bokningar i datumordning.
     *Skapa en autoupdate funktion?
     *spärra fullbokade datum och ändra datumdagar?
-
+    *jag gjorde 2 sidor så det står rätt när bokning är gjord/ändrad/borttagen, -
+    kanske snyggare med en ifsatts och bara skicka med en motsvarande siffra eller nått
 
      */
 }
