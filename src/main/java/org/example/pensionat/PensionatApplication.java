@@ -17,6 +17,8 @@ public class PensionatApplication {
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
+    The knapps are buggy?!?!?! NEED FIX.
+
      KLAR, Användare ska kunna ändra sina uppgifter  - Filip KLAR går ändra namn och telefon, även byta lösenord.
      Användare ska kunna ta bort konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
      Måste ha tydligt felmeddelande). - Stina
