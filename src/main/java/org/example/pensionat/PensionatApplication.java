@@ -33,7 +33,7 @@ public class PensionatApplication {
      Användare ska kunna ta bort konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
      Måste ha tydligt felmeddelande). - Stina
 
-     skapa en kryptering Filip
+     skapa en kryptering Filip KLAR
 
     Räkna ut totalpris, rum+extrasäng*dagar=total Stina
 
