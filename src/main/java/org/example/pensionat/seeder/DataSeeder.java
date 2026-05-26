@@ -6,6 +6,7 @@ import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.repository.CustomerRepository;
+import org.example.pensionat.room.utils.encoder.Encoder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.example.pensionat.room.RoomType;
@@ -42,7 +43,7 @@ public class DataSeeder implements CommandLineRunner {
             firstRoom = roomRepository.findById(1L);
         }
         if (customerRepository.count()==0){
-            savedCustomer = customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777", "hej"));
+            savedCustomer = customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777", Encoder.hashPassword("hej")));
             customerRepository.save(new Customer("Peter", "Peterstein", "peter@fakemail.se", "0767777776","hej"));
 
         } else {

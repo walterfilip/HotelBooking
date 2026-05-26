@@ -8,6 +8,7 @@ import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+import org.example.pensionat.room.utils.encoder.Encoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -86,7 +87,8 @@ public class CustomerController {
                     phoneNumber,
                     newPassword
             );
-            customerService.updateProfile(request);
+            boolean changePassword = true;
+            customerService.updateProfile(request, changePassword);
         }else{
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
@@ -95,7 +97,8 @@ public class CustomerController {
                     phoneNumber,
                     customerService.activeCustomer.getPassword()
             );
-            customerService.updateProfile(request);
+            boolean changePassword = false;
+            customerService.updateProfile(request, changePassword);
         }
 
         return "redirect:/customers/edit";
@@ -120,7 +123,7 @@ public class CustomerController {
                 lastName,
                 email,
                 phoneNumber,
-                password
+                Encoder.hashPassword(password)
         );
 
         customerService.createCustomer(request);
@@ -151,7 +154,7 @@ public class CustomerController {
                 lastName,
                 email,
                 phoneNumber,
-                password
+                Encoder.hashPassword(password)
         );
 
         Customer customer = customerService.createCustomer(request);
