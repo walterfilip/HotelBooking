@@ -72,8 +72,7 @@ public class BookingController {
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
-            @RequestParam (defaultValue = "false") boolean extraBed,
-            Model model
+            @RequestParam (defaultValue = "false") boolean extraBed
     )
     {
 

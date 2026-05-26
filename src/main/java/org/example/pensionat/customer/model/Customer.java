@@ -3,7 +3,6 @@ package org.example.pensionat.customer.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Customer {
@@ -27,8 +26,6 @@ public class Customer {
     @NotBlank(message = "lösenord måste anges")
     @Column(nullable = false)
     private String password;
-
-
 
     public Customer() {
 

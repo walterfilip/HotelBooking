@@ -105,6 +105,22 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
+    @Transactional
+    public void updateExpiredBookings() {
+
+        List<Booking> bookings = bookingRepository.findAll();
+
+        for (Booking booking : bookings) {
+
+            if (booking.getStatus() == BookingStatus.ACTIVE && booking.getEndDate().isBefore(LocalDate.now()))
+            {
+                booking.setStatus(BookingStatus.CANCELLED);
+            }
+        }
+
+        bookingRepository.saveAll(bookings);
+    }
+
 
     public Booking getBookingById(Long bookingId) {
         return bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));

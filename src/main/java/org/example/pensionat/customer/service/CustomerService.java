@@ -5,7 +5,6 @@ import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.repository.CustomerRepository;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
