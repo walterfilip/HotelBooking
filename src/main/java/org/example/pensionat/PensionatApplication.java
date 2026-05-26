@@ -26,22 +26,17 @@ public class PensionatApplication {
     Räkna ut totalpris, rum+extrasäng*dagar=total Stina
 
 
-//test
+    //test
     minst 10 rum - Nils
    Tydliga felmeddelanden som visas för användaren
 
-
-    kolla igenom så felmeddelanden skrivs ut i  frontend, just nu crashar programmet om man försöker boka om datum till ett datum som varit.
-    även ändra i avboka så det inte går avboka bokningar som varit.
-
-
-VG
-skriva 4 enhetstester?
+    VG
+    skriva 4 enhetstester?
 
 
     Extras?
     * sortera bokningar i datumordning.
-    *Skapa en autoupdate funktion? -- Nils
+    *Skapa en autoupdate (kommer inte bli så auto, hehe), funktion? -- Nils
     *spärra fullbokade datum och ändra datumdagar?
     *jag gjorde 2 sidor så det står rätt när bokning är gjord/ändrad/borttagen, -
     kanske snyggare med en ifsatts och bara skicka med en motsvarande siffra eller nått
