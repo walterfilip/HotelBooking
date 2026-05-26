@@ -32,6 +32,8 @@ public class PensionatApplication {
     Datumsök - Stina
     Räkna ut toatalpris, rum+extrasäng*dagar=total Stina
 
+    skapa knappar, skapa en text att det updateras. 
+
 
 
 
