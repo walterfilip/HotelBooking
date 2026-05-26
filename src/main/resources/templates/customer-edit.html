@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div>
+<div class="customer-form-container">
     <h1>Ändra dina uppgifter</h1>
     <h2 th:text="'Konto ' + ${customer.email} "></h2>
 
@@ -41,6 +41,7 @@
                    name="lastName"
                    th:value="*{lastName}"
                    required>
+
         </div>
 
         <div class="customer-contact-input">
@@ -50,6 +51,7 @@
                    name="phoneNumber"
                    th:value="*{phoneNumber}"
                    required>
+
         </div>
         <br>
         <label>Ändra lösenord:</label>

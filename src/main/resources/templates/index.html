@@ -29,14 +29,23 @@
                 <option value="DOUBLE">Dubbelrum</option>
             </select>
         </div>
+
+        <div th:if="${errorMessage}" class="error-container">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+    <div class="search-rooms-button">
         <button type="submit">Sök lediga rum</button>
+    </div>
     </form>
+
+
 </div>
 
 <br>
 
 <div th:if="${activeCustomer == null}">
-    <form th:action="@{/customers/login}" th:object="${costumer}" method="post">
+    <form th:action="@{/customers/login}" th:object="${custumer}" method="post">
         <h1 class="login-row">Logga in</h1>
         <div class="login-row">
             <label>Användarnamn:</label>
@@ -49,7 +58,7 @@
         </div>
         <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}"></small>
         <div class="login-row">
-            <button type="submit">Login</button>
+            <button type="submit">Logga in</button>
         </div>
     </form>
 </div>
@@ -57,9 +66,12 @@
 <div th:if="${activeCustomer != null}">
 
     <h2 th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
-
-    <p>Du kan nu boka rum.</p>
-
+    <a th:href="@{/customers}">
+    <button type="button">Min sida</button>
+    </a>
+    <a th:href="@{/customers/logout}">
+        <button type="button">Logga ut</button>
+    </a>
 </div>
 
 </body>

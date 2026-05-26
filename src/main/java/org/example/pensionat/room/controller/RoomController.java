@@ -46,6 +46,25 @@ public class RoomController {
      @RequestParam RoomType roomType,
      Model model) {
 
+        if (startDate.isBlank() || endDate.isBlank()) {
+            model.addAttribute("errorMessage", "Du måste välja datum för både incheckning och utcheckning!");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            return "index";
+        }
+
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+        LocalDate today = LocalDate.now();
+
+        if (start.isBefore(today) || end.isBefore(today)) {
+            model.addAttribute("errorMessage", "Du kan inte välja datum bakåt i tiden!");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            return "index";
+        }
+
+
         List<Room> availableRooms = roomService.getAvailableRooms(
          roomType,
                 LocalDate.parse(startDate),

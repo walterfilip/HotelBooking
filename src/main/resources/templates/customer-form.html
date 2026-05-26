@@ -12,7 +12,7 @@
 <div class="customer-form-container">
 <h1>Kundformulär</h1>
 
-    <form th:action="@{/customers/booking}" method="post">
+    <form th:action="@{/customers/booking}" method="post" id="customer-form">
 
 
         <div class="customer-contact-input">
@@ -21,6 +21,7 @@
                    id="firstName"
                    name="firstName"
                    required>
+            <small id="firstNameError" class="text-danger"></small>
         </div>
 
         <div class="customer-contact-input">
@@ -29,6 +30,7 @@
                    id="lastName"
                    name="lastName"
                    required>
+            <small id="lastNameError" class="text-danger"></small>
         </div>
 
         <div class="customer-contact-input">
@@ -37,6 +39,7 @@
                    id="email"
                    name="email"
                    required>
+            <small id="emailError" class="text-danger"></small>
         </div>
 
         <div class="customer-contact-input">
@@ -45,6 +48,16 @@
                    id="phoneNumber"
                    name="phoneNumber"
                    required>
+            <small id="phoneNumberError" class="text-danger"></small>
+        </div>
+
+        <div class="customer-contact-input">
+            <label for="password">Lösenord</label>
+            <input type="text"
+                   id="password"
+                   name="password"
+                   required>
+            <small id="passwordError" class="text-danger"></small>
         </div>
 
         <!-- Inputs från bokningen som följer med hidden -->
@@ -70,5 +83,6 @@
 
 <a href="/">Till startsidan</a>
 </div>
+<script th:src="@{/js/form.js}"></script>
 </body>
 </html>

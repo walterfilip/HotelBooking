@@ -187,6 +187,11 @@ public class CustomerController {
         return "redirect:/customers";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        customerService.activeCustomer = null;
+        return "redirect:/";
+    }
 
 }
 

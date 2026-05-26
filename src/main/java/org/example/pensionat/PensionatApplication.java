@@ -1,8 +1,11 @@
 
 package org.example.pensionat;
 
+import org.example.pensionat.booking.service.BookingService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.sql.SQLException;
 
@@ -13,48 +16,41 @@ public class PensionatApplication {
         SpringApplication.run(PensionatApplication.class, args);
     }
 
+    //körs när man startar appen
+    @Bean
+    CommandLineRunner updateBoookings(BookingService bookingService) {
+        return args -> bookingService.updateExpiredBookings();
+    }
+}
+
 
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
-    Registrera användare   - KLAR, men behöver felhantering av kundregistrering i customer-form, just nu kan man skriva vadsom tror jag.
-    Användare ska kunna ändra sina uppgifter  - Filip
-    Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
-    Måste ha tydligt felmeddelande).
+    The knapps are buggy?!?!?! NEED FIX.
 
-    Lösenord  skapa en kryptering? för password  Filip
+     KLAR, Användare ska kunna ändra sina uppgifter  - Filip KLAR går ändra namn och telefon, även byta lösenord.
+     Användare ska kunna ta bort konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
+     Måste ha tydligt felmeddelande). - Stina
 
-    Skapa en autoupdate funktion?
+     skapa en kryptering Filip
 
-    Startsida - knapp för logout actrive user null? linda
-    bekräftelse av bokning - mappa till riktig bokning - KLAR, typ, just nu displayas bara priset per dag och tar inte extrasäng i hänsyn.
-    Knappar på startsidan, mina bokningar/min sida och logga ut
-    Datumsök - Stina
-    Räkna ut toatalpris, rum+extrasäng*dagar=total Stina
-
-    skapa knappar, skapa en text att det updateras. 
+    Räkna ut totalpris, rum+extrasäng*dagar=total Stina
 
 
+    //test
+    minst 10 rum - Nils
+   Tydliga felmeddelanden som visas för användaren
+
+    VG
+    skriva 4 enhetstester?
 
 
-
-    kolla igenom så felmeddelanden skrivs ut i  frontend, just nu crashar programmet om man försöker boka om datum till ett datum som varit.
-    även ändra i avboka så det inte går avboka bokningar som varit.
-
-
-
-
+    Extras?
     * sortera bokningar i datumordning.
-
-
-
-    minst 10 rum
-    Tydliga felmedelanden som visas för användaren
-
-VG
-skriva 4 enhetstester?
-
-Extra? spärra fullbokade datum och ändra datumdagar?
+    *Skapa en autoupdate (kommer inte bli så auto, hehe), funktion? -- Nils
+    *spärra fullbokade datum och ändra datumdagar?
+    *jag gjorde 2 sidor så det står rätt när bokning är gjord/ändrad/borttagen, -
+    kanske snyggare med en ifsatts och bara skicka med en motsvarande siffra eller nått
 
      */
-}

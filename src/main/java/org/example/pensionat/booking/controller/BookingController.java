@@ -60,7 +60,9 @@ public class BookingController {
         model.addAttribute("endDate", endDate);
         model.addAttribute("extraBed", extraBed);
 
+        System.out.println("extraBed = " + extraBed);
         return "booking-form";
+
 
     }
 
@@ -70,8 +72,7 @@ public class BookingController {
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
-            @RequestParam (defaultValue = "false") boolean extraBed,
-            Model model
+            @RequestParam (defaultValue = "false") boolean extraBed
     )
     {
 
@@ -99,7 +100,7 @@ public class BookingController {
     @PostMapping("/cancel/{id}")
     public String cancelBooking(@PathVariable Long id){
         bookingService.cancelBooking(id);
-        return "bookings";
+        return "bookings-cancelled";
     }
 
     @GetMapping ("/changedate/{id}")
@@ -133,7 +134,7 @@ public class BookingController {
 
             model.addAttribute("customer", booking.getCustomer());
 
-            return "bookings";
+            return "bookings-changed";
 
     }
 

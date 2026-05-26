@@ -96,7 +96,6 @@ public class CustomerService {
             System.out.println(customer.getPassword() + " " +  password);
             throw new IllegalArgumentException("passwords don't match");
         }
-
         return true;
     }
 }
