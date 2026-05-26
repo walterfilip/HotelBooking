@@ -17,21 +17,18 @@ public class PensionatApplication {
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
-     KLAR, Registrera användare   - KLAR, men behöver felhantering av kundregistrering i customer-form, just nu kan man skriva vadsom tror jag.
      KLAR, Användare ska kunna ändra sina uppgifter  - Filip KLAR går ändra namn och telefon, även byta lösenord.
-     Användare ska kunna ta bort  konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
-     Måste ha tydligt felmeddelande).
+     Användare ska kunna ta bort konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
+     Måste ha tydligt felmeddelande). - Stina
 
      skapa en kryptering Filip
 
-    bekräftelse av bokning - mappa till riktig bokning - KLAR, typ, just nu displayas bara priset per dag och tar inte extrasäng i hänsyn.
-    Datumsök - Stina
-    Räkna ut toatalpris, rum+extrasäng*dagar=total Stina
+    Räkna ut totalpris, rum+extrasäng*dagar=total Stina
 
 
 //test
-    minst 10 rum
-   Tydliga felmedelanden som visas för användaren
+    minst 10 rum - Nils
+   Tydliga felmeddelanden som visas för användaren
 
 
     kolla igenom så felmeddelanden skrivs ut i  frontend, just nu crashar programmet om man försöker boka om datum till ett datum som varit.
@@ -44,7 +41,7 @@ skriva 4 enhetstester?
 
     Extras?
     * sortera bokningar i datumordning.
-    *Skapa en autoupdate funktion?
+    *Skapa en autoupdate funktion? -- Nils
     *spärra fullbokade datum och ändra datumdagar?
     *jag gjorde 2 sidor så det står rätt när bokning är gjord/ändrad/borttagen, -
     kanske snyggare med en ifsatts och bara skicka med en motsvarande siffra eller nått

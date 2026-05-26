@@ -185,8 +185,8 @@ public class CustomerController {
 
     @GetMapping("/logout")
     public String logout() {
-        Customer customer = null;
-        return "index";
+        customerService.activeCustomer = null;
+        return "redirect:/";
     }
 
 }
