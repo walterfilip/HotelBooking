@@ -29,8 +29,17 @@
                 <option value="DOUBLE">Dubbelrum</option>
             </select>
         </div>
+
+        <div th:if="${errorMessage}" class="error-container">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+    <div class="search-rooms-button">
         <button type="submit">Sök lediga rum</button>
+    </div>
     </form>
+
+
 </div>
 
 <br>
