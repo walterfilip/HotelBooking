@@ -154,7 +154,7 @@ public class CustomerController {
                 lastName,
                 email,
                 phoneNumber,
-                Encoder.hashPassword(password)
+                password
         );
 
         Customer customer = customerService.createCustomer(request);

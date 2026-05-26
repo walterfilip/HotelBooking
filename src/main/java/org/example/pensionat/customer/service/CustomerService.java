@@ -59,9 +59,9 @@ public class CustomerService {
                 System.out.println("login failed");
                 return false;
             }
-                System.out.println("login successful");
-                return true;
-        }
+            System.out.println("login successful");
+            return true;
+    }
 
 
     public void updateProfile(CreateCustomerRequest request, boolean changePassword) {
