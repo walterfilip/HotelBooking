@@ -7,6 +7,7 @@ import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,16 +52,21 @@ public class BookingController {
         }
 
         Room room = roomService.getRoomById(roomId);
+        int totalPrice = bookingService.getTotalPrice(
+                room,
+                LocalDate.parse(startDate),
+                LocalDate.parse(endDate),
+                extraBed
+        );
 
         model.addAttribute("customer", activeCustomer);
         model.addAttribute("room", room);
-
         model.addAttribute("roomId", roomId);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("extraBed", extraBed);
+        model.addAttribute("totalPrice", totalPrice);
 
-        System.out.println("extraBed = " + extraBed);
         return "booking-form";
 
 

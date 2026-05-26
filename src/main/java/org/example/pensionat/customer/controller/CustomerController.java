@@ -159,6 +159,13 @@ public class CustomerController {
 
         Room room = roomService.getRoomById(roomId);
 
+        int totalPrice = bookingService.getTotalPrice(
+                room,
+                java.time.LocalDate.parse(startDate),
+                java.time.LocalDate.parse(endDate),
+                extraBed
+        );
+
         model.addAttribute("customer", customer);
         model.addAttribute("room", room);
 
@@ -166,6 +173,7 @@ public class CustomerController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("extraBed", extraBed);
+        model.addAttribute("totalPrice", totalPrice);
 
         return "booking-form";
     }
@@ -190,6 +198,7 @@ public class CustomerController {
     }
 
 }
+
 
 
 
