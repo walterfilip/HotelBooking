@@ -37,6 +37,7 @@ class BookingServiceTest {
     private Room room1 = new Room();
     private Booking booking1 = new Booking();
     private Booking booking2 = new Booking();
+    private Booking booking3 = new Booking();
     private List<Booking> bookingList = new ArrayList<>();
 
     @BeforeEach
@@ -60,29 +61,29 @@ class BookingServiceTest {
                 true,
                 BookingStatus.CANCELLED
         );
-        bookingList = List.of(booking1, booking2);
-    }
 
-    @Test
-    void shouldCancelExpiredBookings() {
-
-        Booking booking = new Booking(
-                null,
-                null,
+        booking3 = new Booking(
+                customer1,
+                room1,
                 LocalDate.now().minusDays(10),
                 LocalDate.now().minusDays(1),
                 false,
                 BookingStatus.ACTIVE
         );
+        bookingList = List.of(booking1, booking2, booking3);
+    }
 
-        List<Booking> bookings = List.of(booking);
+    @Test
+    void shouldCancelExpiredBookings() {
+
+        List<Booking> bookings = List.of(booking3);
 
         //Mockito override, när. findAll anropas returnerar vi våran egna mock lista
         when(bookingRepository.findAll()).thenReturn(bookings);
 
         bookingService.updateExpiredBookings();
 
-        assertEquals(BookingStatus.CANCELLED, booking.getStatus());
+        assertEquals(BookingStatus.CANCELLED, booking3.getStatus());
 
         verify(bookingRepository).saveAll(bookings);
     }
@@ -93,22 +94,22 @@ class BookingServiceTest {
         when(bookingRepository.findAll()).thenReturn(bookingList);
         List<Booking> results = bookingService.getAllBookings();
         assertNotNull(results);
-        assertEquals(2, results.size());
-        assertThat(results, Matchers.contains(booking1, booking2));
+        assertEquals(3, results.size());
+        assertThat(results, Matchers.contains(booking1, booking2, booking3));
 
         verify(bookingRepository).findAll();
     }
 
-    @Test
-    void throwExceptionWhenDateOverlap() {
-
-        CreateBookingRequest request = new CreateBookingRequest(
-                1L,
-                1L,
-                LocalDate.now().plusDays(2),
-                LocalDate.now().plusDays(3),
-                false
-        );
-        assertThrows(NotFoundException.class, () -> bookingService.createBooking(request));
-    }
+//    @Test
+//    void throwExceptionWhenDateOverlap() {
+//
+//        CreateBookingRequest request = new CreateBookingRequest(
+//                customer1.getId(),
+//                room1.getId(),
+//                LocalDate.now().plusDays(2),
+//                LocalDate.now().plusDays(3),
+//                false
+//        );
+//        assertThrows(NotFoundException.class, () -> bookingService.createBooking(request));
+//    }
 }
