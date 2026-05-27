@@ -5,10 +5,8 @@ import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.Customer;
-import org.example.pensionat.customer.repository.CustomerRepository;
 import org.example.pensionat.error.NotFoundException;
 import org.example.pensionat.room.model.Room;
-import org.example.pensionat.room.repository.RoomRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +14,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,11 +30,6 @@ class BookingServiceTest {
 
     @Mock
     private BookingRepository bookingRepository;
-    @Mock
-    private CustomerRepository customerRepository;
-
-    @Mock
-    private RoomRepository roomRepository;
 
     @InjectMocks
     private BookingService bookingService;
@@ -67,7 +61,6 @@ class BookingServiceTest {
                 BookingStatus.CANCELLED
         );
         bookingList = List.of(booking1, booking2);
-
     }
 
     @Test
@@ -84,7 +77,7 @@ class BookingServiceTest {
 
         List<Booking> bookings = List.of(booking);
 
-        //mockito override, när .findAll anropas returnar vi våran egna mock lista
+        //Mockito override, när. findAll anropas returnerar vi våran egna mock lista
         when(bookingRepository.findAll()).thenReturn(bookings);
 
         bookingService.updateExpiredBookings();
@@ -92,7 +85,6 @@ class BookingServiceTest {
         assertEquals(BookingStatus.CANCELLED, booking.getStatus());
 
         verify(bookingRepository).saveAll(bookings);
-
     }
 
     @Test

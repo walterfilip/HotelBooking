@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Hotellbokning</title>
-
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -34,14 +33,12 @@
             <span th:text="${errorMessage}"></span>
         </div>
 
-    <div class="search-rooms-button">
-        <button type="submit">Sök lediga rum</button>
-    </div>
+        <div class="search-rooms-button">
+            <button type="submit">Sök lediga rum</button>
+        </div>
     </form>
 
-
 </div>
-
 <br>
 
 <div th:if="${activeCustomer == null}">
@@ -58,7 +55,8 @@
             <label>Lösenord:</label>
             <input type="password" name="password">
         </div>
-        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}" style="color:red"></small>
+        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}"
+               style="color:red"></small>
         <div class="login-row">
             <button type="submit">Logga in</button>
         </div>
@@ -78,6 +76,5 @@
     </div>
 
 </div>
-
 </body>
 </html>

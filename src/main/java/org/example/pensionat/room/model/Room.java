@@ -29,7 +29,6 @@ public class Room {
     public Room() {
     }
 
-
     public Room(RoomType roomType, String roomNr, String description, int price) {
         this.roomType = roomType;
         this.roomNr = roomNr;
@@ -49,30 +48,14 @@ public class Room {
         return roomType;
     }
 
-    public void setRoomType(RoomType roomType) {
-        this.roomType = roomType;
-    }
-
     public String getRoomNr() {
         return roomNr;
     }
 
     public String getDescription() {return description;}
 
-    public void setDescription(String description){
-        this.description =  description;
-    }
-
-    public void setRoomNr(String roomNr) {
-        this.roomNr = roomNr;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 }
 

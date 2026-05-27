@@ -1,6 +1,5 @@
 package org.example.pensionat.booking.service;
 
-
 import jakarta.transaction.Transactional;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
@@ -15,8 +14,8 @@ import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.repository.RoomRepository;
 import org.example.pensionat.utils.Validations;
 import org.springframework.stereotype.Service;
-import java.time.temporal.ChronoUnit;
 
+import java.time.temporal.ChronoUnit;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,10 +36,10 @@ public class BookingService {
         this.roomRepository = roomRepository;
     }
 
-
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
+
     public List<Booking> getBookingByCustomerId(long customerId) {
         return bookingRepository.findByCustomerId(customerId);
     }
@@ -56,7 +55,6 @@ public class BookingService {
         return totalPrice;
     }
 
-
     @Transactional
     public Booking createBooking(CreateBookingRequest request) {
 
@@ -65,17 +63,16 @@ public class BookingService {
         Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
 
         Validations.validateDateRange(request.startDate(), request.endDate());
-        validateRoomAvailability(request.roomId(), request.startDate(),request.endDate(), null);
+        validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), null);
         validateExtraBed(room, request.extraBed());
 
-        Booking booking = new Booking(customer, room,request.startDate(),request.endDate(), request.extraBed(), BookingStatus.ACTIVE);
+        Booking booking = new Booking(customer, room, request.startDate(), request.endDate(), request.extraBed(), BookingStatus.ACTIVE);
 
         return bookingRepository.save(booking);
-
     }
 
     @Transactional
-    public Booking cancelBooking(Long bookingId){
+    public Booking cancelBooking(Long bookingId) {
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
 
@@ -86,32 +83,31 @@ public class BookingService {
     private void validateRoomAvailability(Long roomId, LocalDate start, LocalDate end, Long bookingIdToIgnore) {
         List<Booking> bookings = bookingRepository.findByRoom_IdAndStatus(roomId, BookingStatus.ACTIVE);
 
-        for(Booking existingBooking: bookings){
-            if(bookingIdToIgnore != null && bookingIdToIgnore.equals(existingBooking.getId())){
+        for (Booking existingBooking : bookings) {
+            if (bookingIdToIgnore != null && bookingIdToIgnore.equals(existingBooking.getId())) {
                 continue;
             }
 
             boolean overlap = !start.isAfter(existingBooking.getEndDate()) && !end.isBefore(existingBooking.getStartDate());
 
-            if(overlap){
+            if (overlap) {
                 throw new BadRequestException("Rummet är redan bokat under valt datum");
             }
         }
     }
 
-    private void validateExtraBed(Room room, boolean extraBedRequested){
+    private void validateExtraBed(Room room, boolean extraBedRequested) {
 
-        if(extraBedRequested && room.getRoomType() != RoomType.DOUBLE){
+        if (extraBedRequested && room.getRoomType() != RoomType.DOUBLE) {
             throw new BadRequestException("Detta rum stödjer inte extrasäng");
         }
     }
 
     @Transactional
-    public Booking changeBookingDate (CreateBookingRequest request, Long bookingId){
+    public Booking changeBookingDate(CreateBookingRequest request, Long bookingId) {
 
         Validations.validateDateRange(request.startDate(), request.endDate());
         validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), bookingId);
-
 
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
         booking.setStartDate(request.startDate());
@@ -127,15 +123,13 @@ public class BookingService {
 
         for (Booking booking : bookings) {
 
-            if (booking.getStatus() == BookingStatus.ACTIVE && booking.getEndDate().isBefore(LocalDate.now()))
-            {
+            if (booking.getStatus() == BookingStatus.ACTIVE && booking.getEndDate().isBefore(LocalDate.now())) {
                 booking.setStatus(BookingStatus.CANCELLED);
             }
         }
 
         bookingRepository.saveAll(bookings);
     }
-
 
     public Booking getBookingById(Long bookingId) {
         return bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));

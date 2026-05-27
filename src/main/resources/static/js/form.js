@@ -1,5 +1,3 @@
-
-
 const form = document.getElementById("customer-form");
 const firstNameInput = document.getElementById("firstName");
 const firstNameError = document.getElementById("firstNameError");
@@ -24,7 +22,6 @@ numberInput.addEventListener("blur", validateNumber);
 passwordInput.addEventListener("blur", validatePassword);
 
 
-
 function displayError(el, message) {
     el.innerHTML = message;
 }
@@ -36,7 +33,7 @@ function clearError(el) {
 function validateFirstName() {
     let value = firstNameInput.value.trim();
     if (value.length < 2) {
-        displayError(firstNameError, "Minimum 2 letters");
+        displayError(firstNameError, "Minst 2 bokstäver");
         return false;
     }
     clearError(firstNameError);
@@ -46,7 +43,7 @@ function validateFirstName() {
 function validateLastName() {
     let value = lastNameInput.value.trim();
     if (value.length < 2) {
-        displayError(lastNameError, "Minimum 2 letters");
+        displayError(lastNameError, "Minst 2 bokstäver");
         return false;
     }
     clearError(lastNameError);
@@ -58,7 +55,7 @@ function validateEmail() {
     const check = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!check.test(value) || value.length > 50) {
-        displayError(emailError, "Enter a valid mail");
+        displayError(emailError, "Fyll i giltig mail");
         return false;
     }
     clearError(emailError);
@@ -70,7 +67,7 @@ function validateNumber() {
     const check = /^[0-9\-()+]{1,20}$/;
 
     if (!check.test(value)) {
-        displayError(numberError, "Enter a valid phonenumber, max 20 tokens");
+        displayError(numberError, "Fyll i giltigt nummer");
         return false;
     }
     clearError(numberError);
@@ -80,7 +77,7 @@ function validateNumber() {
 function validatePassword() {
     let value = passwordInput.value.trim();
     if (value.length < 2) {
-        displayError(passwordError, "Minimum 2 letters");
+        displayError(passwordError, "Minst 2 tecken");
         return false;
     }
     clearError(passwordError);
@@ -94,11 +91,10 @@ function validateForm() {
     let okNumber = validateNumber();
     let okPassword = validatePassword();
 
-    return okFirstName && okLastName && okEmail && okNumber && okPassword ;
+    return okFirstName && okLastName && okEmail && okNumber && okPassword;
 }
 
-form.addEventListener("submit", function(event) {
-
+form.addEventListener("submit", function (event) {
 
     if (!validateForm()) {
         event.preventDefault();

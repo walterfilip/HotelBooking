@@ -1,6 +1,5 @@
 package org.example.pensionat.customer.controller;
 
-
 import jakarta.validation.Valid;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class CustomerRestController {
 
     private final CustomerService customerService;
@@ -31,5 +30,4 @@ public class CustomerRestController {
     public Customer createCustomer(@RequestBody @Valid CreateCustomerRequest request) {
         return customerService.createCustomer(request);
     }
-
 }

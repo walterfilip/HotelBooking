@@ -23,15 +23,10 @@ public class BookingController {
     private final CustomerService customerService;
     private final RoomService roomService;
 
-    public BookingController(BookingService bookingService, CustomerService customerService , RoomService roomService) {
+    public BookingController(BookingService bookingService, CustomerService customerService, RoomService roomService) {
         this.bookingService = bookingService;
         this.customerService = customerService;
         this.roomService = roomService;
-    }
-
-    @GetMapping
-    public String bookings(){
-        return "bookings";
     }
 
     @GetMapping("/form")
@@ -41,9 +36,8 @@ public class BookingController {
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam(defaultValue = "false") boolean extraBed,
-
             Model model
-      ) {
+    ) {
 
         Customer activeCustomer = customerService.activeCustomer;
 
@@ -68,8 +62,6 @@ public class BookingController {
         model.addAttribute("totalPrice", totalPrice);
 
         return "booking-form";
-
-
     }
 
     @PostMapping
@@ -78,14 +70,13 @@ public class BookingController {
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
-            @RequestParam (defaultValue = "false") boolean extraBed,
+            @RequestParam(defaultValue = "false") boolean extraBed,
             Model model
-    )
-    {
+    ) {
 
         Customer activeCustomer = customerService.activeCustomer;
 
-        if(activeCustomer == null){
+        if (activeCustomer == null) {
 
             return "customer-form";
         }
@@ -113,7 +104,7 @@ public class BookingController {
     public String cancelBooking(
             @PathVariable Long id,
             Model model
-    ){
+    ) {
         bookingService.cancelBooking(id);
 
         model.addAttribute(
@@ -124,12 +115,12 @@ public class BookingController {
         return "booking-result";
     }
 
-    @GetMapping ("/changedate/{id}")
+    @GetMapping("/changedate/{id}")
     public String changedate(
             @PathVariable Long id,
             Model model
-    ){
-        Booking booking =bookingService.getBookingById(id);
+    ) {
+        Booking booking = bookingService.getBookingById(id);
         model.addAttribute("booking", booking);
         return "customers-date-selection";
     }
@@ -137,34 +128,30 @@ public class BookingController {
     @PostMapping("/changedate/{id}")
     public String changeDateBooking(
 
-        @PathVariable("id") Long bookingId,
-        @RequestParam LocalDate startDate,
-        @RequestParam LocalDate endDate,
-        Model model
-    )
-        {
-            Booking booking = bookingService.getBookingById(bookingId);
+            @PathVariable("id") Long bookingId,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate,
+            Model model
+    ) {
+        Booking booking = bookingService.getBookingById(bookingId);
 
-            CreateBookingRequest request =
-                    new CreateBookingRequest(
-                            booking.getCustomer().getId(),
-                            booking.getRoom().getId(),
-                            startDate,
-                            endDate,
-                            booking.isExtraBed()
-                    );
+        CreateBookingRequest request =
+                new CreateBookingRequest(
+                        booking.getCustomer().getId(),
+                        booking.getRoom().getId(),
+                        startDate,
+                        endDate,
+                        booking.isExtraBed()
+                );
 
-            bookingService.changeBookingDate(request, bookingId);
+        bookingService.changeBookingDate(request, bookingId);
 
-            model.addAttribute(
-                    "message",
-                    "Bokning ändrad!"
-            );
+        model.addAttribute(
+                "message",
+                "Bokning ändrad!"
+        );
 
-            return "booking-result";
-
+        return "booking-result";
     }
-
-
 }
 

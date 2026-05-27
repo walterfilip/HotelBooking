@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.example.pensionat.room.RoomType;
 import org.springframework.ui.Model;
+
 import java.util.List;
 import java.time.LocalDate;
 
@@ -22,29 +23,23 @@ public class RoomController {
 
     public RoomController(RoomService roomService, CustomerService customerService) {
 
-    this.roomService = roomService;
-    this.customerService = customerService;
+        this.roomService = roomService;
+        this.customerService = customerService;
 
     }
 
     @GetMapping
     public String rooms(Model model) {
-    model.addAttribute("rooms", roomService.getAllRooms());
-    return "rooms";
+        model.addAttribute("rooms", roomService.getAllRooms());
+        return "rooms";
     }
-//    @GetMapping("/rooms")
-//    public String getRooms(Model model){
-//        model.addAttribute("rooms", roomService.getAllRooms());
-//        return "rooms";
-//
-//    }
 
     @GetMapping("/search")
-     public String searchRooms (
-     @RequestParam String startDate,
-     @RequestParam String endDate,
-     @RequestParam RoomType roomType,
-     Model model) {
+    public String searchRooms(
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam RoomType roomType,
+            Model model) {
 
         if (startDate.isBlank() || endDate.isBlank()) {
             model.addAttribute("errorMessage", "Du måste välja datum för både incheckning och utcheckning!");
@@ -66,25 +61,19 @@ public class RoomController {
             return "index";
         }
 
-
         List<Room> availableRooms = roomService.getAvailableRooms(
-         roomType,
+                roomType,
                 LocalDate.parse(startDate),
                 LocalDate.parse(endDate)
         );
 
         model.addAttribute("rooms", availableRooms);
-
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("roomType", roomType);
         model.addAttribute("activeCustomer", customerService.activeCustomer);
 
-
         return "rooms";
     }
-
-
-
 }
 

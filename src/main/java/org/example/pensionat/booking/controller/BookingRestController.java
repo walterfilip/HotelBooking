@@ -1,6 +1,5 @@
 package org.example.pensionat.booking.controller;
 
-
 import jakarta.validation.Valid;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
@@ -12,18 +11,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookings")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class BookingRestController {
 
     private final BookingService bookingService;
-
     public BookingRestController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Booking createBooking(@RequestBody @Valid CreateBookingRequest request){
+    public Booking createBooking(@RequestBody @Valid CreateBookingRequest request) {
         return bookingService.createBooking(request);
     }
 
@@ -33,13 +31,12 @@ public class BookingRestController {
     }
 
     @PatchMapping("/{id}/cancel")
-    public Booking cancelBooking(@PathVariable Long id){
+    public Booking cancelBooking(@PathVariable Long id) {
         return bookingService.cancelBooking(id);
     }
 
     @PatchMapping("/{id}/changedate")
-    public Booking changedateBooking( @RequestBody @Valid CreateBookingRequest request,@PathVariable Long id){
-        return bookingService.changeBookingDate(request,id);
+    public Booking changedateBooking(@RequestBody @Valid CreateBookingRequest request, @PathVariable Long id) {
+        return bookingService.changeBookingDate(request, id);
     }
-
 }

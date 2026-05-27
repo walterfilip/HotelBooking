@@ -38,7 +38,6 @@
                        th:form="${activeCustomer == null}
                         ? 'bookingForm-' + ${room.id}
                         : 'loggedInBookingForm-' + ${room.id}">
-
             </td>
 
             <td th:text="${room.price} + ' kr'"></td>
@@ -68,7 +67,6 @@
                     <button type="submit">
                         Boka rum
                     </button>
-
                 </form>
 
                 <!-- Inloggad -->
@@ -93,11 +91,8 @@
                     <button type="submit">
                         Boka rum
                     </button>
-
                 </form>
-
             </td>
-
         </tr>
         </tbody>
     </table>

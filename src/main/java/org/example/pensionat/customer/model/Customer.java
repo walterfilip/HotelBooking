@@ -21,6 +21,7 @@ public class Customer {
     @Email(message = "E-post måste vara giltig")
     private String email;
 
+    @NotBlank(message = "Telefonnummer måste anges")
     private String phoneNumber;
 
     @NotBlank(message = "lösenord måste anges")
@@ -28,7 +29,6 @@ public class Customer {
     private String password;
 
     public Customer() {
-
     }
 
     public Customer(String firstName, String lastName, String email, String phoneNumber, String password) {
@@ -79,12 +79,9 @@ public class Customer {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    public String getPhoneNumber() { return phoneNumber; }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 }

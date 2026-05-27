@@ -16,20 +16,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {
 
-   private final CustomerService customerService;
-   private final BookingService bookingService;
-   private final RoomService roomService;
+    private final CustomerService customerService;
+    private final BookingService bookingService;
+    private final RoomService roomService;
 
-   public CustomerController(CustomerService customerService, BookingService bookingService, RoomService roomService) {
-       this.customerService = customerService;
-       this.bookingService = bookingService;
-       this.roomService = roomService;
-   }
+    public CustomerController(CustomerService customerService, BookingService bookingService, RoomService roomService) {
+        this.customerService = customerService;
+        this.bookingService = bookingService;
+        this.roomService = roomService;
+    }
 
     @GetMapping
     public String customers(Model model) {
@@ -48,23 +47,21 @@ public class CustomerController {
         return "customers";
     }
 
-
-
     @GetMapping("/form")
     public String showCustomerForm(
 
-             @RequestParam Long roomId,
-             @RequestParam String startDate,
-             @RequestParam String endDate,
-             @RequestParam(defaultValue = "false") boolean extraBed,
+            @RequestParam Long roomId,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam(defaultValue = "false") boolean extraBed,
 
-             Model model
+            Model model
     ) {
 
-       model.addAttribute("roomId", roomId);
-       model.addAttribute("startDate", startDate);
-       model.addAttribute("endDate", endDate);
-       model.addAttribute("extraBed", extraBed);
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("extraBed", extraBed);
 
         return "customer-form";
     }
@@ -75,9 +72,9 @@ public class CustomerController {
                                @RequestParam String phoneNumber,
                                @RequestParam String password,
                                @RequestParam String newPassword,
-                               RedirectAttributes redirect ){
+                               RedirectAttributes redirect) {
 
-        if (customerService.checkPassword(password,newPassword)){
+        if (customerService.checkPassword(password, newPassword)) {
 
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
@@ -90,7 +87,7 @@ public class CustomerController {
             redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
             redirect.addFlashAttribute("color", "success");
 
-        }else if (password.isBlank() && newPassword.isBlank())    {
+        } else if (password.isBlank() && newPassword.isBlank()) {
 
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
@@ -137,7 +134,7 @@ public class CustomerController {
 
         customerService.createCustomer(request);
 
-       return "redirect:/customers";
+        return "redirect:/customers";
     }
 
     @PostMapping("/booking")
@@ -156,7 +153,7 @@ public class CustomerController {
 
             Model model
 
-    ){
+    ) {
 
         CreateCustomerRequest request = new CreateCustomerRequest(
                 firstName,
@@ -181,7 +178,6 @@ public class CustomerController {
 
         model.addAttribute("customer", customer);
         model.addAttribute("room", room);
-
         model.addAttribute("roomId", roomId);
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
@@ -208,20 +204,20 @@ public class CustomerController {
 
     @PostMapping("/delete")
     public String deleteCustomer(Model model) {
-       boolean deleted  = customerService.deleteActiveCustomer();
+        boolean deleted = customerService.deleteActiveCustomer();
 
-       if (!deleted) {
-           Customer active = customerService.activeCustomer;
-           List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
+        if (!deleted) {
+            Customer active = customerService.activeCustomer;
+            List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
 
-           model.addAttribute("customer", active);
-           model.addAttribute("bookings", currentBookings);
-           model.addAttribute("activeStatus", BookingStatus.ACTIVE);
-           model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
+            model.addAttribute("customer", active);
+            model.addAttribute("bookings", currentBookings);
+            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+            model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
 
-           return "customers";
-       }
-       model.addAttribute("successMessage", "Ditt konto har raderats");
+            return "customers";
+        }
+        model.addAttribute("successMessage", "Ditt konto har raderats");
         model.addAttribute("title", "Välkommen till Hotellbokning");
         model.addAttribute("subtitle", "Sök lediga rum och boka");
         model.addAttribute("activeCustomer", customerService.activeCustomer);
@@ -233,7 +229,6 @@ public class CustomerController {
         customerService.activeCustomer = null;
         return "redirect:/";
     }
-
 }
 
 

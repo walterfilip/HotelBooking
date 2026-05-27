@@ -23,47 +23,48 @@
         <th>Ändra Datum</th>
 
     </tr>
-    <tr th:each="booking : ${bookings}">
-        <td th:text="${booking.getId()}"></td>
-        <td th:text="${booking.getRoom().getRoomNr()}"></td>
-        <td th:text="${booking.getRoom().getRoomType()}"></td>
-        <td th:text="${booking.getStartDate()}"></td>
-        <td th:text="${booking.getEndDate()}"></td>
-        <td>
-            <form th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post">
-                <button
-                        th:if="${booking.status == activeStatus and !booking.datePassed()}"
-                        th:id="'btn-' + ${booking.id}"
-                        type="submit">
-                    Avboka
-                </button>
-            </form>
 
-            <span
-                    th:if="${booking.status != activeStatus and !booking.datePassed()}">
+
+        <tr th:each="booking : ${bookings}">
+            <td th:text="${booking.getId()}"></td>
+            <td th:text="${booking.getRoom().getRoomNr()}"></td>
+            <td th:text="${booking.getRoom().getRoomType()}"></td>
+            <td th:text="${booking.getStartDate()}"></td>
+            <td th:text="${booking.getEndDate()}"></td>
+            <td>
+                <form th:action="@{/bookings/cancel/{id}(id=${booking.id})}" method="post">
+                    <button
+                            th:if="${booking.status == activeStatus and !booking.datePassed()}"
+                            th:id="'btn-' + ${booking.id}"
+                            type="submit">
+                        Avboka
+                    </button>
+                </form>
+
+                <span
+                        th:if="${booking.status != activeStatus and !booking.datePassed()}">
                     Avbokad
                 </span>
-            <span th:if="${booking.datePassed()}">
+                <span th:if="${booking.datePassed()}">
                     Avslutad
                 </span>
 
-        </td>
+            </td>
 
-        <td>
-            <form th:action="@{/bookings/changedate/{id}(id=${booking.id})}" method="get">
-                <button
-                        th:if="${booking.status == activeStatus}"
-                        th:id="'btn-' + ${booking.id}"
-                        type="submit">
-                    Ändra
-                </button>
+            <td>
+                <form th:action="@{/bookings/changedate/{id}(id=${booking.id})}" method="get">
+                    <button
+                            th:if="${booking.status == activeStatus}"
+                            th:id="'btn-' + ${booking.id}"
+                            type="submit">
+                        Ändra
+                    </button>
 
 
-            </form>
-        </td>
-    </tr>
+                </form>
+            </td>
+        </tr>
 
-    <!--    <tr th:each="book : "></tr>-->
 </table>
 <br>
 <br>

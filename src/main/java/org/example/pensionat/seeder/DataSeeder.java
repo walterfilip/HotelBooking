@@ -1,6 +1,5 @@
 package org.example.pensionat.seeder;
 
-
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.repository.BookingRepository;
@@ -29,11 +28,11 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args){
+    public void run(String... args) {
         Room firstRoom = null;
         Customer savedCustomer = null;
 
-        if (roomRepository.count()==0){
+        if (roomRepository.count() == 0) {
             firstRoom = roomRepository.save(new Room(RoomType.SINGLE, "101", "Utan fönster", 500));
             roomRepository.save(new Room(RoomType.SINGLE, "102", "Havsutsikt", 600));
             roomRepository.save(new Room(RoomType.SINGLE, "103", "Balkong", 600));
@@ -49,18 +48,17 @@ public class DataSeeder implements CommandLineRunner {
         } else {
             firstRoom = roomRepository.findById(1L);
         }
-        if (customerRepository.count()==0){
+        if (customerRepository.count() == 0) {
             savedCustomer = customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777", Encoder.hashPassword("hej")));
-            customerRepository.save(new Customer("Peter", "Peterstein", "peter@fakemail.se", "0767777776",Encoder.hashPassword("hej")));
+            customerRepository.save(new Customer("Peter", "Peterstein", "peter@fakemail.se", "0767777776", Encoder.hashPassword("hej")));
 
         } else {
             savedCustomer = customerRepository.findByEmail("nils@fakemail.se");
         }
-        if (bookingRepository.count()==0){
+        if (bookingRepository.count() == 0) {
             if (firstRoom != null && savedCustomer != null) {
                 bookingRepository.save(new Booking(savedCustomer, firstRoom, LocalDate.now(), LocalDate.now(), false, BookingStatus.ACTIVE));
             }
         }
     }
-
 }

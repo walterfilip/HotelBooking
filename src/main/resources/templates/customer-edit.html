@@ -14,17 +14,6 @@
           th:object="${customer}"
           method="post">
 
-        <!--        <div class="customer-contact-input">-->
-        <!--            <label >E-post: </label>-->
-        <!--            <label th:text="*{email}"></label>-->
-        <!--        </div>-->
-        <!--            <input readonly type="text"-->
-        <!--                   id="email"-->
-        <!--                   name="email"-->
-        <!--                   th:text="*{email}"-->
-        <!--                   required>-->
-
-
         <div class="customer-contact-input">
             <label for="firstName">Förnamn: </label>
             <input type="text"
@@ -41,7 +30,6 @@
                    name="lastName"
                    th:value="*{lastName}"
                    required>
-
         </div>
 
         <div class="customer-contact-input">
@@ -51,7 +39,6 @@
                    name="phoneNumber"
                    th:value="*{phoneNumber}"
                    required>
-
         </div>
         <br>
         <strong>Ändra lösenord:</strong>
@@ -72,7 +59,6 @@
         <br>
         <button type="submit">Slutför ändringar</button>
         <br>
-
         <br>
         <br>
             <a th:href="@{/customers}">

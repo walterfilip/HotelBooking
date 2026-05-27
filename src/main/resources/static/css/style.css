@@ -2,8 +2,6 @@ body {
     background-color: lightblue;
 }
 
-
-/* ============ STARTSIDAN ==========*/
 .search-container {
     display: flex;
     flex-direction: column;
@@ -35,8 +33,8 @@ body {
     justify-content: center;
     gap: 10px;
     margin-top: 20px;
-
 }
+
 .login-row {
     display: flex;
     justify-content: center;
@@ -44,15 +42,14 @@ body {
     margin-top: 20px;
 }
 
-.login-row a{
+.login-row a {
     margin: 0;
 }
 
-.search-rooms-button{
+.search-rooms-button {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-
 }
 
 .rooms-container {
@@ -75,13 +72,12 @@ th, td {
 }
 
 a {
-   margin-top: 20px;
+    margin-top: 20px;
 }
+
 .empty-head {
     background: lightblue;
 }
-
-/* ============ KUNDFORMULÄR ==========*/
 
 .customer-form-container {
     display: flex;
@@ -93,15 +89,14 @@ a {
 .customer-contact-input {
     margin-top: 20px;
 }
-.success{
+
+.success {
     color: green;
 }
-.error{
+
+.error {
     color: red;
 }
-
-
-/* ============ BOKNINGSBEKRÄFTELSE ==========*/
 
 .booking-summary-container {
     display: flex;
@@ -109,4 +104,3 @@ a {
     align-items: center;
 
 }
-

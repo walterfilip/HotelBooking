@@ -1,6 +1,5 @@
 package org.example.pensionat.customer.service;
 
-
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
@@ -20,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
 
@@ -30,15 +28,12 @@ class CustomerServiceTest {
     @Mock
     private BookingRepository bookingRepository;
 
-
     @InjectMocks
     private CustomerService customerService;
-
 
     private Customer customer1 = new Customer();
     private Customer customer2 = new Customer();
     private List<Customer> fakeCustomers;
-
 
     @BeforeEach
     void setUp() {
@@ -143,5 +138,4 @@ class CustomerServiceTest {
         verify(customerRepository)
                 .save(any(Customer.class));
     }
-
 }

@@ -1,6 +1,5 @@
 package org.example.pensionat.booking.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -94,10 +93,6 @@ public class Booking {
         return extraBed;
     }
 
-    public void setExtraBed(boolean extraBed) {
-        this.extraBed = extraBed;
-    }
-
     public BookingStatus getStatus() {
         return status;
     }
@@ -105,9 +100,8 @@ public class Booking {
     public void setStatus(BookingStatus status) {
         this.status = status;
     }
+
     public boolean datePassed() {
         return startDate.isBefore(LocalDate.now());
     }
 }
-
-

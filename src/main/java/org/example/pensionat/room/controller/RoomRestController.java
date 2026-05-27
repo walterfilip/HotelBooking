@@ -1,6 +1,5 @@
 package org.example.pensionat.room.controller;
 
-
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -4,16 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Hotellbokning</title>
-
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
 <div class="customer-form-container">
-<h1>Kundformulär</h1>
+    <h1>Kundformulär</h1>
 
     <form th:action="@{/customers/booking}" method="post" id="customer-form">
-
 
         <div class="customer-contact-input">
             <label for="firstName">Förnamn</label>
@@ -78,10 +76,9 @@
                th:value="${extraBed}">
 
         <button type="submit">Registrera och fortsätt</button>
-
     </form>
 
-<a href="/">Till startsidan</a>
+    <a href="/">Till startsidan</a>
 </div>
 <script th:src="@{/js/form.js}"></script>
 </body>
