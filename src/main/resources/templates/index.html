@@ -45,6 +45,8 @@
 <br>
 
 <div th:if="${activeCustomer == null}">
+    <p th:if="${successMessage}" th:text="${successMessage}" style="color: green; text-align: center">
+    </p>
     <form th:action="@{/customers/login}" th:object="${custumer}" method="post">
         <h1 class="login-row">Logga in</h1>
         <div class="login-row">

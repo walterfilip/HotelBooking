@@ -190,9 +190,33 @@ public class CustomerController {
     ) {
         if (!customerService.loginCustomer(email, password)) {
             model.addAttribute("loginError", "Invalid username and/or password");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
             return "index";
         }
         return "redirect:/customers";
+    }
+
+    @PostMapping("/delete")
+    public String deleteCustomer(Model model) {
+       boolean deleted  = customerService.deleteActiveCustomer();
+
+       if (!deleted) {
+           Customer active = customerService.activeCustomer;
+           List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
+
+           model.addAttribute("customer", active);
+           model.addAttribute("bookings", currentBookings);
+           model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+           model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
+
+           return "customers";
+       }
+       model.addAttribute("successMessage", "Ditt konto har raderats");
+        model.addAttribute("title", "Välkommen till Hotellbokning");
+        model.addAttribute("subtitle", "Sök lediga rum och boka");
+        model.addAttribute("activeCustomer", customerService.activeCustomer);
+        return "index";
     }
 
     @GetMapping("/logout")

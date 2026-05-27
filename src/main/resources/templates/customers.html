@@ -71,6 +71,11 @@
     <button type="submit">Ändra uppgifter</button>
 </form>
 
+<p th:if="${deleteError}" th:text="${deleteError}" style="color: red;"></p>
+<form th:action="@{/customers/delete}" method="post">
+    <button type="submit">Radera konto</button>
+</form>
+
 <a href="/">
     <button type="button">Till startsidan</button>
 </a>
