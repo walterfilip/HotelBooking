@@ -78,6 +78,10 @@
     <a th:href="@{/customers/logout}">
         <button type="button">Logga ut</button>
     </a>
+    <p th:if="${deleteError}" th:text="${deleteError}" style="color: red;"></p>
+    <form th:action="@{/customers/delete}" method="post">
+        <button type="submit">Radera konto</button>
+    </form>
 </div>
 
 </body>

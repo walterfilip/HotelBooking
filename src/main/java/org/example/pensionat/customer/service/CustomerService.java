@@ -1,9 +1,11 @@
 package org.example.pensionat.customer.service;
 
 
+import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
+import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.customer.repository.CustomerRepository;
 import org.example.pensionat.room.utils.encoder.Encoder;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final BookingRepository bookingRepository;
     public Customer activeCustomer;
 
     public CustomerService(CustomerRepository customerRepository, BookingRepository bookingRepository) {
         this.customerRepository = customerRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     public List<Customer> getAllCustomers() {
@@ -91,5 +95,23 @@ public class CustomerService {
         return Encoder.checkPassword(password, customer.getPassword());
     }
 
+    public boolean deleteActiveCustomer() {
+        Customer customer = activeCustomer;
+
+        if (customer == null){
+            return false;
+        }
+        boolean hasActiveBookings = bookingRepository.existsByCustomer_IdAndStatus(customer.getId(), BookingStatus.ACTIVE);
+
+        if (hasActiveBookings) {
+            return false;
+        }
+        List<Booking> bookings = bookingRepository.findByCustomerId(customer.getId());
+        bookingRepository.deleteAll(bookings);
+        customerRepository.delete(customer);
+        activeCustomer = null;
+
+        return true;
+    }
 
 }
