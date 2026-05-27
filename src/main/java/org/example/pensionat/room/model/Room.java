@@ -26,8 +26,9 @@ public class Room {
     @Min(value = 1, message = "Pris per natt måste vara större än 0")
     private int price;
 
-    protected Room() {
+    public Room() {
     }
+
 
     public Room(RoomType roomType, String roomNr, String description, int price) {
         this.roomType = roomType;

@@ -72,21 +72,21 @@ class CustomerServiceTest {
                 .thenReturn(fakeCustomers);
         //Act
 
-        Customer customer1 = new Customer(
-                "Nils",
-                "Modig",
-                "nils@fakemail.se",
-                "0767777777",
-                "loppa"
-        );
-
-        Customer customer2 = new Customer(
-                "Rebecca",
-                "Eriksson",
-                "rebecca@fakemail.se",
-                "0767777776",
-                "loppa"
-        );
+//        Customer customer1 = new Customer(
+//                "Nils",
+//                "Modig",
+//                "nils@fakemail.se",
+//                "0767777777",
+//                "loppa"
+//        );
+//
+//        Customer customer2 = new Customer(
+//                "Rebecca",
+//                "Eriksson",
+//                "rebecca@fakemail.se",
+//                "0767777776",
+//                "loppa"
+//        );
 
 
         List<Customer> fakeCustomers = List.of(customer1, customer2);

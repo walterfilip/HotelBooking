@@ -38,7 +38,7 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
-    protected Booking() {
+    public Booking() {
     }
 
     public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, boolean extraBed, BookingStatus status) {
