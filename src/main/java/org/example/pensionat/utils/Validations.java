@@ -1,4 +1,4 @@
-package org.example.pensionat.room.utils;
+package org.example.pensionat.utils;
 import org.example.pensionat.error.BadRequestException;
 import java.time.LocalDate;
 

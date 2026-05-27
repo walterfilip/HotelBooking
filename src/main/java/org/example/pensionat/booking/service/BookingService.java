@@ -13,6 +13,7 @@ import org.example.pensionat.error.NotFoundException;
 import org.example.pensionat.room.RoomType;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.repository.RoomRepository;
+import org.example.pensionat.utils.Validations;
 import org.springframework.stereotype.Service;
 import java.time.temporal.ChronoUnit;
 
@@ -20,7 +21,6 @@ import java.time.temporal.ChronoUnit;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.example.pensionat.room.utils.Validations.validateDateRange;
 
 @Service
 public class BookingService {
@@ -64,7 +64,7 @@ public class BookingService {
 
         Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
 
-        validateDateRange(request.startDate(), request.endDate());
+        Validations.validateDateRange(request.startDate(), request.endDate());
         validateRoomAvailability(request.roomId(), request.startDate(),request.endDate(), null);
         validateExtraBed(room, request.extraBed());
 
@@ -109,7 +109,7 @@ public class BookingService {
     @Transactional
     public Booking changeBookingDate (CreateBookingRequest request, Long bookingId){
 
-        validateDateRange(request.startDate(), request.endDate());
+        Validations.validateDateRange(request.startDate(), request.endDate());
         validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), bookingId);
 
 

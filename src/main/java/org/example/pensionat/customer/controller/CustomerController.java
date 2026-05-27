@@ -8,11 +8,11 @@ import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
-import org.example.pensionat.room.utils.encoder.Encoder;
-import org.springframework.http.ResponseEntity;
+import org.example.pensionat.utils.encoder.Encoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -75,10 +75,9 @@ public class CustomerController {
                                @RequestParam String phoneNumber,
                                @RequestParam String password,
                                @RequestParam String newPassword,
-                               Model model) {
-        model.addAttribute("customer", customerService.activeCustomer);
+                               RedirectAttributes redirect ){
 
-        if (customerService.checkPassword(password,newPassword)) {
+        if (customerService.checkPassword(password,newPassword)){
 
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
@@ -87,9 +86,12 @@ public class CustomerController {
                     phoneNumber,
                     newPassword
             );
-            boolean changePassword = true;
-            customerService.updateProfile(request, changePassword);
-        }else{
+            customerService.updateProfile(request, true);
+            redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
+            redirect.addFlashAttribute("color", "success");
+
+        }else if (password.isBlank() && newPassword.isBlank())    {
+
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
                     lastName,
@@ -97,14 +99,21 @@ public class CustomerController {
                     phoneNumber,
                     customerService.activeCustomer.getPassword()
             );
-            boolean changePassword = false;
-            customerService.updateProfile(request, changePassword);
-        }
+            customerService.updateProfile(request, false);
+            redirect.addFlashAttribute("message", "Profilen uppdaterad");
+            redirect.addFlashAttribute("color", "success");
 
+        } else {
+            redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
+            redirect.addFlashAttribute("color", "error");
+        }
         return "redirect:/customers/edit";
     }
+
     @GetMapping("/edit")
     public String editCustomer(Model model) {
+        customerService.activeCustomer = customerService.getCustomerById(customerService.activeCustomer.getId());
+
         model.addAttribute("customer", customerService.activeCustomer);
         return "customer-edit";
     }
@@ -190,9 +199,33 @@ public class CustomerController {
     ) {
         if (!customerService.loginCustomer(email, password)) {
             model.addAttribute("loginError", "Invalid username and/or password");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
             return "index";
         }
         return "redirect:/customers";
+    }
+
+    @PostMapping("/delete")
+    public String deleteCustomer(Model model) {
+       boolean deleted  = customerService.deleteActiveCustomer();
+
+       if (!deleted) {
+           Customer active = customerService.activeCustomer;
+           List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
+
+           model.addAttribute("customer", active);
+           model.addAttribute("bookings", currentBookings);
+           model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+           model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
+
+           return "customers";
+       }
+       model.addAttribute("successMessage", "Ditt konto har raderats");
+        model.addAttribute("title", "Välkommen till Hotellbokning");
+        model.addAttribute("subtitle", "Sök lediga rum och boka");
+        model.addAttribute("activeCustomer", customerService.activeCustomer);
+        return "index";
     }
 
     @GetMapping("/logout")

@@ -32,11 +32,13 @@ public class PensionatApplication {
 
     2.   skriva 4 enhetstester - Linda (skapa bokning + ändra , ladda rum)  & Nils ( html test?, kundformulär )  Klar ladda användare
 
-    3.   ändra info hos kund - felmedelanden - Filip
 
     4.   Tydliga felmeddelanden som visas för användaren
 
     6.   The knapps are buggy?!?!?! NEED FIX. - Linda
+
+    7. bugg när man failar en login, då försvinner title och subtitle när felmeddelande postas. / fix or skip?
+    8. byta namn från hotelbooking till pensionat?
 
 
 Eftermidag

@@ -16,24 +16,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 
     @Mock
+    private BookingRepository bookingRepository;
+    @Mock
     private CustomerRepository customerRepository;
+
     @Mock
     private RoomRepository roomRepository;
-    @Mock
-    private BookingRepository bookingRepository;
 
     @InjectMocks
     private BookingService bookingService;
@@ -65,6 +67,31 @@ class BookingServiceTest {
                 BookingStatus.CANCELLED
         );
         bookingList = List.of(booking1, booking2);
+
+    }
+
+    @Test
+    void shouldCancelExpiredBookings() {
+
+        Booking booking = new Booking(
+                null,
+                null,
+                LocalDate.now().minusDays(10),
+                LocalDate.now().minusDays(1),
+                false,
+                BookingStatus.ACTIVE
+        );
+
+        List<Booking> bookings = List.of(booking);
+
+        //mockito override, när .findAll anropas returnar vi våran egna mock lista
+        when(bookingRepository.findAll()).thenReturn(bookings);
+
+        bookingService.updateExpiredBookings();
+
+        assertEquals(BookingStatus.CANCELLED, booking.getStatus());
+
+        verify(bookingRepository).saveAll(bookings);
 
     }
 

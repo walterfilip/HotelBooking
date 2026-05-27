@@ -1,11 +1,13 @@
 package org.example.pensionat.customer.service;
 
 
+import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
+import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.customer.repository.CustomerRepository;
-import org.example.pensionat.room.utils.encoder.Encoder;
+import org.example.pensionat.utils.encoder.Encoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,16 +16,19 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-//    private final BookingRepository bookingRepository;
+    private final BookingRepository bookingRepository;
     public Customer activeCustomer;
 
     public CustomerService(CustomerRepository customerRepository, BookingRepository bookingRepository) {
         this.customerRepository = customerRepository;
-//        this.bookingRepository = bookingRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
+    }
+    public Customer getCustomerById(long customerId) {
+        return customerRepository.findById(customerId).orElse(null);
     }
 
     public Customer createCustomer(CreateCustomerRequest request) {
@@ -55,11 +60,8 @@ public class CustomerService {
                 activeCustomer = customer;
 
             }catch(NullPointerException e){
-
-                System.out.println("login failed");
                 return false;
             }
-            System.out.println("login successful");
             return true;
     }
 
@@ -85,17 +87,31 @@ public class CustomerService {
 
         if (password == null || password.isBlank()) {
          return false;
-
         }
         if (newPassword == null || newPassword.isBlank()) {
             return false;
-
         }
         Customer customer = customerRepository.findByEmail(activeCustomer.getEmail());
-        if (!Encoder.checkPassword(password, customer.getPassword())) {
-            System.out.println(customer.getPassword() + " " +  password);
-            throw new IllegalArgumentException("passwords don't match");
+        return Encoder.checkPassword(password, customer.getPassword());
+    }
+
+    public boolean deleteActiveCustomer() {
+        Customer customer = activeCustomer;
+
+        if (customer == null){
+            return false;
         }
+        boolean hasActiveBookings = bookingRepository.existsByCustomer_IdAndStatus(customer.getId(), BookingStatus.ACTIVE);
+
+        if (hasActiveBookings) {
+            return false;
+        }
+        List<Booking> bookings = bookingRepository.findByCustomerId(customer.getId());
+        bookingRepository.deleteAll(bookings);
+        customerRepository.delete(customer);
+        activeCustomer = null;
+
         return true;
     }
+
 }

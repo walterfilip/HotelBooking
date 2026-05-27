@@ -50,6 +50,7 @@ public class RoomController {
             model.addAttribute("errorMessage", "Du måste välja datum för både incheckning och utcheckning!");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("activeCustomer", customerService.activeCustomer);
             return "index";
         }
 
@@ -61,6 +62,7 @@ public class RoomController {
             model.addAttribute("errorMessage", "Du kan inte välja datum bakåt i tiden!");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("activeCustomer", customerService.activeCustomer);
             return "index";
         }
 

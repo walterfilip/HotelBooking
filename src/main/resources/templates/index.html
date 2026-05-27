@@ -45,7 +45,9 @@
 <br>
 
 <div th:if="${activeCustomer == null}">
-    <form th:action="@{/customers/login}" th:object="${custumer}" method="post">
+    <p th:if="${successMessage}" th:text="${successMessage}" style="color: green; text-align: center">
+    </p>
+    <form th:action="@{/customers/login}" th:object="${customer}" method="post">
         <h1 class="login-row">Logga in</h1>
         <div class="login-row">
             <label>Användarnamn:</label>
@@ -54,9 +56,9 @@
 
         <div class="login-row">
             <label>Lösenord:</label>
-            <input type="text" name="password">
+            <input type="password" name="password">
         </div>
-        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}"></small>
+        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}" style="color:red"></small>
         <div class="login-row">
             <button type="submit">Logga in</button>
         </div>
@@ -64,14 +66,17 @@
 </div>
 
 <div th:if="${activeCustomer != null}">
+    <h2 class="login-row" th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
 
-    <h2 th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
-    <a th:href="@{/customers}">
-    <button type="button">Min sida</button>
-    </a>
-    <a th:href="@{/customers/logout}">
-        <button type="button">Logga ut</button>
-    </a>
+    <div class="login-row">
+        <a th:href="@{/customers}">
+            <button type="button">Min sida</button>
+        </a>
+        <a th:href="@{/customers/logout}">
+            <button type="button">Logga ut</button>
+        </a>
+    </div>
+
 </div>
 
 </body>

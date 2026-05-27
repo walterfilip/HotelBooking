@@ -67,15 +67,22 @@
 </table>
 <br>
 <br>
-<form th:action="@{/customers/edit}" method="get">
-    <button type="submit">Ändra uppgifter</button>
-</form>
 
-<a href="/">
-    <button type="button">Till startsidan</button>
-</a>
-<a th:href="@{/customers/logout}">
-    <button type="button">Logga ut</button>
-</a>
+<div class="login-row">
+    <a th:href="@{/customers/edit}">
+        <button type="button">Ändra uppgifter</button>
+    </a>
+    <a th:href="@{/}">
+        <button type="button">Till startsidan</button>
+    </a>
+    <a th:href="@{/customers/logout}">
+        <button type="button">Logga ut</button>
+    </a>
+    <p th:if="${deleteError}" th:text="${deleteError}" style="color: red;"></p>
+    <form th:action="@{/customers/delete}" method="post">
+        <button type="submit">Radera konto</button>
+    </form>
+</div>
+
 </body>
 </html>
