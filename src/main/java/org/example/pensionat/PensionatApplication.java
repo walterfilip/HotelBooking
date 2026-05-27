@@ -38,6 +38,7 @@ public class PensionatApplication {
     6.   The knapps are buggy?!?!?! NEED FIX. - Linda
 
     7. bugg när man failar en login, då försvinner title och subtitle när felmeddelande postas. / fix or skip?
+    8. byta namn från hotelbooking till pensionat?
 
 
 Eftermidag
