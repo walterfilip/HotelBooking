@@ -5,6 +5,7 @@ import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.repository.CustomerRepository;
+import org.example.pensionat.room.utils.encoder.Encoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +48,7 @@ class CustomerServiceTest {
                 "hussien",
                 "yahja@test.se",
                 "0701111111",
-                "hoppa"
+                Encoder.hashPassword("hoppa")
         );
 
         customer2 = new Customer(
@@ -55,7 +56,7 @@ class CustomerServiceTest {
                 "jensen",
                 "klasse@test.se",
                 "0701221111",
-                "loppa"
+                Encoder.hashPassword("loppa")
         );
 
         fakeCustomers = List.of(
@@ -68,56 +69,56 @@ class CustomerServiceTest {
     @Test
     void getAllCustomers_ShouldReturnAllCustomersFromRepository() {
         // Arrange
-        when(customerRepository.findAll())
-                .thenReturn(fakeCustomers);
+        when(customerRepository.findAll()).thenReturn(fakeCustomers);
         //Act
-
-        Customer customer1 = new Customer(
-                "Nils",
-                "Modig",
-                "nils@fakemail.se",
-                "0767777777",
-                "loppa"
-        );
-
-        Customer customer2 = new Customer(
-                "Rebecca",
-                "Eriksson",
-                "rebecca@fakemail.se",
-                "0767777776",
-                "loppa"
-        );
-
-
-        List<Customer> fakeCustomers = List.of(customer1, customer2);
-
         when(customerRepository.findAll()).thenReturn(fakeCustomers);
 
         List<Customer> result = customerService.getAllCustomers();
-
         //assert
         assertThat(result)
-                .hasSize(2);
-//          assertEquals(result, fakeCustomers); //??
-        assertThat(result)
-                .containsExactly(
-                        customer1,
-                        customer2
-                );
-        assertThat(result).hasSize(2);
+                .hasSize(2)
+                .containsExactly(customer1, customer2);
 
-        assertThat(result).containsExactly(customer1, customer2);
-
-        verify(customerRepository).findAll();
         assertThat(result.get(0).getFirstName()).isEqualTo("Yayha");
 
-        verify(customerRepository)
-                .findAll();
+        verify(customerRepository).findAll();
+
         verifyNoMoreInteractions(customerRepository);
 
         verifyNoMoreInteractions(bookingRepository);
 
     }
+
+    @Test
+    void shouldLoginCustomerWithCorrectPassword() {
+
+        when(customerRepository.findByEmail("yahja@test.se")).thenReturn(customer1);
+
+        boolean result = customerService.loginCustomer(
+                        "yahja@test.se",
+                        "hoppa"
+                );
+
+        assertTrue(result);
+
+        verify(customerRepository).findByEmail("yahja@test.se");
+    }
+
+    @Test
+    void shouldNotLoginCustomerWithWrongPassword() {
+
+        when(customerRepository.findByEmail("yahja@test.se")).thenReturn(customer1);
+
+        boolean result = customerService.loginCustomer(
+                "yahja@test.se",
+                "hoppaFEL"
+        );
+
+        assertFalse(result);
+
+        verify(customerRepository).findByEmail("yahja@test.se");
+    }
+
     @Test
     void testForCreateCustomer() {
         CreateCustomerRequest request =
