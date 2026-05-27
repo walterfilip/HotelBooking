@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -75,10 +76,9 @@ public class CustomerController {
                                @RequestParam String phoneNumber,
                                @RequestParam String password,
                                @RequestParam String newPassword,
-                               Model model) {
-        model.addAttribute("customer", customerService.activeCustomer);
+                               RedirectAttributes redirect ){
 
-        if (customerService.checkPassword(password,newPassword)) {
+        if (customerService.checkPassword(password,newPassword)){
 
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
@@ -87,9 +87,12 @@ public class CustomerController {
                     phoneNumber,
                     newPassword
             );
-            boolean changePassword = true;
-            customerService.updateProfile(request, changePassword);
-        }else{
+            customerService.updateProfile(request, true);
+            redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
+            redirect.addFlashAttribute("color", "success");
+
+        }else if (password.isBlank() && newPassword.isBlank())    {
+
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
                     lastName,
@@ -97,14 +100,21 @@ public class CustomerController {
                     phoneNumber,
                     customerService.activeCustomer.getPassword()
             );
-            boolean changePassword = false;
-            customerService.updateProfile(request, changePassword);
-        }
+            customerService.updateProfile(request, false);
+            redirect.addFlashAttribute("message", "Profilen uppdaterad");
+            redirect.addFlashAttribute("color", "success");
 
+        } else {
+            redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
+            redirect.addFlashAttribute("color", "error");
+        }
         return "redirect:/customers/edit";
     }
+
     @GetMapping("/edit")
     public String editCustomer(Model model) {
+        customerService.activeCustomer = customerService.getCustomerById(customerService.activeCustomer.getId());
+
         model.addAttribute("customer", customerService.activeCustomer);
         return "customer-edit";
     }

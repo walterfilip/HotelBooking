@@ -58,16 +58,17 @@
 
         <div class="customer-contact-input">
             <label for="password">Nuvarande Lösenord: </label>
-            <input type="text"
+            <input type="password"
                    id="password"
                    name="password">
         </div>
         <div class="customer-contact-input">
             <label for="newPassword">Nytt Lösenord: </label>
-            <input type="text"
+            <input type="password"
                    id="newPassword"
                    name="newPassword">
         </div>
+        <strong class="login-row text-danger" th:if="${message}" th:text="${message}" th:class="${color}"></strong>
         <br>
         <button type="submit">Slutför ändringar</button>
         <br>

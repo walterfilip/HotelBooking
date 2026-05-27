@@ -14,16 +14,17 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-//    private final BookingRepository bookingRepository;
     public Customer activeCustomer;
 
     public CustomerService(CustomerRepository customerRepository, BookingRepository bookingRepository) {
         this.customerRepository = customerRepository;
-//        this.bookingRepository = bookingRepository;
     }
 
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
+    }
+    public Customer getCustomerById(long customerId) {
+        return customerRepository.findById(customerId).orElse(null);
     }
 
     public Customer createCustomer(CreateCustomerRequest request) {
@@ -55,11 +56,8 @@ public class CustomerService {
                 activeCustomer = customer;
 
             }catch(NullPointerException e){
-
-                System.out.println("login failed");
                 return false;
             }
-            System.out.println("login successful");
             return true;
     }
 
@@ -85,17 +83,13 @@ public class CustomerService {
 
         if (password == null || password.isBlank()) {
          return false;
-
         }
         if (newPassword == null || newPassword.isBlank()) {
             return false;
-
         }
         Customer customer = customerRepository.findByEmail(activeCustomer.getEmail());
-        if (!Encoder.checkPassword(password, customer.getPassword())) {
-            System.out.println(customer.getPassword() + " " +  password);
-            throw new IllegalArgumentException("passwords don't match");
-        }
-        return true;
+        return Encoder.checkPassword(password, customer.getPassword());
     }
+
+
 }
