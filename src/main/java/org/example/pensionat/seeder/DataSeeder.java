@@ -6,7 +6,7 @@ import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.repository.CustomerRepository;
-import org.example.pensionat.room.utils.encoder.Encoder;
+import org.example.pensionat.utils.encoder.Encoder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.example.pensionat.room.RoomType;

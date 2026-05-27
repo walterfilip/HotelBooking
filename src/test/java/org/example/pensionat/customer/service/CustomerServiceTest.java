@@ -5,14 +5,13 @@ import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.repository.CustomerRepository;
-import org.example.pensionat.room.utils.encoder.Encoder;
+import org.example.pensionat.utils.encoder.Encoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -38,7 +37,6 @@ class CustomerServiceTest {
     private Customer customer1 = new Customer();
     private Customer customer2 = new Customer();
     private List<Customer> fakeCustomers;
-
 
 
     @BeforeEach
@@ -95,9 +93,9 @@ class CustomerServiceTest {
         when(customerRepository.findByEmail("yahja@test.se")).thenReturn(customer1);
 
         boolean result = customerService.loginCustomer(
-                        "yahja@test.se",
-                        "hoppa"
-                );
+                "yahja@test.se",
+                "hoppa"
+        );
 
         assertTrue(result);
 
@@ -144,63 +142,5 @@ class CustomerServiceTest {
         verify(customerRepository)
                 .save(any(Customer.class));
     }
-//        when(customerRepository.save(testCustomer))
-//                .thenReturn(testCustomer);
-//        assertThat(testCustomer.getFirstName()).isEqualTo("Jens");
-//        assertThat(testCustomer.getLastName()).isEqualTo("Kodbengtsson");
-
-
-
-    //TODO create test for createUser Method
-
-    // method saves users
-    // method saves correct user
-
-
 
 }
-
-
-// mock fejkat objekt
-
-// stub förbereder ett svar (when(repo.findAll()).then ....
-
-//fake implementartion av fejkade objekt
-
-
-
-//        Customer customer1 = new Customer(
-//                "Yayha",
-//                "hussien",
-//                "yahja@test.se",
-//                "0701111111"
-//        );
-//
-//        Customer customer2 = new Customer(
-//                "klas",
-//                "jensen",
-//                "klasse@test.se",
-//                "0701221111"
-//        );
-
-//        List<Customer> fakeCustomers = List.of(
-//                customer1,
-//                customer2
-//        );
-
-
-//        Customer customer1 = new Customer(
-//                "Yayha",
-//                "hussien",
-//                "yahja@test.se",
-//                "0701111111"
-//        );
-//
-//        Customer customer2 = new Customer(
-//                "klas",
-//                "jensen",
-//                "klasse@test.se",
-//                "0701221111"
-//        );
-//
-//    }

@@ -47,7 +47,7 @@
 <div th:if="${activeCustomer == null}">
     <p th:if="${successMessage}" th:text="${successMessage}" style="color: green; text-align: center">
     </p>
-    <form th:action="@{/customers/login}" th:object="${custumer}" method="post">
+    <form th:action="@{/customers/login}" th:object="${customer}" method="post">
         <h1 class="login-row">Logga in</h1>
         <div class="login-row">
             <label>Användarnamn:</label>
@@ -66,7 +66,7 @@
 </div>
 
 <div th:if="${activeCustomer != null}">
-    <h2 th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
+    <h2 class="login-row" th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
 
     <div class="login-row">
         <a th:href="@{/customers}">

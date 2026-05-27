@@ -7,7 +7,7 @@ import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.customer.repository.CustomerRepository;
-import org.example.pensionat.room.utils.encoder.Encoder;
+import org.example.pensionat.utils.encoder.Encoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

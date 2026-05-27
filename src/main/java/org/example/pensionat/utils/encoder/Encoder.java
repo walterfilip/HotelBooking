@@ -1,4 +1,4 @@
-package org.example.pensionat.room.utils.encoder;
+package org.example.pensionat.utils.encoder;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
