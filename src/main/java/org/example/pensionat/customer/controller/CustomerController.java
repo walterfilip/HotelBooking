@@ -129,7 +129,7 @@ public class CustomerController {
                 lastName,
                 email,
                 phoneNumber,
-                Encoder.hashPassword(password)
+                password
         );
 
         customerService.createCustomer(request);
@@ -194,7 +194,7 @@ public class CustomerController {
             Model model
     ) {
         if (!customerService.loginCustomer(email, password)) {
-            model.addAttribute("loginError", "Invalid username and/or password");
+            model.addAttribute("loginError", "Fel användarnman eller lösen");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
             return "index";
