@@ -25,6 +25,9 @@ public class CustomerService {
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
+    public Customer getCustomerById(long customerId) {
+        return customerRepository.findById(customerId).orElse(null);
+    }
 
     public Customer createCustomer(CreateCustomerRequest request) {
         Customer customer = new  Customer(request.firstName(),request.lastName(),request.email(),request.phoneNumber(),Encoder.hashPassword(request.password()));
@@ -85,17 +88,13 @@ public class CustomerService {
 
         if (password == null || password.isBlank()) {
          return false;
-
         }
         if (newPassword == null || newPassword.isBlank()) {
             return false;
-
         }
         Customer customer = customerRepository.findByEmail(activeCustomer.getEmail());
-        if (!Encoder.checkPassword(password, customer.getPassword())) {
-            System.out.println(customer.getPassword() + " " +  password);
-            throw new IllegalArgumentException("passwords don't match");
-        }
-        return true;
+        return Encoder.checkPassword(password, customer.getPassword());
     }
+
+
 }
