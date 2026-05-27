@@ -27,30 +27,30 @@ public class PensionatApplication {
     /* Todo
     GREJER VI INTE HAR GJORT ÄN:
 
-    The knapps are buggy?!?!?! NEED FIX.
+    1.   Användare ska kunna ta bort konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
+         Måste ha tydligt felmeddelande). - Stina
 
-     KLAR, Användare ska kunna ändra sina uppgifter  - Filip KLAR går ändra namn och telefon, även byta lösenord.
-     Användare ska kunna ta bort konto (Får bara tas bort om kunden inte har några aktiva bokningar kopplade till sig.
-     Måste ha tydligt felmeddelande). - Stina
+    2.   skriva 4 enhetstester - Linda (skapa bokning + ändra , ladda rum)  & Nils ( html test?, kundformulär )  Klar ladda användare
 
-     skapa en kryptering Filip KLAR
+    3.   ändra info hos kund - felmedelanden - Filip
 
-    Räkna ut totalpris, rum+extrasäng*dagar=total Stina
+    4.   Tydliga felmeddelanden som visas för användaren
 
-
-    //test
-    minst 10 rum - Nils
-   Tydliga felmeddelanden som visas för användaren
-
-    VG
-    skriva 4 enhetstester?
+    6.   The knapps are buggy?!?!?! NEED FIX. - Linda
 
 
-    Extras?
-    * sortera bokningar i datumordning.
-    *Skapa en autoupdate (kommer inte bli så auto, hehe), funktion? -- Nils
-    *spärra fullbokade datum och ändra datumdagar?
-    *jag gjorde 2 sidor så det står rätt när bokning är gjord/ändrad/borttagen, -
-    kanske snyggare med en ifsatts och bara skicka med en motsvarande siffra eller nått
+Eftermidag
+codecleanup, felmedelanden, gå igenom redovisning
 
-     */
+Under redovisningen ska ni gå igenom:
+
+En demo av appen där ni visar full funktionalitet(en i gruppen får göra detta)
+Visa arkitekturen i appen och förklara varför ni kör på det sättet. Tex om det följer en multi tier arkitektur med controller service model etc
+Hur gruppen har fördelat arbetet mellan sig (Jira, trello eller annat)
+Vad varje person själv har bidragit med till projektet(Funktioner etc)
+Hur det har fungerat att jobba i grupp
+Vad som har varit lättare eller svårare med att arbeta i grupp.
+Vad ni har lärt er av arbetet
+Ni behöver INTE gå igenom och förklara hela kodbasen, jag kommer ställa frågor om specifika delar/funktioner istället.
+
+*/

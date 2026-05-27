@@ -35,13 +35,13 @@
 
     <p>
         <strong>Extrasäng:</strong>
-        <a th:text="${extraBed} ? 'Ja' : 'Nej'"></a>
+        <a th:text="${extraBed} ? 'Ja (+200kr/natt)' : 'Nej'"></a>
     </p>
 
     <p>
-        <!-- temporärt visar pris per natt (ingen logik för extrasäng!), måste egentligen visa totala kostnaden -->
-        <strong>Pris:</strong>
-        <a th:text="${room.price} + ' kr per natt'"></a>
+
+        <strong>Totalpris:</strong>
+        <a th:text="${totalPrice} + ' kr'"></a>
     </p>
 
     <p>
