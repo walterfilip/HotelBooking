@@ -78,7 +78,8 @@ public class BookingController {
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
-            @RequestParam (defaultValue = "false") boolean extraBed
+            @RequestParam (defaultValue = "false") boolean extraBed,
+            Model model
     )
     {
 
@@ -100,24 +101,41 @@ public class BookingController {
 
         bookingService.createBooking(request);
 
-        return "redirect:/customers";
+        model.addAttribute(
+                "message",
+                "Bokning skapad!"
+        );
+
+        return "booking-result";
     }
 
     @PostMapping("/cancel/{id}")
-    public String cancelBooking(@PathVariable Long id){
+    public String cancelBooking(
+            @PathVariable Long id,
+            Model model
+    ){
         bookingService.cancelBooking(id);
-        return "bookings-cancelled";
+
+        model.addAttribute(
+                "message",
+                "Bokning avbruten!"
+        );
+
+        return "booking-result";
     }
 
     @GetMapping ("/changedate/{id}")
-    public String changedate(@PathVariable Long id, Model model){
+    public String changedate(
+            @PathVariable Long id,
+            Model model
+    ){
         Booking booking =bookingService.getBookingById(id);
         model.addAttribute("booking", booking);
         return "customers-date-selection";
     }
 
     @PostMapping("/changedate/{id}")
-    public String changedateBooking(
+    public String changeDateBooking(
 
         @PathVariable("id") Long bookingId,
         @RequestParam LocalDate startDate,
@@ -138,9 +156,12 @@ public class BookingController {
 
             bookingService.changeBookingDate(request, bookingId);
 
-            model.addAttribute("customer", booking.getCustomer());
+            model.addAttribute(
+                    "message",
+                    "Bokning ändrad!"
+            );
 
-            return "bookings-changed";
+            return "booking-result";
 
     }
 
