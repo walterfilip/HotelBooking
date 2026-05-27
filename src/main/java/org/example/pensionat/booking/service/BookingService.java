@@ -14,6 +14,8 @@ import org.example.pensionat.room.RoomType;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.repository.RoomRepository;
 import org.springframework.stereotype.Service;
+import java.time.temporal.ChronoUnit;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +24,8 @@ import static org.example.pensionat.room.utils.Validations.validateDateRange;
 
 @Service
 public class BookingService {
+
+    private static final int extra_bed_price_per_night = 200;
 
     private final BookingRepository bookingRepository;
     private final CustomerRepository customerRepository;
@@ -39,6 +43,17 @@ public class BookingService {
     }
     public List<Booking> getBookingByCustomerId(long customerId) {
         return bookingRepository.findByCustomerId(customerId);
+    }
+
+    public int getTotalPrice(Room room, LocalDate startDate, LocalDate endDate, boolean extraBed) {
+
+        long numberOfNights = ChronoUnit.DAYS.between(startDate, endDate);
+        int totalPrice = room.getPrice() * (int) numberOfNights;
+
+        if (extraBed) {
+            totalPrice += extra_bed_price_per_night * (int) numberOfNights;
+        }
+        return totalPrice;
     }
 
 
