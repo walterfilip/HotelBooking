@@ -64,14 +64,17 @@
 </div>
 
 <div th:if="${activeCustomer != null}">
-
     <h2 th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
-    <a th:href="@{/customers}">
-    <button type="button">Min sida</button>
-    </a>
-    <a th:href="@{/customers/logout}">
-        <button type="button">Logga ut</button>
-    </a>
+
+    <div class="login-row">
+        <a th:href="@{/customers}">
+            <button type="button">Min sida</button>
+        </a>
+        <a th:href="@{/customers/logout}">
+            <button type="button">Logga ut</button>
+        </a>
+    </div>
+
 </div>
 
 </body>
