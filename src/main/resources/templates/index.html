@@ -56,7 +56,7 @@
             <label>Lösenord:</label>
             <input type="text" name="password">
         </div>
-        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}"></small>
+        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}" style="color:red"></small>
         <div class="login-row">
             <button type="submit">Logga in</button>
         </div>
