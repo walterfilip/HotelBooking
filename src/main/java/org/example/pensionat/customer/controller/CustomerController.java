@@ -89,6 +89,7 @@ public class CustomerController {
             );
             customerService.updateProfile(request, true);
             redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
+            redirect.addFlashAttribute("color", "success");
 
         }else if (password.isBlank() && newPassword.isBlank())    {
 
@@ -101,9 +102,11 @@ public class CustomerController {
             );
             customerService.updateProfile(request, false);
             redirect.addFlashAttribute("message", "Profilen uppdaterad");
+            redirect.addFlashAttribute("color", "success");
 
         } else {
             redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
+            redirect.addFlashAttribute("color", "error");
         }
         return "redirect:/customers/edit";
     }

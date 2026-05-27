@@ -68,7 +68,7 @@
                    id="newPassword"
                    name="newPassword">
         </div>
-        <strong class="login-row text-danger" th:if="${message}" th:text="${message}"></strong>
+        <strong class="login-row text-danger" th:if="${message}" th:text="${message}" th:class="${color}"></strong>
         <br>
         <button type="submit">Slutför ändringar</button>
         <br>

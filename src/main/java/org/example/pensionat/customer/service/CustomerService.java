@@ -14,12 +14,10 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-//    private final BookingRepository bookingRepository;
     public Customer activeCustomer;
 
     public CustomerService(CustomerRepository customerRepository, BookingRepository bookingRepository) {
         this.customerRepository = customerRepository;
-//        this.bookingRepository = bookingRepository;
     }
 
     public List<Customer> getAllCustomers() {
@@ -58,11 +56,8 @@ public class CustomerService {
                 activeCustomer = customer;
 
             }catch(NullPointerException e){
-
-                System.out.println("login failed");
                 return false;
             }
-            System.out.println("login successful");
             return true;
     }
 

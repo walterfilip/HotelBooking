@@ -89,6 +89,12 @@ a {
 .customer-contact-input {
     margin-top: 20px;
 }
+.success{
+    color: green;
+}
+.error{
+    color: red;
+}
 
 
 /* ============ BOKNINGSBEKRÄFTELSE ==========*/
