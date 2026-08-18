@@ -8,10 +8,10 @@ import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
-import org.example.pensionat.utils.encoder.Encoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -19,6 +19,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {
+
+    RestTemplate restTemplate = new RestTemplate();
 
     private final CustomerService customerService;
     private final BookingService bookingService;
@@ -163,9 +165,18 @@ public class CustomerController {
                 password
         );
 
-        Customer customer = customerService.createCustomer(request);
+        Customer customer = getCustomerFromAPI();
+        CreateCustomerRequest request2 = new CreateCustomerRequest(
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getPhoneNumber(),
+                customer.getPassword()
+        );
+        Customer customer1 = customerService.createCustomer(request2);
+//      Customer customer = customerService.createCustomer(request);
 
-        customerService.activeCustomer = customer;
+        customerService.activeCustomer = customer1;
 
         Room room = roomService.getRoomById(roomId);
 
@@ -228,6 +239,11 @@ public class CustomerController {
     public String logout() {
         customerService.activeCustomer = null;
         return "redirect:/";
+    }
+
+    public Customer getCustomerFromAPI() {
+        Customer reply = restTemplate.getForObject("http://localhost:8081/userid", Customer.class);
+        return reply;
     }
 }
 
