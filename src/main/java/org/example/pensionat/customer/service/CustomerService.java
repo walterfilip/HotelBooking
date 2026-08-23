@@ -23,13 +23,13 @@ public class CustomerService {
         this.bookingRepository = bookingRepository;
     }
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
-    }
+//    public List<Customer> getAllCustomers() {
+//        return customerRepository.findAll();
+//    }
 
-    public Customer getCustomerById(long customerId) {
-        return customerRepository.findById(customerId).orElse(null);
-    }
+//    public Customer getCustomerById(long customerId) {
+//        return customerRepository.findById(customerId).orElse(null);
+//    }
 
 //    public Customer createCustomer(CreateCustomerRequest request) {
 //        Customer customer = new Customer(request.firstName(), request.lastName(), request.email(), request.phoneNumber(), Encoder.hashPassword(request.password()));

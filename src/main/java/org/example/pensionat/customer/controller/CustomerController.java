@@ -111,9 +111,16 @@ public class CustomerController {
 
     @GetMapping("/edit")
     public String editCustomer(Model model) {
-        customerService.activeCustomer = customerService.getCustomerById(customerService.activeCustomer.getId());
 
-        model.addAttribute("customer", customerService.activeCustomer);
+        Customer customer = restTemplate.getForObject(
+                "http://localhost:8081/api/customers/{id}",
+                Customer.class,
+                customerService.activeCustomer.getId()
+        );
+
+        customerService.activeCustomer = customer;
+
+        model.addAttribute("customer", customer);
         return "customer-edit";
     }
 
