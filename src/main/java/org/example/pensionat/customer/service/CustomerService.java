@@ -36,33 +36,33 @@ public class CustomerService {
 //        return customerRepository.save(customer);
 //    }
 
-    public boolean loginCustomer(String email, String password) {
-
-        if (email == null || email.isBlank()) {
-            return false;
-        }
-        if (password == null || password.isBlank()) {
-            return false;
-        }
-
-        try {
-            Customer customer = customerRepository.findByEmail(email);
-            if (customer == null) {
-                return false;
-            }
-
-            String dbPassword = customer.getPassword();
-
-            if (!Encoder.checkPassword(password, dbPassword)) {
-                return false;
-            }
-            activeCustomer = customer;
-
-        } catch (NullPointerException e) {
-            return false;
-        }
-        return true;
-    }
+//    public boolean loginCustomer(String email, String password) {
+//
+//        if (email == null || email.isBlank()) {
+//            return false;
+//        }
+//        if (password == null || password.isBlank()) {
+//            return false;
+//        }
+//
+//        try {
+//            Customer customer = customerRepository.findByEmail(email);
+//            if (customer == null) {
+//                return false;
+//            }
+//
+//            String dbPassword = customer.getPassword();
+//
+//            if (!Encoder.checkPassword(password, dbPassword)) {
+//                return false;
+//            }
+//            activeCustomer = customer;
+//
+//        } catch (NullPointerException e) {
+//            return false;
+//        }
+//        return true;
+//    }
 
     public void updateProfile(CreateCustomerRequest request, boolean changePassword) {
         Customer customer = customerRepository.findByEmail(request.email());

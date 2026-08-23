@@ -5,6 +5,7 @@ import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.Customer;
+import org.example.pensionat.customer.model.LoginRequest;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
@@ -210,12 +211,23 @@ public class CustomerController {
             @RequestParam String password,
             Model model
     ) {
-        if (!customerService.loginCustomer(email, password)) {
+        LoginRequest request = new LoginRequest(email, password);
+
+        Customer customer = restTemplate.postForObject(
+                "http://localhost:8081/api/customers/login",
+                request,
+                Customer.class
+        );
+
+        if (customer == null) {
             model.addAttribute("loginError", "Fel användarnman eller lösen");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
             return "index";
         }
+
+        customerService.activeCustomer = customer;
+
         return "redirect:/customers";
     }
 
