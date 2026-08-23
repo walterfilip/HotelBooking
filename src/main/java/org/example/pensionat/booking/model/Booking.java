@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import org.example.pensionat.booking.BookingStatus;
-import org.example.pensionat.customer.model.Customer;
 import org.example.pensionat.room.model.Room;
 
 import java.time.LocalDate;
@@ -16,8 +15,8 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(optional = false)
-    private Customer customer;
+    @Column(nullable = false)
+    private Long customerId;
 
     @ManyToOne(optional = false)
     private Room room;
@@ -40,8 +39,8 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(Customer customer, Room room, LocalDate startDate, LocalDate endDate, boolean extraBed, BookingStatus status) {
-        this.customer = customer;
+    public Booking(Long customerId, Room room, LocalDate startDate, LocalDate endDate, boolean extraBed, BookingStatus status) {
+        this.customerId = customerId;
         this.room = room;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -57,12 +56,11 @@ public class Booking {
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Long getCustomerId() {
+        return customerId;
     }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public Room getRoom() {

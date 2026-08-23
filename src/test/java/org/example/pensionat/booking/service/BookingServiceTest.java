@@ -46,7 +46,7 @@ class BookingServiceTest {
         );
         room1 = new Room();
         booking1 = new Booking(
-                customer1,
+                customer1.getId(),
                 room1,
                 LocalDate.now(),
                 LocalDate.now().plusDays(4),
@@ -54,7 +54,7 @@ class BookingServiceTest {
                 BookingStatus.ACTIVE
         );
         booking2 = new Booking(
-                customer1,
+                customer1.getId(),
                 room1,
                 LocalDate.now().plusDays(1),
                 LocalDate.now().plusDays(6),
@@ -63,7 +63,7 @@ class BookingServiceTest {
         );
 
         booking3 = new Booking(
-                customer1,
+                customer1.getId(),
                 room1,
                 LocalDate.now().minusDays(10),
                 LocalDate.now().minusDays(1),

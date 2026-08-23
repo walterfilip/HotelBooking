@@ -97,7 +97,8 @@ public class CustomerService {
         if (customer == null) {
             return false;
         }
-        boolean hasActiveBookings = bookingRepository.existsByCustomer_IdAndStatus(customer.getId(), BookingStatus.ACTIVE);
+        boolean hasActiveBookings = bookingRepository
+                .existsByCustomerIdAndStatus(customer.getId(), BookingStatus.ACTIVE);
 
         if (hasActiveBookings) {
             return false;

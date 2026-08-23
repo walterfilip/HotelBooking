@@ -137,7 +137,7 @@ public class BookingController {
 
         CreateBookingRequest request =
                 new CreateBookingRequest(
-                        booking.getCustomer().getId(),
+                        booking.getCustomerId(),
                         booking.getRoom().getId(),
                         startDate,
                         endDate,

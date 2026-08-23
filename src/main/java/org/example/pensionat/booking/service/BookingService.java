@@ -5,8 +5,6 @@ import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.repository.BookingRepository;
-import org.example.pensionat.customer.model.Customer;
-import org.example.pensionat.customer.repository.CustomerRepository;
 import org.example.pensionat.error.BadRequestException;
 import org.example.pensionat.error.NotFoundException;
 import org.example.pensionat.room.RoomType;
@@ -14,6 +12,7 @@ import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.repository.RoomRepository;
 import org.example.pensionat.utils.Validations;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.temporal.ChronoUnit;
 
@@ -27,12 +26,12 @@ public class BookingService {
     private static final int extra_bed_price_per_night = 200;
 
     private final BookingRepository bookingRepository;
-    private final CustomerRepository customerRepository;
     private final RoomRepository roomRepository;
 
-    public BookingService(BookingRepository bookingRepository, CustomerRepository customerRepository, RoomRepository roomRepository) {
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public BookingService(BookingRepository bookingRepository, RoomRepository roomRepository) {
         this.bookingRepository = bookingRepository;
-        this.customerRepository = customerRepository;
         this.roomRepository = roomRepository;
     }
 
@@ -58,15 +57,20 @@ public class BookingService {
     @Transactional
     public Booking createBooking(CreateBookingRequest request) {
 
-        Customer customer = customerRepository.findById(request.customerId()).orElseThrow(() -> new NotFoundException("Kunden finns inte"));
-
         Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
 
         Validations.validateDateRange(request.startDate(), request.endDate());
         validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), null);
         validateExtraBed(room, request.extraBed());
 
-        Booking booking = new Booking(customer, room, request.startDate(), request.endDate(), request.extraBed(), BookingStatus.ACTIVE);
+        Booking booking = new Booking(
+                request.customerId(),
+                room,
+                request.startDate(),
+                request.endDate(),
+                request.extraBed(),
+                BookingStatus.ACTIVE
+        );
 
         return bookingRepository.save(booking);
     }
