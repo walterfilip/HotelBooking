@@ -31,10 +31,10 @@ public class CustomerService {
         return customerRepository.findById(customerId).orElse(null);
     }
 
-    public Customer createCustomer(CreateCustomerRequest request) {
-        Customer customer = new Customer(request.firstName(), request.lastName(), request.email(), request.phoneNumber(), Encoder.hashPassword(request.password()));
-        return customerRepository.save(customer);
-    }
+//    public Customer createCustomer(CreateCustomerRequest request) {
+//        Customer customer = new Customer(request.firstName(), request.lastName(), request.email(), request.phoneNumber(), Encoder.hashPassword(request.password()));
+//        return customerRepository.save(customer);
+//    }
 
     public boolean loginCustomer(String email, String password) {
 

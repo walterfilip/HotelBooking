@@ -134,7 +134,11 @@ public class CustomerController {
                 password
         );
 
-        customerService.createCustomer(request);
+        Customer customer = restTemplate.postForObject(
+                "http://localhost:8081/api/customers",
+                request,
+                Customer.class
+        );
 
         return "redirect:/customers";
     }
@@ -165,18 +169,13 @@ public class CustomerController {
                 password
         );
 
-        Customer customer = getCustomerFromAPI();
-        CreateCustomerRequest request2 = new CreateCustomerRequest(
-                customer.getFirstName(),
-                customer.getLastName(),
-                customer.getEmail(),
-                customer.getPhoneNumber(),
-                customer.getPassword()
+        Customer customer = restTemplate.postForObject(
+                "http://localhost:8081/api/customers",
+                request,
+                Customer.class
         );
-        Customer customer1 = customerService.createCustomer(request2);
-//      Customer customer = customerService.createCustomer(request);
 
-        customerService.activeCustomer = customer1;
+        customerService.activeCustomer = customer;
 
         Room room = roomService.getRoomById(roomId);
 
@@ -241,10 +240,6 @@ public class CustomerController {
         return "redirect:/";
     }
 
-    public Customer getCustomerFromAPI() {
-        Customer reply = restTemplate.getForObject("http://localhost:8081/userid", Customer.class);
-        return reply;
-    }
 }
 
 
