@@ -75,7 +75,6 @@ public class CustomerController {
                                @RequestParam String newPassword,
                                RedirectAttributes redirect) {
 
-
         CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customerService.activeCustomer.getEmail());
         Boolean success = restTemplate.postForObject("http://localhost:8081/api/customers/checkpassword", checkPassword, Boolean.class);
 
@@ -90,17 +89,11 @@ public class CustomerController {
             );
             UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request,true);
             Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
-            System.out.println(customerService.activeCustomer.getFirstName());
+
             customerService.activeCustomer = update;
-            System.out.println(customerService.activeCustomer.getFirstName());
+
             redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
             redirect.addFlashAttribute("color", "success");
-            System.out.println("här");
-
-
-//
-//           customerService.updateProfile(request, true);
-
 
         } else if (Boolean.FALSE.equals(success) && customerService.emptyCheck(password, newPassword)) {
 
@@ -113,11 +106,12 @@ public class CustomerController {
             );
             UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request, false);
             Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
-//            customerService.updateProfile(request, false);
+
             customerService.activeCustomer = update;
+
             redirect.addFlashAttribute("message", "Profilen uppdaterad");
             redirect.addFlashAttribute("color", "success");
-            System.out.println("här");
+
         }
          else {
             redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
@@ -134,8 +128,7 @@ public class CustomerController {
                 Customer.class,
                 customerService.activeCustomer.getId()
         );
-
-        customerService.activeCustomer = customer;
+//        customerService.activeCustomer = customer;
 
         model.addAttribute("customer", customer);
         return "customer-edit";
