@@ -64,32 +64,32 @@ public class CustomerService {
 //        return true;
 //    }
 
-    public void updateProfile(CreateCustomerRequest request, boolean changePassword) {
-        Customer customer = customerRepository.findByEmail(request.email());
-        customer.setFirstName(request.firstName());
-        customer.setLastName(request.lastName());
-        customer.setPhoneNumber(request.phoneNumber());
-        if (changePassword) {
-            customer.setPassword(Encoder.hashPassword(request.password()));
-        } else {
-            customer.setPassword(request.password());
-        }
-        customerRepository.save(customer);
+//    public void updateProfile(CreateCustomerRequest request, boolean changePassword) {
+//        Customer customer = customerRepository.findByEmail(request.email());
+//        customer.setFirstName(request.firstName());
+//        customer.setLastName(request.lastName());
+//        customer.setPhoneNumber(request.phoneNumber());
+//        if (changePassword) {
+//            customer.setPassword(Encoder.hashPassword(request.password()));
+//        } else {
+//            customer.setPassword(request.password());
+//        }
+//        customerRepository.save(customer);
+//
+//        activeCustomer = customer;
+//    }
 
-        activeCustomer = customer;
-    }
-
-    public boolean checkPassword(String password, String newPassword) {
-
-        if (password == null || password.isBlank()) {
-            return false;
-        }
-        if (newPassword == null || newPassword.isBlank()) {
-            return false;
-        }
-        Customer customer = customerRepository.findByEmail(activeCustomer.getEmail());
-        return Encoder.checkPassword(password, customer.getPassword());
-    }
+//    public boolean checkPassword(String password, String newPassword) {
+//
+//        if (password == null || password.isBlank()) {
+//            return false;
+//        }
+//        if (newPassword == null || newPassword.isBlank()) {
+//            return false;
+//        }
+//        Customer customer = customerRepository.findByEmail(activeCustomer.getEmail());
+//        return Encoder.checkPassword(password, customer.getPassword());
+//    }
 
     public boolean deleteActiveCustomer() {
         Customer customer = activeCustomer;
@@ -109,5 +109,15 @@ public class CustomerService {
         activeCustomer = null;
 
         return true;
+    }
+
+    public boolean emptyCheck(String password, String newPassword) {
+        if (password == null || password.isBlank()) {
+            return true;
+        }
+        if (newPassword == null || newPassword.isBlank()) {
+            return true;
+        }
+        return false;
     }
 }

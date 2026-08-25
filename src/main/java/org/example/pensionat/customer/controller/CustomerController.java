@@ -3,9 +3,7 @@ package org.example.pensionat.customer.controller;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
-import org.example.pensionat.customer.model.CreateCustomerRequest;
-import org.example.pensionat.customer.model.Customer;
-import org.example.pensionat.customer.model.LoginRequest;
+import org.example.pensionat.customer.model.*;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
@@ -77,7 +75,11 @@ public class CustomerController {
                                @RequestParam String newPassword,
                                RedirectAttributes redirect) {
 
-        if (customerService.checkPassword(password, newPassword)) {
+
+        CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customerService.activeCustomer.getEmail());
+        Boolean success = restTemplate.postForObject("http://localhost:8081/api/customers/checkpassword", checkPassword, Boolean.class);
+
+        if (Boolean.TRUE.equals(success)) {
 
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
@@ -86,11 +88,21 @@ public class CustomerController {
                     phoneNumber,
                     newPassword
             );
-            customerService.updateProfile(request, true);
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request,true);
+            Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
+            System.out.println(customerService.activeCustomer.getFirstName());
+            customerService.activeCustomer = update;
+            System.out.println(customerService.activeCustomer.getFirstName());
             redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
             redirect.addFlashAttribute("color", "success");
+            System.out.println("här");
 
-        } else if (password.isBlank() && newPassword.isBlank()) {
+
+//
+//           customerService.updateProfile(request, true);
+
+
+        } else if (Boolean.FALSE.equals(success) && customerService.emptyCheck(password, newPassword)) {
 
             CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
@@ -99,11 +111,15 @@ public class CustomerController {
                     phoneNumber,
                     customerService.activeCustomer.getPassword()
             );
-            customerService.updateProfile(request, false);
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request, false);
+            Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
+//            customerService.updateProfile(request, false);
+            customerService.activeCustomer = update;
             redirect.addFlashAttribute("message", "Profilen uppdaterad");
             redirect.addFlashAttribute("color", "success");
-
-        } else {
+            System.out.println("här");
+        }
+         else {
             redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
             redirect.addFlashAttribute("color", "error");
         }
