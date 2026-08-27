@@ -23,11 +23,14 @@ public class CustomerService {
 
     public boolean emptyCheck(String password, String newPassword) {
         if (password == null || password.isBlank()) {
-            return true;
+            if (newPassword == null || newPassword.isBlank()) {
+                return true;
+            }
+
         }
-        if (newPassword == null || newPassword.isBlank()) {
-            return true;
-        }
+//        if (newPassword == null || newPassword.isBlank()) {
+//            return true;
+//        }
         return false;
     }
     public boolean checkIfActiveCustomerHasActiveBookings(Customer customer) {
