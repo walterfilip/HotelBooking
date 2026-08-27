@@ -4,28 +4,28 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity
+//@Entity
 public class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @NotBlank(message = "Förnamn måste anges")
+//    @NotBlank(message = "Förnamn måste anges")
     private String firstName;
 
-    @NotBlank(message = "Efternamn måste anges")
+//    @NotBlank(message = "Efternamn måste anges")
     private String lastName;
 
-    @NotBlank(message = "E-post måste anges")
-    @Email(message = "E-post måste vara giltig")
+//    @NotBlank(message = "E-post måste anges")
+//    @Email(message = "E-post måste vara giltig")
     private String email;
 
-    @NotBlank(message = "Telefonnummer måste anges")
+//    @NotBlank(message = "Telefonnummer måste anges")
     private String phoneNumber;
 
-    @NotBlank(message = "lösenord måste anges")
-    @Column(nullable = false)
+//    @NotBlank(message = "lösenord måste anges")
+//    @Column(nullable = false)
     private String password;
 
     public Customer() {
