@@ -1,6 +1,7 @@
 package org.example.pensionat.room.controller;
 
-import org.example.pensionat.customer.service.CustomerService;
+import org.example.pensionat.customer.CustomerClient;
+import org.example.pensionat.customer.dto.CustomerResponse;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -8,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import org.example.pensionat.room.RoomType;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 import java.time.LocalDate;
@@ -19,12 +22,12 @@ import java.time.LocalDate;
 public class RoomController {
 
     private final RoomService roomService;
-    private final CustomerService customerService;
+    private final CustomerClient customerClient;
 
-    public RoomController(RoomService roomService, CustomerService customerService) {
+    public RoomController(RoomService roomService, CustomerClient customerClient) {
 
         this.roomService = roomService;
-        this.customerService = customerService;
+        this.customerClient = customerClient;
 
     }
 
@@ -36,16 +39,23 @@ public class RoomController {
 
     @GetMapping("/search")
     public String searchRooms(
+            @SessionAttribute(value = "customerId", required = false)
+            Long customerId,
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam RoomType roomType,
             Model model) {
 
+        if (customerId != null) {
+            CustomerResponse customer= customerClient.getCustomer(customerId);
+
+            model.addAttribute("customer", customer);
+        }
+
         if (startDate.isBlank() || endDate.isBlank()) {
             model.addAttribute("errorMessage", "Du måste välja datum för både incheckning och utcheckning!");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("activeCustomer", customerService.activeCustomer);
             return "index";
         }
 
@@ -57,7 +67,6 @@ public class RoomController {
             model.addAttribute("errorMessage", "Du kan inte välja datum bakåt i tiden!");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("activeCustomer", customerService.activeCustomer);
             return "index";
         }
 
@@ -71,7 +80,6 @@ public class RoomController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("roomType", roomType);
-        model.addAttribute("activeCustomer", customerService.activeCustomer);
 
         return "rooms";
     }

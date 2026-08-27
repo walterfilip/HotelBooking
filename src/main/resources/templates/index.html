@@ -15,7 +15,7 @@
 
         <div class="date-row">
             <label>Incheckning</label>
-            <input type="date" name="startDate">
+            <input type="date" name="startDate" >
 
             <label>Utcheckning</label>
             <input type="date" name="endDate">
@@ -41,13 +41,14 @@
 </div>
 <br>
 
-<div th:if="${activeCustomer == null}">
+<div th:if="${customer == null}">
+
     <p th:if="${successMessage}" th:text="${successMessage}" style="color: green; text-align: center">
     </p>
     <form th:action="@{/customers/login}" th:object="${customer}" method="post">
         <h1 class="login-row">Logga in</h1>
         <div class="login-row">
-            <label>Användarnamn:</label>
+            <label>E-mail:</label>
             <input type="text" name="email">
         </div>
 
@@ -63,8 +64,8 @@
     </form>
 </div>
 
-<div th:if="${activeCustomer != null}">
-    <h2 class="login-row" th:text="'Inloggad som ' + ${activeCustomer.firstName}"></h2>
+<div th:if="${customer != null}">
+    <h2 class="login-row" th:text="${'Inloggad som ' + customer.firstName}"></h2>
 
     <div class="login-row">
         <a th:href="@{/customers}">

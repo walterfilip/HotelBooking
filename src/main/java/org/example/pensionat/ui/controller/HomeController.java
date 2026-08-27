@@ -1,22 +1,26 @@
 package org.example.pensionat.ui.controller;
 
-import org.example.pensionat.customer.service.CustomerService;
+import org.example.pensionat.customer.CustomerClient;
+import org.example.pensionat.customer.dto.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class
 HomeController {
 
-    private final CustomerService customerService;
+    private final CustomerClient customerClient;
 
-    public HomeController(CustomerService customerService) {
-        this.customerService = customerService;
+    public HomeController(CustomerClient customerClient) {
+        this.customerClient = customerClient;
     }
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(@SessionAttribute
+             (value = "customerId", required = false) Long customerId, Model model)
+    {
         model.addAttribute(
                 "title",
                 "Välkommen till Hotellbokning"
@@ -26,10 +30,10 @@ HomeController {
                 "Sök lediga rum och boka"
         );
 
-        model.addAttribute(
-                "activeCustomer",
-                customerService.activeCustomer
-        );
+        if (customerId != null) {
+            CustomerResponse customer = customerClient.getCustomer(customerId);
+            model.addAttribute("customer", customer);
+        }
 
         return "index";
     }

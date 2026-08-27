@@ -27,7 +27,7 @@
 
             <td>
                 <span th:text="${room.roomType.name() == 'SINGLE' ? 'Enkelrum' : 'Dubbelrum'}"></span>
-                <span th:text="' (' + ${room.description} + ')'"></span>
+                <span th:text="${' (' + room.description + ')'}"></span>
             </td>
 
             <td th:if="${room.roomType.name() == 'DOUBLE'}">
@@ -35,19 +35,19 @@
                 <input type="checkbox"
                        name="extraBed"
                        value="true"
-                       th:form="${activeCustomer == null}
-                        ? 'bookingForm-' + ${room.id}
-                        : 'loggedInBookingForm-' + ${room.id}">
+                       th:form="${customer == null
+                        ? 'bookingForm-' + room.id
+                        : 'loggedInBookingForm-' + room.id}">
             </td>
 
-            <td th:text="${room.price} + ' kr'"></td>
+            <td th:text="${room.price + ' kr'}"></td>
 
             <!-- Boka -->
             <td>
 
                 <!-- Ej inloggad -->
                 <form
-                        th:if="${activeCustomer == null}"
+                        th:if="${customer == null}"
                         th:id="'bookingForm-' + ${room.id}"
                         th:action="@{/customers/form}"
                         method="get">
@@ -71,8 +71,8 @@
 
                 <!-- Inloggad -->
                 <form
-                        th:if="${activeCustomer != null}"
-                        th:id="'loggedInBookingForm-' + ${room.id}"
+                        th:if="${customer != null}"
+                        th:id="${'loggedInBookingForm-' + room.id}"
                         th:action="@{/bookings/form}"
                         method="get">
 

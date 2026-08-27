@@ -5,6 +5,7 @@ import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.repository.BookingRepository;
+import org.example.pensionat.customer.CustomerClient;
 import org.example.pensionat.error.BadRequestException;
 import org.example.pensionat.error.NotFoundException;
 import org.example.pensionat.room.RoomType;
@@ -12,7 +13,7 @@ import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.repository.RoomRepository;
 import org.example.pensionat.utils.Validations;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 
 import java.time.temporal.ChronoUnit;
 
@@ -27,12 +28,14 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
+    private final CustomerClient customerClient;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+//    private final RestTemplate restTemplate = new RestTemplate();
 
-    public BookingService(BookingRepository bookingRepository, RoomRepository roomRepository) {
+    public BookingService(BookingRepository bookingRepository, RoomRepository roomRepository, CustomerClient customerClient) {
         this.bookingRepository = bookingRepository;
         this.roomRepository = roomRepository;
+        this.customerClient = customerClient;
     }
 
     public List<Booking> getAllBookings() {
@@ -56,6 +59,8 @@ public class BookingService {
 
     @Transactional
     public Booking createBooking(CreateBookingRequest request) {
+
+        customerClient.getCustomer(request.customerId());
 
         Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
 

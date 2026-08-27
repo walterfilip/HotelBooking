@@ -11,7 +11,7 @@
 <body>
 <h1>Kundsida</h1>
 
-<h2 th:text="'Välkommen ' + ${customer.getFirstName()}"></h2>
+<h2 th:text="${'Välkommen ' + customer.firstName()}"></h2>
 <table>
     <tr>
         <th>Bokning</th>
