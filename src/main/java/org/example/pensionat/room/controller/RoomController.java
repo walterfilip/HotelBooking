@@ -60,7 +60,7 @@ public class RoomController {
             model.addAttribute("activeCustomer", customerService.activeCustomer);
             return "index";
         }
-
+//validering måste göras här just nu går det boka bak i tid
         List<Room> availableRooms = roomService.getAvailableRooms(
                 roomType,
                 LocalDate.parse(startDate),
