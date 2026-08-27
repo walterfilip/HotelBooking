@@ -118,4 +118,20 @@ public class CustomerService {
         }
         return false;
     }
+    public boolean checkIfActiveCustomerHasActiveBookings(Customer customer) {
+//        Customer customer = activeCustomer;
+
+        if (customer == null) {
+            return false;
+        }
+        boolean hasActiveBookings = bookingRepository
+                .existsByCustomerIdAndStatus(customer.getId(), BookingStatus.ACTIVE);
+
+        if (hasActiveBookings) {
+            return true;
+        }
+        List<Booking> bookings = bookingRepository.findByCustomerId(customer.getId());
+        bookingRepository.deleteAll(bookings);
+        return false;
+    }
 }

@@ -240,11 +240,43 @@ public class CustomerController {
         return "redirect:/customers";
     }
 
+//    @PostMapping("/delete")
+//    public String deleteCustomer(Model model) {
+//        boolean deleted = customerService.deleteActiveCustomer();
+//
+//        if (!deleted) {
+//            Customer active = customerService.activeCustomer;
+//            List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
+//
+//            model.addAttribute("customer", active);
+//            model.addAttribute("bookings", currentBookings);
+//            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+//            model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
+//
+//            return "customers";
+//        }
+//        model.addAttribute("successMessage", "Ditt konto har raderats");
+//        model.addAttribute("title", "Välkommen till Hotellbokning");
+//        model.addAttribute("subtitle", "Sök lediga rum och boka");
+//        model.addAttribute("activeCustomer", customerService.activeCustomer);
+//        return "index";
+//    }
     @PostMapping("/delete")
-    public String deleteCustomer(Model model) {
-        boolean deleted = customerService.deleteActiveCustomer();
+    public String deleteCustomerFromApi(Model model) {
+        boolean hasActiveBooking = customerService.checkIfActiveCustomerHasActiveBookings(customerService.activeCustomer);
 
-        if (!deleted) {
+        if (!hasActiveBooking) {
+            Customer customerToDelete = customerService.activeCustomer;
+            restTemplate.postForObject("http://localhost:8081/api/customers/delete", customerToDelete, String.class);
+            customerService.activeCustomer = null;
+
+
+            model.addAttribute("successMessage", "Ditt konto har raderats");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("activeCustomer", customerService.activeCustomer);
+            return "index";
+        }else {
             Customer active = customerService.activeCustomer;
             List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
 
@@ -255,11 +287,7 @@ public class CustomerController {
 
             return "customers";
         }
-        model.addAttribute("successMessage", "Ditt konto har raderats");
-        model.addAttribute("title", "Välkommen till Hotellbokning");
-        model.addAttribute("subtitle", "Sök lediga rum och boka");
-        model.addAttribute("activeCustomer", customerService.activeCustomer);
-        return "index";
+
     }
 
     @GetMapping("/logout")
