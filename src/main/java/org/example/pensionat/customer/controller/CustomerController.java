@@ -384,6 +384,8 @@ public class CustomerController {
     public boolean checkIfActiveCustomerHasActiveBookings(Customer customer) {
 //        Customer customer = activeCustomer;
 
+        // skapa funktion som kopplar denna till bookingService och får returnera en bool
+
         if (customer == null) {
             return false;
         }
