@@ -7,9 +7,13 @@ import org.example.pensionat.customer.model.*;
 import org.example.pensionat.customer.service.CustomerService;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -214,31 +218,68 @@ public class CustomerController {
         return "booking-form";
     }
 
-    @PostMapping("/login")
-    public String login(
-            @RequestParam String email,
-            @RequestParam String password,
-            Model model
-    ) {
-        LoginRequest request = new LoginRequest(email, password);
+//    @PostMapping("/login")
+//    public String login(
+//            @RequestParam String email,
+//            @RequestParam String password,
+//            Model model
+//    ) {
+//        LoginRequest request = new LoginRequest(email, password);
+//
+//        Customer customer = restTemplate.postForObject(
+//                "http://localhost:8081/api/customers/login",
+//                request,
+//                Customer.class
+//        );
+//
+//        if (customer == null) {
+//            model.addAttribute("loginError", "Fel användarnman eller lösen");
+//            model.addAttribute("title", "Välkommen till Hotellbokning");
+//            model.addAttribute("subtitle", "Sök lediga rum och boka");
+//            return "index";
+//        }
+//
+//        customerService.activeCustomer = customer;
+//
+//        return "redirect:/customers";
+//    }
+@PostMapping("/login")
+public String login(@RequestParam String email, @RequestParam String password, Model model) {
+    LoginRequest request = new LoginRequest(email, password);
 
-        Customer customer = restTemplate.postForObject(
+    try {
+        ResponseEntity<Customer> response = restTemplate.postForEntity(
                 "http://localhost:8081/api/customers/login",
                 request,
                 Customer.class
         );
 
-        if (customer == null) {
-            model.addAttribute("loginError", "Fel användarnman eller lösen");
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            return "index";
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Customer customer = response.getBody();
+            customerService.activeCustomer = customer;
+            return "redirect:/customers";
         }
+//        if(response.getStatusCode() ==  HttpStatus.UNAUTHORIZED) {
+//            model.addAttribute("loginError", "Fel användarnman eller lösen");
+//            model.addAttribute("title", "Välkommen till Hotellbokning");
+//            model.addAttribute("subtitle", "Sök lediga rum och boka");
+//            return "index";
+//        }
+    } catch (HttpClientErrorException.Unauthorized e) {
+        model.addAttribute("loginError", "Fel användarnman eller lösen");
+        model.addAttribute("title", "Välkommen till Hotellbokning");
+        model.addAttribute("subtitle", "Sök lediga rum och boka");
+        return "index";
 
-        customerService.activeCustomer = customer;
-
-        return "redirect:/customers";
+    } catch (ResourceAccessException e) {
+        model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+        model.addAttribute("title", "Välkommen till Hotellbokning");
+        model.addAttribute("subtitle", "Sök lediga rum och boka");
+        return "index";
     }
+    return "redirect:/";
+}
+
 
     @PostMapping("/delete")
     public String deleteCustomerFromApi(Model model) {
