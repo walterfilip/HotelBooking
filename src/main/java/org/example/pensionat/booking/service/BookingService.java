@@ -5,7 +5,7 @@ import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.repository.BookingRepository;
-import org.example.pensionat.customer.CustomerClient;
+import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.error.BadRequestException;
 import org.example.pensionat.error.NotFoundException;
 import org.example.pensionat.room.RoomType;

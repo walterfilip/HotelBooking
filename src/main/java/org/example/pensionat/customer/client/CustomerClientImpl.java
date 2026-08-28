@@ -1,4 +1,4 @@
-package org.example.pensionat.customer;
+package org.example.pensionat.customer.client;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.example.pensionat.customer.model.UpdateCustomerRequest2;

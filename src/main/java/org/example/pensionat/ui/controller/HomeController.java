@@ -1,6 +1,6 @@
 package org.example.pensionat.ui.controller;
 
-import org.example.pensionat.customer.CustomerClient;
+import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.customer.model.CustomerResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

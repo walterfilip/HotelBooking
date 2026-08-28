@@ -11,7 +11,7 @@ import org.example.pensionat.room.service.RoomService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.example.pensionat.customer.CustomerClient;
+import org.example.pensionat.customer.client.CustomerClient;
 
 
 import java.time.LocalDate;

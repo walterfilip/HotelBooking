@@ -1,4 +1,4 @@
-package org.example.pensionat.customer;
+package org.example.pensionat.customer.client;
 
 import org.example.pensionat.customer.model.UpdateCustomerRequest2;
 import org.example.pensionat.customer.model.*;

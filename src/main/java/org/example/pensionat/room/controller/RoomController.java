@@ -1,6 +1,6 @@
 package org.example.pensionat.room.controller;
 
-import org.example.pensionat.customer.CustomerClient;
+import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.customer.model.CustomerResponse;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
