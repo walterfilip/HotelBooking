@@ -63,6 +63,15 @@ public class RoomController {
         LocalDate end = LocalDate.parse(endDate);
         LocalDate today = LocalDate.now();
 
+        if (end.isBefore(start)) {
+            model.addAttribute("errorMessage", "Utcheckningsdatum måste vara efter incheckningsdatum!");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("activeCustomer", customerService.activeCustomer);
+
+            return "index";
+        }
+
         if (start.isBefore(today) || end.isBefore(today)) {
             model.addAttribute("errorMessage", "Du kan inte välja datum bakåt i tiden!");
             model.addAttribute("title", "Välkommen till Hotellbokning");

@@ -20,12 +20,16 @@
             <label>Utcheckning</label>
             <input type="date" name="endDate">
 
-
             <button
                     th:id="'btn-' + ${booking.id}"
                     type="submit">
                 Ändra
             </button>
+
+        </div>
+
+        <div th:if="${errorMessage}" class="error-container">
+            <span th:text="${errorMessage}"></span>
         </div>
     </table>
 </form>

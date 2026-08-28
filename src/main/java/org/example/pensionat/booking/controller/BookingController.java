@@ -3,6 +3,9 @@ package org.example.pensionat.booking.controller;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.service.BookingService;
+import org.example.pensionat.customer.model.Customer;
+import org.example.pensionat.customer.service.CustomerService;
+import org.example.pensionat.error.BadRequestException;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
 
@@ -140,29 +143,44 @@ public class BookingController {
     public String changeDateBooking(
 
             @PathVariable("id") Long bookingId,
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
             Model model
     ) {
         Booking booking = bookingService.getBookingById(bookingId);
+
+        if (startDate.isBlank() || endDate.isBlank()) {
+
+            model.addAttribute("booking", booking);
+            model.addAttribute("errorMessage", "Du måste välja datum för både incheckning och utcheckning!");
+
+            return "customers-date-selection";
+
+        }
+
+        LocalDate parsedStartDate = LocalDate.parse(startDate);
+        LocalDate parsedEndDate = LocalDate.parse(endDate);
 
         CreateBookingRequest request =
                 new CreateBookingRequest(
                         booking.getCustomerId(),
                         booking.getRoom().getId(),
-                        startDate,
-                        endDate,
+                        parsedStartDate,
+                        parsedEndDate,
                         booking.isExtraBed()
                 );
+        try {
+            bookingService.changeBookingDate(request, bookingId);
+            model.addAttribute("message", "Bokning ändrad!");
 
-        bookingService.changeBookingDate(request, bookingId);
+            return "booking-result";
 
-        model.addAttribute(
-                "message",
-                "Bokning ändrad!"
-        );
+        } catch (BadRequestException exception) {
+            model.addAttribute("booking", booking);
+            model.addAttribute("errorMessage", exception.getMessage());
 
-        return "booking-result";
+            return "customers-date-selection";
+        }
     }
 }
 

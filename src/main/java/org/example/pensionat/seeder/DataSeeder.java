@@ -2,7 +2,7 @@ package org.example.pensionat.seeder;
 
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.model.Customer;
-import org.example.pensionat.customer.repository.CustomerRepository;
+//import org.example.pensionat.customer.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.example.pensionat.room.RoomType;
@@ -13,12 +13,14 @@ import org.example.pensionat.room.repository.RoomRepository;
 public class DataSeeder implements CommandLineRunner {
 
     private final RoomRepository roomRepository;
-    private final CustomerRepository customerRepository;
+//    private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
 
-    public DataSeeder(RoomRepository roomRepository, CustomerRepository customerRepository, BookingRepository bookingRepository) {
+    public DataSeeder(RoomRepository roomRepository,
+//                      CustomerRepository customerRepository,
+                      BookingRepository bookingRepository) {
         this.roomRepository = roomRepository;
-        this.customerRepository = customerRepository;
+//        this.customerRepository = customerRepository;
         this.bookingRepository = bookingRepository;
     }
 

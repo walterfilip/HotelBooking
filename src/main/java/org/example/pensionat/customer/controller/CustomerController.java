@@ -10,10 +10,14 @@ import org.example.pensionat.customer.dto.UpdateCustomerRequest;
 import org.example.pensionat.customer.model.*;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -80,31 +84,88 @@ public class CustomerController {
     }
 
     @PostMapping("/edit")
-    public String editCustomer
-            (@SessionAttribute(value = "customerId", required = false)
-             Long customerId,
-             @RequestParam String firstName,
-             @RequestParam String lastName,
-             @RequestParam String phoneNumber,
-             RedirectAttributes redirect
-            ) {
+    public String editCustomer(
+            @SessionAttribute(value = "customerId", required = false)
+            Long customerId,
+            @RequestParam String firstName,
+                               @RequestParam String lastName,
+                               @RequestParam String phoneNumber,
+                               @RequestParam String password,
+                               @RequestParam String newPassword,
+                               RedirectAttributes redirect) {
 
-        if (customerId == null) {
-            return "redirect:/";
-        }
+        CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customerService.activeCustomer.getEmail());
+        Boolean success = restTemplate.postForObject("http://localhost:8081/api/customers/checkpassword", checkPassword, Boolean.class);
 
-            UpdateCustomerRequest request = new UpdateCustomerRequest(
+        if (Boolean.TRUE.equals(success)) {
+
+            CreateCustomerRequest request = new CreateCustomerRequest(
                     firstName,
                     lastName,
-                    phoneNumber
+                    customerService.activeCustomer.getEmail(),
+                    phoneNumber,
+                    newPassword
             );
-            customerClient.updateCustomer(customerId, request);
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request,true);
+            Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
+
+            customerService.activeCustomer = update;
+
+            redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
+            redirect.addFlashAttribute("color", "success");
+
+        } else if (Boolean.FALSE.equals(success) && customerService.emptyCheck(password, newPassword)) {
+
+            CreateCustomerRequest request = new CreateCustomerRequest(
+                    firstName,
+                    lastName,
+                    customerService.activeCustomer.getEmail(),
+                    phoneNumber,
+                    customerService.activeCustomer.getPassword()
+            );
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request, false);
+            Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
+
+            customerService.activeCustomer = update;
+            customerClient.updateCustomer(customerId, updateCustomerRequest);
 
             redirect.addFlashAttribute("message", "Profilen uppdaterad");
             redirect.addFlashAttribute("color", "success");
 
+        }
+         else {
+            redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
+            redirect.addFlashAttribute("color", "error");
+        }
         return "redirect:/customers/edit";
     }
+
+//    @PostMapping("/edit")
+//    public String editCustomer
+//            (@SessionAttribute(value = "customerId", required = false)
+//             Long customerId,
+//             @RequestParam String firstName,
+//             @RequestParam String lastName,
+//             @RequestParam String phoneNumber,
+//             RedirectAttributes redirect
+//            ) {
+//
+//        if (customerId == null) {
+//            return "redirect:/";
+//        }
+//
+//        UpdateCustomerRequest request = new UpdateCustomerRequest(
+//                firstName,
+//                lastName,
+//                phoneNumber
+//        );
+//        customerClient.updateCustomer(customerId, request);
+//
+//        redirect.addFlashAttribute("message", "Profilen uppdaterad");
+//        redirect.addFlashAttribute("color", "success");
+//
+//        return "redirect:/customers/edit";
+//    }
 
     @GetMapping("/edit")
     public String showEditCustomer(@SessionAttribute
@@ -200,46 +261,96 @@ public class CustomerController {
     public String login(
             @RequestParam String email,
             @RequestParam String password,
-            HttpSession session,
             Model model
     ) {
         LoginRequest request = new LoginRequest(email, password);
 
-        CustomerResponse customer = customerClient.login(request);
+    try {
+        ResponseEntity<Customer> response = restTemplate.postForEntity(
+                "http://localhost:8081/api/customers/login",
+                request,
+                Customer.class
+        );
 
-        if (customer == null) {
-            model.addAttribute("loginError", "Fel användarnman eller lösen");
+        if (response.getStatusCode().is2xxSuccessful()) {
+            Customer customer = response.getBody();
+            customerService.activeCustomer = customer;
+            return "redirect:/customers";
+        }
+//        if(response.getStatusCode() ==  HttpStatus.UNAUTHORIZED) {
+//            model.addAttribute("loginError", "Fel användarnman eller lösen");
+//            model.addAttribute("title", "Välkommen till Hotellbokning");
+//            model.addAttribute("subtitle", "Sök lediga rum och boka");
+//            return "index";
+//        }
+    } catch (HttpClientErrorException.Unauthorized e) {
+        model.addAttribute("loginError", "Fel användarnman eller lösen");
+        model.addAttribute("title", "Välkommen till Hotellbokning");
+        model.addAttribute("subtitle", "Sök lediga rum och boka");
+        return "index";
+
+    } catch (ResourceAccessException e) {
+        model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+        model.addAttribute("title", "Välkommen till Hotellbokning");
+        model.addAttribute("subtitle", "Sök lediga rum och boka");
+        return "index";
+    }
+    return "redirect:/";
+}
+
+
+//    @PostMapping("/login")
+//    public String login(
+//            @RequestParam String email,
+//            @RequestParam String password,
+//            HttpSession session,
+//            Model model
+//    ) {
+//        LoginRequest request = new LoginRequest(email, password);
+//
+//        CustomerResponse customer = customerClient.login(request);
+//
+//        if (customer == null) {
+//            model.addAttribute("loginError", "Fel användarnman eller lösen");
+//            model.addAttribute("title", "Välkommen till Hotellbokning");
+//            model.addAttribute("subtitle", "Sök lediga rum och boka");
+//            return "index";
+//        }
+//
+//        session.setAttribute("customerId", customer.id());
+//
+//        return "redirect:/customers";
+//    }
+
+
+    @PostMapping("/delete")
+    public String deleteCustomerFromApi(Model model) {
+        boolean hasActiveBooking = customerService.checkIfActiveCustomerHasActiveBookings(customerService.activeCustomer);
+
+        if (!hasActiveBooking) {
+            Customer customerToDelete = customerService.activeCustomer;
+            restTemplate.postForObject("http://localhost:8081/api/customers/delete", customerToDelete, String.class);
+            customerService.activeCustomer = null;
+
+
+            model.addAttribute("successMessage", "Ditt konto har raderats");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("activeCustomer", customerService.activeCustomer);
             return "index";
+        }else {
+            Customer active = customerService.activeCustomer;
+            List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
+
+            model.addAttribute("customer", active);
+            model.addAttribute("bookings", currentBookings);
+            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+            model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
+
+            return "customers";
         }
 
-        session.setAttribute("customerId", customer.id());
-
-        return "redirect:/customers";
     }
-
-//    @PostMapping("/delete")
-//    public String deleteCustomer(Model model) {
-//        boolean deleted = customerService.deleteActiveCustomer();
-//
-//        if (!deleted) {
-//            Customer active = customerService.activeCustomer;
-//            List<Booking> currentBookings = bookingService.getBookingByCustomerId(active.getId());
-//
-//            model.addAttribute("customer", active);
-//            model.addAttribute("bookings", currentBookings);
-//            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
-//            model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
-//
-//            return "customers";
-//        }
-//        model.addAttribute("successMessage", "Ditt konto har raderats");
-//        model.addAttribute("title", "Välkommen till Hotellbokning");
-//        model.addAttribute("subtitle", "Sök lediga rum och boka");
-//        model.addAttribute("activeCustomer", customerService.activeCustomer);
-//        return "index";
-//    }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
