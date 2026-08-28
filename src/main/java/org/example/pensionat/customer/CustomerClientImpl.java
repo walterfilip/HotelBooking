@@ -13,7 +13,7 @@ public class CustomerClientImpl implements CustomerClient {
     private final String BASE_URL;
     private final RestTemplate restTemplate;
 
-    public CustomerClientImpl(@Value ("${sevices.customer.base-url}")
+    public CustomerClientImpl(@Value ("${services.customer.base-url}")
                               String customerServiceUrl) {
         this.restTemplate = new RestTemplate();
         this.BASE_URL = customerServiceUrl +"/api/customers";
@@ -38,15 +38,10 @@ public class CustomerClientImpl implements CustomerClient {
     }
 
     @Override
-    public CustomerResponse updateCustomer(long customerId, UpdateCustomerRequest request) {
-        return null;
-    }
+    public CustomerResponse updateCustomer(
+            long customerId, UpdateCustomerRequest request
+    ){restTemplate.put(BASE_URL+"/{id}",request,customerId);
 
-//    @Override
-//    public CustomerResponse updateCustomer(
-//            Long customerId, UpdateCustomerRequest request
-//    ){restTemplate.put(BASE_URL+"/{id}",request,customerId);
-//
-//        return getCustomer(customerId);
-//    }
+        return getCustomer(customerId);
+    }
 }
