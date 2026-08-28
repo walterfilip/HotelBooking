@@ -5,4 +5,6 @@ public record CheckPasswordRequest(
         String newPassword,
         String email
 ) {
+
+
 }
