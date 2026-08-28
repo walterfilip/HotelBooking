@@ -3,8 +3,7 @@ package org.example.pensionat.booking.controller;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.service.BookingService;
-import org.example.pensionat.customer.model.Customer;
-import org.example.pensionat.customer.service.CustomerService;
+import org.example.pensionat.customer.model.CustomerResponse;
 import org.example.pensionat.error.BadRequestException;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.example.pensionat.customer.CustomerClient;
-import org.example.pensionat.customer.dto.*;
 
 
 import java.time.LocalDate;

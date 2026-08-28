@@ -1,7 +1,7 @@
 package org.example.pensionat.room.controller;
 
 import org.example.pensionat.customer.CustomerClient;
-import org.example.pensionat.customer.dto.CustomerResponse;
+import org.example.pensionat.customer.model.CustomerResponse;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -67,7 +67,7 @@ public class RoomController {
             model.addAttribute("errorMessage", "Utcheckningsdatum måste vara efter incheckningsdatum!");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("activeCustomer", customerService.activeCustomer);
+//            model.addAttribute("activeCustomer", customerService.activeCustomer);
 
             return "index";
         }

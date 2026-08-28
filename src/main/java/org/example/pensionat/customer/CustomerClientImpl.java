@@ -1,8 +1,7 @@
 package org.example.pensionat.customer;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.example.pensionat.customer.dto.*;
-import org.example.pensionat.customer.dto.UpdateCustomerRequest;
+import org.example.pensionat.customer.model.UpdateCustomerRequest2;
 import org.example.pensionat.customer.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -39,7 +38,7 @@ public class CustomerClientImpl implements CustomerClient {
 
     @Override
     public CustomerResponse updateCustomer(
-            long customerId, UpdateCustomerRequest request
+            long customerId, UpdateCustomerRequest2 request
     ){restTemplate.put(BASE_URL+"/{id}",request,customerId);
 
         return getCustomer(customerId);

@@ -1,7 +1,6 @@
 package org.example.pensionat.customer;
 
-import org.example.pensionat.customer.dto.*;
-import org.example.pensionat.customer.dto.UpdateCustomerRequest;
+import org.example.pensionat.customer.model.UpdateCustomerRequest2;
 import org.example.pensionat.customer.model.*;
 
 public interface CustomerClient {
@@ -9,7 +8,7 @@ public interface CustomerClient {
     CustomerResponse getCustomer (long customer);
     CustomerResponse createCustomer(CreateCustomerRequest request);
 
-    CustomerResponse updateCustomer(long customerId, UpdateCustomerRequest request);
+    CustomerResponse updateCustomer(long customerId, UpdateCustomerRequest2 request);
 
     //       CustomerResponse getCustomerByEmail(String email);
     //    void deleteCustomer(long customerId);
