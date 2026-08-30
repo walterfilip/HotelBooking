@@ -1,9 +1,19 @@
 package org.example.pensionat.customer.model;
 
+import jakarta.validation.constraints.NotBlank;
 
 public record UpdateCustomerRequest(
-        CreateCustomerRequest request,
-        boolean changePassword
-){
+        @NotBlank(message = "Förnamn måste anges")
+        String firstName,
 
+        @NotBlank(message = "Efternamn måste anges")
+        String lastName,
+
+        @NotBlank(message = "Telefonnummer måste anges")
+        String phoneNumber,
+
+        String newPassword,
+
+        boolean changePassword
+) {
 }

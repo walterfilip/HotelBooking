@@ -9,6 +9,7 @@ import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.customer.model.*;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,50 +90,62 @@ public class CustomerController {
     public String editCustomer(
             @SessionAttribute(value = "customerId", required = false)
             Long customerId,
+
             @RequestParam String firstName,
-                               @RequestParam String lastName,
-                               @RequestParam String phoneNumber,
-                               @RequestParam String password,
-                               @RequestParam String newPassword,
-                               RedirectAttributes redirect) {
+            @RequestParam String lastName,
+            @RequestParam String phoneNumber,
+            @RequestParam String password,
+            @RequestParam String newPassword,
+
+            RedirectAttributes redirect
+    ) {
+
+        if (customerId == null) {
+            return "redirect:/";
+        }
+
 
         CustomerResponse customer = customerClient.getCustomer(customerId);
-        CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customer.email());
+
+        CheckPasswordRequest checkPassword = new CheckPasswordRequest(
+                password,
+                newPassword,
+                customer.email());
+
         Boolean success = restTemplate.postForObject("http://localhost:8081/api/customers/checkpassword", checkPassword, Boolean.class);
 
         if (Boolean.TRUE.equals(success)) {
 
-            CreateCustomerRequest request = new CreateCustomerRequest(
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
                     firstName,
                     lastName,
-                    customer.email(),
                     phoneNumber,
-                    newPassword
+                    newPassword,
+                    true
             );
-            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request,true);
-            Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
 
-//            customerService.activeCustomer = update;
+            customerClient.updateCustomer(
+                    customerId,
+                    updateCustomerRequest
+            );
 
             redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
             redirect.addFlashAttribute("color", "success");
 
         } else if (Boolean.FALSE.equals(success) && emptyCheck(password, newPassword)) {
 
-            Customer getPassword = restTemplate.getForObject("http://localhost:8081/api/customers/" +customer.id(), Customer.class);
-
-            CreateCustomerRequest request = new CreateCustomerRequest(
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
                     firstName,
                     lastName,
-                    customer.email(),
                     phoneNumber,
-                    getPassword.getPassword()
+                    null,
+                    false
             );
-            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(request, false);
-            Customer update = restTemplate.postForObject("http://localhost:8081/api/customers/update", updateCustomerRequest, Customer.class);
 
-
-//            customerClient.updateCustomer(customerId, updateCustomerRequest2);
+            customerClient.updateCustomer(
+                    customerId,
+                    updateCustomerRequest
+            );
 
             redirect.addFlashAttribute("message", "Profilen uppdaterad");
             redirect.addFlashAttribute("color", "success");
@@ -274,17 +287,16 @@ public class CustomerController {
         LoginRequest request = new LoginRequest(email, password);
 
     try {
-        ResponseEntity<Customer> response = restTemplate.postForEntity(
+        ResponseEntity<CustomerResponse> response = restTemplate.postForEntity(
                 "http://localhost:8081/api/customers/login",
                 request,
-                Customer.class
+                CustomerResponse.class
         );
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            Customer customer = response.getBody();
+            CustomerResponse customer = response.getBody();
 
-            session.setAttribute("customerId", customer.getId());
-//            customerService.activeCustomer = customer;
+            session.setAttribute("customerId", customer.id());
             return "redirect:/customers";
         }
 //        if(response.getStatusCode() ==  HttpStatus.UNAUTHORIZED) {
@@ -334,15 +346,22 @@ public class CustomerController {
 
 
     @PostMapping("/delete")
-    public String deleteCustomerFromApi(Model model, @SessionAttribute(value = "customerId", required = false)
-    Long customerId, HttpSession session) {
-        CustomerResponse customer = customerClient.getCustomer(customerId);
-        Customer toBeDeleted = restTemplate.getForObject("http://localhost:8081/api/customers/" +customer.id(), Customer.class);
-        boolean hasActiveBooking = checkIfActiveCustomerHasActiveBookings(toBeDeleted);
+    public String deleteCustomerFromApi(
+            Model model,
+            @SessionAttribute(value = "customerId", required = false)
+            Long customerId,
+            HttpSession session
+    ) {
+
+        if(customerId == null) {
+            return "redirect:/";
+        }
+
+        boolean hasActiveBooking = checkIfActiveCustomerHasActiveBookings(customerId);
 
         if (!hasActiveBooking) {
 //            Customer customerToDelete = customerService.activeCustomer;
-            restTemplate.postForObject("http://localhost:8081/api/customers/delete", toBeDeleted, String.class);
+            restTemplate.postForObject("http://localhost:8081/api/customers/delete", customerId, String.class);
             session.setAttribute("customerId", null);
 
 
@@ -350,12 +369,15 @@ public class CustomerController {
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
             model.addAttribute("activeCustomer", null);
-            return "index";
-        }else {
-//            Customer active = customerService.activeCustomer;
-            List<Booking> currentBookings = bookingService.getBookingByCustomerId(toBeDeleted.getId());
 
-            model.addAttribute("customer", toBeDeleted);
+            return "index";
+        }
+        else {
+
+            CustomerResponse customer = customerClient.getCustomer(customerId);
+            List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
+
+            model.addAttribute("customer", customer);
             model.addAttribute("bookings", currentBookings);
             model.addAttribute("activeStatus", BookingStatus.ACTIVE);
             model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
@@ -381,21 +403,18 @@ public class CustomerController {
         return false;
     }
 
-    public boolean checkIfActiveCustomerHasActiveBookings(Customer customer) {
+    public boolean checkIfActiveCustomerHasActiveBookings(Long customerId) {
 //        Customer customer = activeCustomer;
 
         // skapa funktion som kopplar denna till bookingService och får returnera en bool
 
-        if (customer == null) {
-            return false;
-        }
         boolean hasActiveBookings = bookingRepository
-                .existsByCustomerIdAndStatus(customer.getId(), BookingStatus.ACTIVE);
+                .existsByCustomerIdAndStatus(customerId, BookingStatus.ACTIVE);
 
         if (hasActiveBookings) {
             return true;
         }
-        List<Booking> bookings = bookingRepository.findByCustomerId(customer.getId());
+        List<Booking> bookings = bookingRepository.findByCustomerId(customerId);
         bookingRepository.deleteAll(bookings);
         return false;
     }
