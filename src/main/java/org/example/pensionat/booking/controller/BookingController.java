@@ -53,6 +53,8 @@ public class BookingController {
         }
 
         CustomerResponse customer = customerClient.getCustomer(customerId);
+
+        // lägg in en try catch
         Room room = roomService.getRoomById(roomId);
 
         int totalPrice = bookingService.getTotalPrice(
