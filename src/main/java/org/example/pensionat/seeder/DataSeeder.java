@@ -13,14 +13,11 @@ import org.example.pensionat.room.repository.RoomRepository;
 public class DataSeeder implements CommandLineRunner {
 
     private final RoomRepository roomRepository;
-//    private final CustomerRepository customerRepository;
     private final BookingRepository bookingRepository;
 
     public DataSeeder(RoomRepository roomRepository,
-//                      CustomerRepository customerRepository,
                       BookingRepository bookingRepository) {
         this.roomRepository = roomRepository;
-//        this.customerRepository = customerRepository;
         this.bookingRepository = bookingRepository;
     }
 
@@ -45,17 +42,5 @@ public class DataSeeder implements CommandLineRunner {
         } else {
             firstRoom = roomRepository.findById(1L);
         }
-//        if (customerRepository.count() == 0) {
-//            savedCustomer = customerRepository.save(new Customer("Nils", "Modig", "nils@fakemail.se", "0767777777", Encoder.hashPassword("hej")));
-//            customerRepository.save(new Customer("Peter", "Peterstein", "peter@fakemail.se", "0767777776", Encoder.hashPassword("hej")));
-//
-//        } else {
-//            savedCustomer = customerRepository.findByEmail("nils@fakemail.se");
-//        }
-//        if (bookingRepository.count() == 0) {
-//            if (firstRoom != null && savedCustomer != null) {
-//                bookingRepository.save(new Booking(savedCustomer, firstRoom, LocalDate.now(), LocalDate.now(), false, BookingStatus.ACTIVE));
-//            }
-//        }
     }
 }
