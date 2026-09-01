@@ -32,20 +32,21 @@ public class CustomerController {
     private final CustomerClient customerClient;
 
     //TEMPORÄRT
-    private final BookingRepository bookingRepository;
+//    private final BookingRepository bookingRepository;
 
-    public CustomerController(BookingService bookingService, RoomService roomService, CustomerClient customerClient, BookingRepository bookingRepository) {
+    public CustomerController(BookingService bookingService, RoomService roomService, CustomerClient customerClient
+//                              ,BookingRepository bookingRepository
+    ) {
         this.bookingService = bookingService;
         this.roomService = roomService;
         this.customerClient = customerClient;
-        this.bookingRepository = bookingRepository;
+//        this.bookingRepository = bookingRepository;
     }
 
     @GetMapping
     public String customers(
             @SessionAttribute(value = "customerId", required = false)
-            Long customerId, Model model)
-    {
+            Long customerId, Model model) {
         if (customerId == null) {
 //            return "redirect:/login";
             return "redirect:/";
@@ -150,44 +151,17 @@ public class CustomerController {
             redirect.addFlashAttribute("message", "Profilen uppdaterad");
             redirect.addFlashAttribute("color", "success");
 
-        }
-         else {
+        } else {
             redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
             redirect.addFlashAttribute("color", "error");
         }
         return "redirect:/customers/edit";
     }
 
-//    @PostMapping("/edit")
-//    public String editCustomer
-//            (@SessionAttribute(value = "customerId", required = false)
-//             Long customerId,
-//             @RequestParam String firstName,
-//             @RequestParam String lastName,
-//             @RequestParam String phoneNumber,
-//             RedirectAttributes redirect
-//            ) {
-//
-//        if (customerId == null) {
-//            return "redirect:/";
-//        }
-//
-//        UpdateCustomerRequest request = new UpdateCustomerRequest(
-//                firstName,
-//                lastName,
-//                phoneNumber
-//        );
-//        customerClient.updateCustomer(customerId, request);
-//
-//        redirect.addFlashAttribute("message", "Profilen uppdaterad");
-//        redirect.addFlashAttribute("color", "success");
-//
-//        return "redirect:/customers/edit";
-//    }
 
     @GetMapping("/edit")
     public String showEditCustomer(@SessionAttribute
-           (value = "customerId", required = false)Long customerId, Model model) {
+                                           (value = "customerId", required = false) Long customerId, Model model) {
 
         if (customerId == null) {
             return "redirect:/";
@@ -286,34 +260,34 @@ public class CustomerController {
     ) {
         LoginRequest request = new LoginRequest(email, password);
 
-    try {
-        ResponseEntity<CustomerResponse> response = restTemplate.postForEntity(
-                "http://localhost:8081/api/customers/login",
-                request,
-                CustomerResponse.class
-        );
+        try {
+            ResponseEntity<CustomerResponse> response = restTemplate.postForEntity(
+                    "http://localhost:8081/api/customers/login",
+                    request,
+                    CustomerResponse.class
+            );
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            CustomerResponse customer = response.getBody();
+            if (response.getStatusCode().is2xxSuccessful()) {
+                CustomerResponse customer = response.getBody();
 
-            session.setAttribute("customerId", customer.id());
-            return "redirect:/customers";
+                session.setAttribute("customerId", customer.id());
+                return "redirect:/customers";
+            }
+
+        } catch (HttpClientErrorException.Unauthorized e) {
+            model.addAttribute("loginError", "Fel användarnman eller lösen");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            return "index";
+
+        } catch (ResourceAccessException e) {
+            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            return "index";
         }
-
-    } catch (HttpClientErrorException.Unauthorized e) {
-        model.addAttribute("loginError", "Fel användarnman eller lösen");
-        model.addAttribute("title", "Välkommen till Hotellbokning");
-        model.addAttribute("subtitle", "Sök lediga rum och boka");
-        return "index";
-
-    } catch (ResourceAccessException e) {
-        model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
-        model.addAttribute("title", "Välkommen till Hotellbokning");
-        model.addAttribute("subtitle", "Sök lediga rum och boka");
-        return "index";
+        return "redirect:/";
     }
-    return "redirect:/";
-}
 
 
     @PostMapping("/delete")
@@ -324,7 +298,7 @@ public class CustomerController {
             HttpSession session
     ) {
 
-        if(customerId == null) {
+        if (customerId == null) {
             return "redirect:/";
         }
 
@@ -340,8 +314,7 @@ public class CustomerController {
             model.addAttribute("activeCustomer", null);
 
             return "index";
-        }
-        else {
+        } else {
 
             CustomerResponse customer = customerClient.getCustomer(customerId);
             List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
@@ -374,18 +347,20 @@ public class CustomerController {
 
     public boolean checkIfActiveCustomerHasActiveBookings(Long customerId) {
 
-        // skapa funktion som kopplar denna till bookingService och får returnera en bool
-
-        boolean hasActiveBookings = bookingRepository
-                .existsByCustomerIdAndStatus(customerId, BookingStatus.ACTIVE);
-
-        if (hasActiveBookings) {
-            return true;
-        }
-        List<Booking> bookings = bookingRepository.findByCustomerId(customerId);
-        bookingRepository.deleteAll(bookings);
-        return false;
+        return bookingService.checkIfCustomerHasActiveBookings(customerId);
     }
+//        // skapa funktion som kopplar denna till bookingService och får returnera en bool
+//
+//        boolean hasActiveBookings = bookingRepository
+//                .existsByCustomerIdAndStatus(customerId, BookingStatus.ACTIVE);
+//
+//        if (hasActiveBookings) {
+//            return true;
+//        }
+//        List<Booking> bookings = bookingRepository.findByCustomerId(customerId);
+//        bookingRepository.deleteAll(bookings);
+//        return false;
+
 }
 
 

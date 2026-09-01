@@ -143,4 +143,17 @@ public class BookingService {
     public Booking getBookingById(Long bookingId) {
         return bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
     }
+
+    public boolean checkIfCustomerHasActiveBookings(Long customerId) {
+
+        boolean hasActiveBookings = bookingRepository
+                .existsByCustomerIdAndStatus(customerId, BookingStatus.ACTIVE);
+
+        if (hasActiveBookings) {
+            return true;
+        }
+        List<Booking> bookings = bookingRepository.findByCustomerId(customerId);
+        bookingRepository.deleteAll(bookings);
+        return false;
+    }
 }
