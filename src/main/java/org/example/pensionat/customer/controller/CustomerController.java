@@ -305,7 +305,21 @@ public class CustomerController {
         boolean hasActiveBooking = checkIfActiveCustomerHasActiveBookings(customerId);
 
         if (!hasActiveBooking) {
-            restTemplate.postForObject("http://localhost:8081/api/customers/delete", customerId, String.class);
+            try {
+                restTemplate.postForObject("http://localhost:8081/api/customers/delete", customerId, String.class);
+            }catch (ResourceAccessException e) {
+//                CustomerResponse customer = customerClient.getCustomer(customerId);
+                List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
+
+//                model.addAttribute("customer", customer);
+                model.addAttribute("bookings", currentBookings);
+                model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+                model.addAttribute("deleteError", "RESOURCE ACCESS ERROR");
+
+
+                return "customers";
+            }
+
             session.setAttribute("customerId", null);
 
             model.addAttribute("successMessage", "Ditt konto har raderats");
@@ -315,11 +329,23 @@ public class CustomerController {
 
             return "index";
         } else {
+            try{
+                CustomerResponse customer = customerClient.getCustomer(customerId);
 
-            CustomerResponse customer = customerClient.getCustomer(customerId);
+                            model.addAttribute("customer", customer);
+
+            }catch (ResourceAccessException e){
+                model.addAttribute("title", "Välkommen till Hotellbokning");
+                model.addAttribute("subtitle", "Sök lediga rum och boka");
+                model.addAttribute("deleteError", "RESOURCE ACCESS ERROR");
+                model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+
+                return "index";
+            }
+
             List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
 
-            model.addAttribute("customer", customer);
+
             model.addAttribute("bookings", currentBookings);
             model.addAttribute("activeStatus", BookingStatus.ACTIVE);
             model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
