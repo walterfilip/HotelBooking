@@ -299,12 +299,7 @@ public class CustomerController {
             session.setAttribute("customerId", customer.id());
             return "redirect:/customers";
         }
-//        if(response.getStatusCode() ==  HttpStatus.UNAUTHORIZED) {
-//            model.addAttribute("loginError", "Fel användarnman eller lösen");
-//            model.addAttribute("title", "Välkommen till Hotellbokning");
-//            model.addAttribute("subtitle", "Sök lediga rum och boka");
-//            return "index";
-//        }
+
     } catch (HttpClientErrorException.Unauthorized e) {
         model.addAttribute("loginError", "Fel användarnman eller lösen");
         model.addAttribute("title", "Välkommen till Hotellbokning");
@@ -319,30 +314,6 @@ public class CustomerController {
     }
     return "redirect:/";
 }
-
-
-//    @PostMapping("/login")
-//    public String login(
-//            @RequestParam String email,
-//            @RequestParam String password,
-//            HttpSession session,
-//            Model model
-//    ) {
-//        LoginRequest request = new LoginRequest(email, password);
-//
-//        CustomerResponse customer = customerClient.login(request);
-//
-//        if (customer == null) {
-//            model.addAttribute("loginError", "Fel användarnman eller lösen");
-//            model.addAttribute("title", "Välkommen till Hotellbokning");
-//            model.addAttribute("subtitle", "Sök lediga rum och boka");
-//            return "index";
-//        }
-//
-//        session.setAttribute("customerId", customer.id());
-//
-//        return "redirect:/customers";
-//    }
 
 
     @PostMapping("/delete")
@@ -360,10 +331,8 @@ public class CustomerController {
         boolean hasActiveBooking = checkIfActiveCustomerHasActiveBookings(customerId);
 
         if (!hasActiveBooking) {
-//            Customer customerToDelete = customerService.activeCustomer;
             restTemplate.postForObject("http://localhost:8081/api/customers/delete", customerId, String.class);
             session.setAttribute("customerId", null);
-
 
             model.addAttribute("successMessage", "Ditt konto har raderats");
             model.addAttribute("title", "Välkommen till Hotellbokning");
@@ -404,7 +373,6 @@ public class CustomerController {
     }
 
     public boolean checkIfActiveCustomerHasActiveBookings(Long customerId) {
-//        Customer customer = activeCustomer;
 
         // skapa funktion som kopplar denna till bookingService och får returnera en bool
 
