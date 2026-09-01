@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 @Controller
 public class
@@ -31,8 +33,20 @@ HomeController {
         );
 
         if (customerId != null) {
-            CustomerResponse customer = customerClient.getCustomer(customerId);
-            model.addAttribute("customer", customer);
+            try {
+                CustomerResponse customer = customerClient.getCustomer(customerId);
+                model.addAttribute("customer", customer);
+            }catch (HttpClientErrorException e) {
+                model.addAttribute("customer", null);
+                System.out.println("hej");
+                return "index";
+            }catch (ResourceAccessException ex) {
+                model.addAttribute("customer", null);
+                System.out.println("eja");
+                return "index";
+            }
+
+
         }
 
         return "index";
