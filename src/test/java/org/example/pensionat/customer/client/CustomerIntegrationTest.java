@@ -2,10 +2,12 @@ package org.example.pensionat.customer.client;
 
 import org.example.pensionat.customer.model.CreateCustomerRequest;
 import org.example.pensionat.customer.model.CustomerResponse;
+import org.example.pensionat.customer.model.LoginRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +19,7 @@ public class CustomerIntegrationTest {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Test
-    void registeringCustomerShouldReturn201() throws Exception {
+    void registeringCustomerShouldReturn201(){
         CreateCustomerRequest request = new CreateCustomerRequest(
                 "Jens",
                 "Jensson",
@@ -48,6 +50,7 @@ public class CustomerIntegrationTest {
             assertEquals("0767661111", createdCustomer.phoneNumber()
             );
         } finally {
+            //Deletar bara customern från databasen efter testet, egentligen inte en riktig del av testet (går att bryta ut till ett separat test sen om man vill).
             if (createdCustomer != null) {
                 restTemplate.postForObject(
                         "http://localhost:8081/api/customers/delete",
@@ -56,5 +59,50 @@ public class CustomerIntegrationTest {
                 );
             }
         }
+    }
+
+    @Test
+    void registeringCustomerWithIncorrectEmailShouldReturn400() {
+        CreateCustomerRequest request = new CreateCustomerRequest(
+                "Gunnar",
+                "Gunnarsson",
+                "paj-epost",
+                "0767661111",
+                "hej"
+        );
+
+        HttpClientErrorException exception = assertThrows(
+                HttpClientErrorException.class,
+                () -> restTemplate.postForEntity(
+                        "http://localhost:8081/api/customers",
+                        request,
+                        CustomerResponse.class
+                )
+        );
+
+        assertEquals(400, exception.getStatusCode().value());
+    }
+
+    @Test
+    void loginWithIncorrectCredentialsShouldReturn401() {
+        LoginRequest request = new LoginRequest(
+                "finns-inte@testmail.se",
+                "fel-lösen"
+        );
+
+        //får den här Unauthorized exceptionen från logiken i CustomerService
+        HttpClientErrorException.Unauthorized exception = assertThrows(
+                HttpClientErrorException.Unauthorized.class,
+                () -> restTemplate.postForEntity(
+                        "http://localhost:8081/api/customers/login",
+                        request,
+                        CustomerResponse.class
+                )
+        );
+
+        assertEquals(
+                401,
+                exception.getStatusCode().value()
+        );
     }
 }
