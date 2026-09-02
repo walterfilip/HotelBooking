@@ -13,6 +13,7 @@ import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.repository.RoomRepository;
 import org.example.pensionat.utils.Validations;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 
 import java.time.temporal.ChronoUnit;
@@ -59,7 +60,7 @@ public class BookingService {
 
     @Transactional
     public Booking createBooking(CreateBookingRequest request) {
-
+    try{
         customerClient.getCustomer(request.customerId());
 
         Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
@@ -78,6 +79,10 @@ public class BookingService {
         );
 
         return bookingRepository.save(booking);
+    }catch (ResourceAccessException e){
+        return new Booking();
+    }
+
     }
 
     @Transactional
