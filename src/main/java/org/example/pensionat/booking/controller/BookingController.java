@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.example.pensionat.customer.client.CustomerClient;
+import org.springframework.web.client.ResourceAccessException;
 
 
 import java.time.LocalDate;
@@ -51,26 +52,40 @@ public class BookingController {
 
             return "customer-form";
         }
+        try{
+            CustomerResponse customer = customerClient.getCustomer(customerId);
 
-        CustomerResponse customer = customerClient.getCustomer(customerId);
-        Room room = roomService.getRoomById(roomId);
+            Room room = roomService.getRoomById(roomId);
 
-        int totalPrice = bookingService.getTotalPrice(
-                room,
-                LocalDate.parse(startDate),
-                LocalDate.parse(endDate),
-                extraBed
-        );
+            int totalPrice = bookingService.getTotalPrice(
+                    room,
+                    LocalDate.parse(startDate),
+                    LocalDate.parse(endDate),
+                    extraBed
+            );
 
-        model.addAttribute("customer", customer);
-        model.addAttribute("room", room);
-        model.addAttribute("roomId", roomId);
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-        model.addAttribute("extraBed", extraBed);
-        model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("customer", customer);
+            model.addAttribute("room", room);
+            model.addAttribute("roomId", roomId);
+            model.addAttribute("startDate", startDate);
+            model.addAttribute("endDate", endDate);
+            model.addAttribute("extraBed", extraBed);
+            model.addAttribute("totalPrice", totalPrice);
 
-        return "booking-form";
+            return "booking-form";
+
+
+
+        }catch (ResourceAccessException e){
+            model.addAttribute("errorMessage", "Tyvärr ligger tjänsten nere, försök igen senare");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            return "index";
+        }
+
+
+        // lägg in en try catch
+
     }
 
     @PostMapping
@@ -102,7 +117,14 @@ public class BookingController {
                         extraBed
                 );
 
-        bookingService.createBooking(request);
+        Booking b = bookingService.createBooking(request);
+
+        if (b.getCustomerId() == null ) {
+            model.addAttribute("errorMessage", "Tyvärr ligger tjänsten nere, försök igen senare");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            return "index";
+        }
 
         model.addAttribute(
                 "message",

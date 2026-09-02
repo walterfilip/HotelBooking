@@ -22,11 +22,11 @@ public class Booking {
     private Room room;
 
     @NotNull(message = "Start datum måste anges")
-    @FutureOrPresent(message = "Startdatum kan inte vara bakåt i tiden")
+//    @FutureOrPresent(message = "Startdatum kan inte vara bakåt i tiden")
     private LocalDate startDate;
 
     @NotNull(message = "Slut datum måste anges")
-    @FutureOrPresent(message = "slut datum kan inte vara bakåt i tiden")
+//    @FutureOrPresent(message = "slut datum kan inte vara bakåt i tiden")
     private LocalDate endDate;
 
     @Column(nullable = false)
