@@ -52,10 +52,9 @@ public class CustomerIntegrationTest {
         } finally {
             //Deletar bara customern från databasen efter testet, egentligen inte en riktig del av testet (går att bryta ut till ett separat test sen om man vill).
             if (createdCustomer != null) {
-                restTemplate.postForObject(
-                        "http://localhost:8081/api/customers/delete",
-                        createdCustomer.id(),
-                        String.class
+                restTemplate.delete(
+                        "http://localhost:8081/api/customers/{id}",
+                        createdCustomer.id()
                 );
             }
         }

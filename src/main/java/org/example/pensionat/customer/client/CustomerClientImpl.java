@@ -47,4 +47,10 @@ public class CustomerClientImpl implements CustomerClient {
     public void deleteCustomer(long customerId) {
         restTemplate.delete(BASE_URL + "/{id}", customerId);
     }
+
+    @Override
+    public Boolean checkPassword(CheckPasswordRequest request){
+        return restTemplate.postForObject
+                (BASE_URL+"/checkpassword",request,Boolean.class);
+    }
 }

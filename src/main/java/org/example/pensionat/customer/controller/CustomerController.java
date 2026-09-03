@@ -113,7 +113,7 @@ public class CustomerController {
                 newPassword,
                 customer.email());
 
-        Boolean success = restTemplate.postForObject("http://localhost:8081/api/customers/checkpassword", checkPassword, Boolean.class);
+        Boolean success = customerClient.checkPassword(checkPassword);
 
         if (Boolean.TRUE.equals(success)) {
 
@@ -261,18 +261,20 @@ public class CustomerController {
         LoginRequest request = new LoginRequest(email, password);
 
         try {
-            ResponseEntity<CustomerResponse> response = restTemplate.postForEntity(
-                    "http://localhost:8081/api/customers/login",
-                    request,
-                    CustomerResponse.class
-            );
+            CustomerResponse customer = customerClient.login(request);
 
-            if (response.getStatusCode().is2xxSuccessful()) {
-                CustomerResponse customer = response.getBody();
+//            ResponseEntity<CustomerResponse> response = restTemplate.postForEntity(
+//                    "http://localhost:8081/api/customers/login",
+//                    request,
+//                    CustomerResponse.class
+//            );
 
-                session.setAttribute("customerId", customer.id());
-                return "redirect:/customers";
-            }
+//            if (response.getStatusCode().is2xxSuccessful()) {
+//                CustomerResponse customer = response.getBody();
+
+            session.setAttribute("customerId", customer.id());
+            return "redirect:/customers";
+//            }
 
         } catch (HttpClientErrorException.Unauthorized e) {
             model.addAttribute("loginError", "Fel användarnman eller lösen");
@@ -286,7 +288,7 @@ public class CustomerController {
             model.addAttribute("subtitle", "Sök lediga rum och boka");
             return "index";
         }
-        return "redirect:/";
+//        return "redirect:/";
     }
 
 
@@ -306,7 +308,7 @@ public class CustomerController {
 
         if (!hasActiveBooking) {
             try {
-                restTemplate.postForObject("http://localhost:8081/api/customers/delete", customerId, String.class);
+                customerClient.deleteCustomer(customerId);
             }catch (ResourceAccessException e) {
 //                CustomerResponse customer = customerClient.getCustomer(customerId);
                 List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
