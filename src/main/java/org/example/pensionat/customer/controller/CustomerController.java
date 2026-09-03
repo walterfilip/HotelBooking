@@ -227,6 +227,7 @@ public class CustomerController {
                 password
         );
 
+        try {
         CustomerResponse customer = customerClient.createCustomer(request);
 
         session.setAttribute("customerId", customer.id());
@@ -249,6 +250,12 @@ public class CustomerController {
         model.addAttribute("totalPrice", totalPrice);
 
         return "booking-form";
+    }catch (ResourceAccessException e){
+            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            return "index";
+        }
     }
 
     @PostMapping("/login")
