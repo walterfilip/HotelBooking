@@ -268,9 +268,10 @@ public class CustomerController {
         if (email.isEmpty() || password.isEmpty()) {
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("loginError", "Fel användarnman eller lösen");
+            model.addAttribute("loginError", "Fyll i användarnamn och lösenord");
             return "index";
         }
+
         LoginRequest request = new LoginRequest(email, password);
 
         try {
@@ -291,7 +292,7 @@ public class CustomerController {
 //            }
 
         } catch (HttpClientErrorException.Unauthorized e) {
-            model.addAttribute("loginError", "Fel användarnman eller lösen");
+            model.addAttribute("loginError", "Fel användarnamn eller lösen");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
             return "index";
