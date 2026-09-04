@@ -19,6 +19,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -55,15 +56,9 @@ public class CustomerController {
         CustomerResponse customer = customerClient.getCustomer(customerId);
 
         List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
-        model.addAttribute(
-                "bookings", currentBookings
-        );
-        model.addAttribute(
-                "customer", customer
-        );
-        model.addAttribute("activeStatus",
-                BookingStatus.ACTIVE
-        );
+        model.addAttribute("bookings", currentBookings);
+        model.addAttribute("customer", customer);
+        model.addAttribute("activeStatus",BookingStatus.ACTIVE);
 
         return "customers";
     }
@@ -213,7 +208,7 @@ public class CustomerController {
             @RequestParam boolean extraBed,
             @SessionAttribute(value = "customerId", required = false)
             Long customerId,
-
+            RedirectAttributes redirect,
             HttpSession session,
             Model model
 
@@ -229,6 +224,18 @@ public class CustomerController {
 
         try {
         CustomerResponse customer = customerClient.createCustomer(request);
+        if(customerId == null) {
+            redirect.addAttribute("roomId", roomId);
+            redirect.addAttribute("startDate", startDate);
+            redirect.addAttribute("endDate", endDate);
+            redirect.addAttribute("extraBed", extraBed);
+//            model.addAttribute("roomId", roomId);
+//            model.addAttribute("startDate", startDate);
+//            model.addAttribute("endDate", endDate);
+//            model.addAttribute("extraBed", extraBed);
+
+            return "redirect:/customer-form";
+        }
 
         session.setAttribute("customerId", customer.id());
 
