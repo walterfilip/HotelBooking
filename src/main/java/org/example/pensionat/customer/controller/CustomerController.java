@@ -265,6 +265,12 @@ public class CustomerController {
             HttpSession session,
             Model model
     ) {
+        if (email.isEmpty() || password.isEmpty()) {
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("loginError", "Fel användarnman eller lösen");
+            return "index";
+        }
         LoginRequest request = new LoginRequest(email, password);
 
         try {
@@ -278,6 +284,7 @@ public class CustomerController {
 
 //            if (response.getStatusCode().is2xxSuccessful()) {
 //                CustomerResponse customer = response.getBody();
+
 
             session.setAttribute("customerId", customer.id());
             return "redirect:/customers";
