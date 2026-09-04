@@ -43,7 +43,7 @@
 
 <div th:if="${customer == null}">
 
-    <p th:if="${successMessage}" th:text="${successMessage}" style="color: green; text-align: center">
+    <p th:if="${successMessage}"  th:text="${successMessage}" style="color: green; text-align: center">
     </p>
     <form th:action="@{/customers/login}" th:object="${customer}" method="post">
         <h1 class="login-row">Logga in</h1>
@@ -56,8 +56,8 @@
             <label>Lösenord:</label>
             <input type="password" name="password">
         </div>
-        <small id="loginHelp" class="login-row text-danger" th:if="${loginError}" th:text="${loginError}"
-               style="color:red"></small>
+        <p id="loginHelp" class="error-container" th:if="${loginError}" th:text="${loginError}"
+           ></p>
         <div class="login-row">
             <button type="submit">Logga in</button>
         </div>
