@@ -224,7 +224,8 @@ public class CustomerController {
 
         try {
         CustomerResponse customer = customerClient.createCustomer(request);
-        if(customerId == null) {
+
+        if(customer.id() == null) {
             redirect.addAttribute("roomId", roomId);
             redirect.addAttribute("startDate", startDate);
             redirect.addAttribute("endDate", endDate);
@@ -234,7 +235,7 @@ public class CustomerController {
 //            model.addAttribute("endDate", endDate);
 //            model.addAttribute("extraBed", extraBed);
 
-            return "redirect:/customer-form";
+            return "redirect:/customers/form";
         }
 
         session.setAttribute("customerId", customer.id());
