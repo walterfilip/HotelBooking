@@ -207,6 +207,8 @@ public class CustomerController {
             @RequestParam String endDate,
             @RequestParam boolean extraBed,
             @SessionAttribute(value = "customerId", required = false)
+
+            //används aldrig?!?!?!?
             Long customerId,
             RedirectAttributes redirect,
             HttpSession session,
@@ -224,16 +226,11 @@ public class CustomerController {
 
         try {
         CustomerResponse customer = customerClient.createCustomer(request);
-
         if(customer.id() == null) {
             redirect.addAttribute("roomId", roomId);
             redirect.addAttribute("startDate", startDate);
             redirect.addAttribute("endDate", endDate);
             redirect.addAttribute("extraBed", extraBed);
-//            model.addAttribute("roomId", roomId);
-//            model.addAttribute("startDate", startDate);
-//            model.addAttribute("endDate", endDate);
-//            model.addAttribute("extraBed", extraBed);
 
             return "redirect:/customers/form";
         }
@@ -259,9 +256,9 @@ public class CustomerController {
 
         return "booking-form";
     }catch (ResourceAccessException e){
-            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
             return "index";
         }
     }
@@ -300,15 +297,15 @@ public class CustomerController {
 //            }
 
         } catch (HttpClientErrorException.Unauthorized e) {
-            model.addAttribute("loginError", "Fel användarnamn eller lösen");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("loginError", "Fel användarnamn eller lösen");
             return "index";
 
         } catch (ResourceAccessException e) {
-            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
             return "index";
         }
 //        return "redirect:/";
