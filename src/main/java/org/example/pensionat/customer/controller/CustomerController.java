@@ -138,10 +138,18 @@ public class CustomerController {
             return "redirect:/";
         }
 
-        CustomerResponse customer = customerClient.getCustomer(customerId);
-        model.addAttribute("customer", customer);
+        try {
+            CustomerResponse customer = customerClient.getCustomer(customerId);
+            model.addAttribute("customer", customer);
 
-        return "customer-edit";
+            return "customer-edit";
+        }catch (ResourceAccessException e) {
+            model.addAttribute("title", "Välkommen till Hotellbokning");
+            model.addAttribute("subtitle", "Sök lediga rum och boka");
+            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+
+            return "index";
+        }
     }
 
     @PostMapping
