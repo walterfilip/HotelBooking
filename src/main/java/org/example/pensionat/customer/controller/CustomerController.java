@@ -32,20 +32,29 @@ public class CustomerController {
     }
 
     @GetMapping
-    public String customers(@SessionAttribute(value = "customerId", required = false) Long customerId, Model model) {
+    public String customers(@SessionAttribute(value = "customerId", required = false) Long customerId, Model model, RedirectAttributes redirect) {
         if (customerId == null) {
 
             return "redirect:/";
         }
 
-        CustomerResponse customer = customerClient.getCustomer(customerId);
+        try {
+            CustomerResponse customer = customerClient.getCustomer(customerId);
 
-        List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
-        model.addAttribute("bookings", currentBookings);
-        model.addAttribute("customer", customer);
-        model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+            List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
+            model.addAttribute("bookings", currentBookings);
+            model.addAttribute("customer", customer);
+            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
 
-        return "customers";
+            return "customers";
+        }catch (ResourceAccessException e) {
+            redirect.addFlashAttribute("title", "Välkommen till Hotellbokning");
+            redirect.addFlashAttribute("subtitle", "Sök lediga rum och boka");
+            redirect.addFlashAttribute("loginError", "Tjänsten ligger nere för tillfället");
+
+
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/form")

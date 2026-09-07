@@ -29,7 +29,7 @@ HomeController {
                 CustomerResponse customer = customerClient.getCustomer(customerId);
                 model.addAttribute("customer", customer);
 
-            }catch (ResourceAccessException ex) {
+            }catch (ResourceAccessException e) {
                 model.addAttribute("customer", null);
 
                 return "index";
