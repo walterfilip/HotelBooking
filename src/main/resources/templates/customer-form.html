@@ -57,6 +57,8 @@
                    required>
             <small id="passwordError" class="text-danger"></small>
         </div>
+        <p id="loginHelp" class="error-container" th:if="${loginError}" th:text="${loginError}"
+        ></p>
 
         <!-- Inputs från bokningen som följer med hidden -->
         <input type="hidden"

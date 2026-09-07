@@ -232,6 +232,7 @@ public class CustomerController {
             redirect.addAttribute("endDate", endDate);
             redirect.addAttribute("extraBed", extraBed);
 
+            redirect.addFlashAttribute("loginError", "Epost är kopplat till ett nuvarande konto");
             return "redirect:/customers/form";
         }
 
