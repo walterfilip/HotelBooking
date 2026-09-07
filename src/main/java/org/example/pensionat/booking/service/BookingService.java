@@ -26,12 +26,10 @@ import java.util.List;
 public class BookingService {
 
     private static final int extra_bed_price_per_night = 200;
-
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final CustomerClient customerClient;
 
-//    private final RestTemplate restTemplate = new RestTemplate();
 
     public BookingService(BookingRepository bookingRepository, RoomRepository roomRepository, CustomerClient customerClient) {
         this.bookingRepository = bookingRepository;
@@ -60,28 +58,28 @@ public class BookingService {
 
     @Transactional
     public Booking createBooking(CreateBookingRequest request) {
-    try{
-        customerClient.getCustomer(request.customerId());
+        try {
+            customerClient.getCustomer(request.customerId());
 
-        Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
+            Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
 
-        Validations.validateDateRange(request.startDate(), request.endDate());
-        validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), null);
-        validateExtraBed(room, request.extraBed());
+            Validations.validateDateRange(request.startDate(), request.endDate());
+            validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), null);
+            validateExtraBed(room, request.extraBed());
 
-        Booking booking = new Booking(
-                request.customerId(),
-                room,
-                request.startDate(),
-                request.endDate(),
-                request.extraBed(),
-                BookingStatus.ACTIVE
-        );
+            Booking booking = new Booking(
+                    request.customerId(),
+                    room,
+                    request.startDate(),
+                    request.endDate(),
+                    request.extraBed(),
+                    BookingStatus.ACTIVE
+            );
 
-        return bookingRepository.save(booking);
-    }catch (ResourceAccessException e){
-        return new Booking();
-    }
+            return bookingRepository.save(booking);
+        } catch (ResourceAccessException e) {
+            return new Booking();
+        }
 
     }
 
@@ -111,7 +109,6 @@ public class BookingService {
     }
 
     private void validateExtraBed(Room room, boolean extraBedRequested) {
-
         if (extraBedRequested && room.getRoomType() != RoomType.DOUBLE) {
             throw new BadRequestException("Detta rum stödjer inte extrasäng");
         }
@@ -119,7 +116,6 @@ public class BookingService {
 
     @Transactional
     public Booking changeBookingDate(CreateBookingRequest request, Long bookingId) {
-
         Validations.validateDateRange(request.startDate(), request.endDate());
         validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), bookingId);
 
@@ -132,7 +128,6 @@ public class BookingService {
 
     @Transactional
     public void updateExpiredBookings() {
-
         List<Booking> bookings = bookingRepository.findAll();
 
         for (Booking booking : bookings) {
@@ -150,7 +145,6 @@ public class BookingService {
     }
 
     public boolean checkIfCustomerHasActiveBookings(Long customerId) {
-
         boolean hasActiveBookings = bookingRepository
                 .existsByCustomerIdAndStatus(customerId, BookingStatus.ACTIVE);
 

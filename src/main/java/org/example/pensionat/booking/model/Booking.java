@@ -1,7 +1,6 @@
 package org.example.pensionat.booking.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.room.model.Room;
@@ -22,11 +21,9 @@ public class Booking {
     private Room room;
 
     @NotNull(message = "Start datum måste anges")
-//    @FutureOrPresent(message = "Startdatum kan inte vara bakåt i tiden")
     private LocalDate startDate;
 
     @NotNull(message = "Slut datum måste anges")
-//    @FutureOrPresent(message = "slut datum kan inte vara bakåt i tiden")
     private LocalDate endDate;
 
     @Column(nullable = false)
@@ -59,6 +56,7 @@ public class Booking {
     public Long getCustomerId() {
         return customerId;
     }
+
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }

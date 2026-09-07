@@ -1,4 +1,3 @@
-
 package org.example.pensionat;
 
 import org.example.pensionat.booking.service.BookingService;
@@ -7,8 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.sql.SQLException;
-
 @SpringBootApplication
 public class PensionatApplication {
 
@@ -16,7 +13,6 @@ public class PensionatApplication {
         SpringApplication.run(PensionatApplication.class, args);
     }
 
-    //körs när man startar appen
     @Bean
     CommandLineRunner updateBoookings(BookingService bookingService) {
         return args -> bookingService.updateExpiredBookings();

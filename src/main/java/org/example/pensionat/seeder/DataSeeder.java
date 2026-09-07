@@ -1,8 +1,5 @@
 package org.example.pensionat.seeder;
 
-import org.example.pensionat.booking.repository.BookingRepository;
-import org.example.pensionat.customer.model.Customer;
-//import org.example.pensionat.customer.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.example.pensionat.room.RoomType;
@@ -13,18 +10,14 @@ import org.example.pensionat.room.repository.RoomRepository;
 public class DataSeeder implements CommandLineRunner {
 
     private final RoomRepository roomRepository;
-    private final BookingRepository bookingRepository;
 
-    public DataSeeder(RoomRepository roomRepository,
-                      BookingRepository bookingRepository) {
+    public DataSeeder(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
-        this.bookingRepository = bookingRepository;
     }
 
     @Override
     public void run(String... args) {
         Room firstRoom = null;
-        Customer savedCustomer = null;
 
         if (roomRepository.count() == 0) {
             firstRoom = roomRepository.save(new Room(RoomType.SINGLE, "101", "Utan fönster", 500));

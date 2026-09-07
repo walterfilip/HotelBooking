@@ -15,6 +15,7 @@ import java.util.List;
 public class BookingRestController {
 
     private final BookingService bookingService;
+
     public BookingRestController(BookingService bookingService) {
         this.bookingService = bookingService;
     }

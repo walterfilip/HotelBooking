@@ -12,45 +12,40 @@ public class CustomerClientImpl implements CustomerClient {
     private final String BASE_URL;
     private final RestTemplate restTemplate;
 
-    public CustomerClientImpl(@Value ("${services.customer.base-url}")
+    public CustomerClientImpl(@Value("${services.customer.base-url}")
                               String customerServiceUrl) {
         this.restTemplate = new RestTemplate();
-        this.BASE_URL = customerServiceUrl +"/api/customers";
+        this.BASE_URL = customerServiceUrl + "/api/customers";
     }
 
     @Override
-    public CustomerResponse login(LoginRequest request){
-        return restTemplate.postForObject
-                (BASE_URL+"/login",request,CustomerResponse.class);
+    public CustomerResponse login(LoginRequest request) {
+        return restTemplate.postForObject(BASE_URL + "/login", request, CustomerResponse.class);
     }
 
     @Override
-    public CustomerResponse getCustomer(long customerId){
-        return restTemplate.getForObject
-                (BASE_URL+"/{id}",CustomerResponse.class,customerId);
+    public CustomerResponse getCustomer(long customerId) {
+        return restTemplate.getForObject(BASE_URL + "/{id}", CustomerResponse.class, customerId);
     }
 
     @Override
-    public CustomerResponse createCustomer(CreateCustomerRequest request){
-        return restTemplate.postForObject
-                (BASE_URL,request,CustomerResponse.class);
+    public CustomerResponse createCustomer(CreateCustomerRequest request) {
+        return restTemplate.postForObject(BASE_URL, request, CustomerResponse.class);
     }
 
     @Override
-    public CustomerResponse updateCustomer(long customerId, UpdateCustomerRequest request){
+    public CustomerResponse updateCustomer(long customerId, UpdateCustomerRequest request) {
         restTemplate.put(BASE_URL + "/{id}", request, customerId);
 
         return getCustomer(customerId);
     }
 
     @Override
-    public void deleteCustomer(long customerId) {
-        restTemplate.delete(BASE_URL + "/{id}", customerId);
+    public void deleteCustomer(long customerId) {restTemplate.delete(BASE_URL + "/{id}", customerId);
     }
 
     @Override
-    public Boolean checkPassword(CheckPasswordRequest request){
-        return restTemplate.postForObject
-                (BASE_URL+"/checkpassword",request,Boolean.class);
+    public Boolean checkPassword(CheckPasswordRequest request) {
+        return restTemplate.postForObject(BASE_URL + "/checkpassword", request, Boolean.class);
     }
 }

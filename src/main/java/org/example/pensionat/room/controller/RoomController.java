@@ -26,7 +26,6 @@ public class RoomController {
     private final CustomerClient customerClient;
 
     public RoomController(RoomService roomService, CustomerClient customerClient) {
-
         this.roomService = roomService;
         this.customerClient = customerClient;
 
@@ -35,6 +34,7 @@ public class RoomController {
     @GetMapping
     public String rooms(Model model) {
         model.addAttribute("rooms", roomService.getAllRooms());
+
         return "rooms";
     }
 
@@ -48,18 +48,17 @@ public class RoomController {
             Model model) {
 
         if (customerId != null) {
-            try{
-                CustomerResponse customer= customerClient.getCustomer(customerId);
-
+            try {
+                CustomerResponse customer = customerClient.getCustomer(customerId);
                 model.addAttribute("customer", customer);
-            } catch (ResourceAccessException e){
-                System.out.println("apakaka");
+
+            } catch (ResourceAccessException e) {
                 model.addAttribute("errorMessage", "Servicen ligger nere, försök igen senare");
                 model.addAttribute("title", "Välkommen till Hotellbokning");
                 model.addAttribute("subtitle", "Sök lediga rum och boka");
+
                 return "index";
             }
-
         }
 
         if (startDate.isBlank() || endDate.isBlank()) {
@@ -77,7 +76,6 @@ public class RoomController {
             model.addAttribute("errorMessage", "Utcheckningsdatum måste vara efter incheckningsdatum!");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
-//            model.addAttribute("activeCustomer", customerService.activeCustomer);
 
             return "index";
         }
@@ -86,6 +84,7 @@ public class RoomController {
             model.addAttribute("errorMessage", "Du kan inte välja datum bakåt i tiden!");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
+
             return "index";
         }
 

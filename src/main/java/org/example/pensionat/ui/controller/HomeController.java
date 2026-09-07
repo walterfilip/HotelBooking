@@ -20,33 +20,20 @@ HomeController {
     }
 
     @GetMapping("/")
-    public String home(@SessionAttribute
-             (value = "customerId", required = false) Long customerId, Model model)
-    {
-        model.addAttribute(
-                "title",
-                "Välkommen till Hotellbokning"
-        );
-        model.addAttribute(
-                "subtitle",
-                "Sök lediga rum och boka"
-        );
+    public String home(@SessionAttribute(value = "customerId", required = false) Long customerId, Model model) {
+        model.addAttribute("title", "Välkommen till Hotellbokning");
+        model.addAttribute("subtitle", "Sök lediga rum och boka");
 
         if (customerId != null) {
             try {
                 CustomerResponse customer = customerClient.getCustomer(customerId);
                 model.addAttribute("customer", customer);
-            }catch (HttpClientErrorException e) {
-                model.addAttribute("customer", null);
-                System.out.println("hej");
-                return "index";
+
             }catch (ResourceAccessException ex) {
                 model.addAttribute("customer", null);
-                System.out.println("eja");
+
                 return "index";
             }
-
-
         }
 
         return "index";

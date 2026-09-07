@@ -52,7 +52,9 @@ public class Room {
         return roomNr;
     }
 
-    public String getDescription() {return description;}
+    public String getDescription() {
+        return description;
+    }
 
     public int getPrice() {
         return price;

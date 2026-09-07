@@ -34,7 +34,7 @@ public class BookingController {
 
     @GetMapping("/form")
     public String showBookingForm(
-            @SessionAttribute (
+            @SessionAttribute(
                     value = "customerId",
                     required = false
             ) Long customerId,
@@ -52,7 +52,7 @@ public class BookingController {
 
             return "customer-form";
         }
-        try{
+        try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
 
             Room room = roomService.getRoomById(roomId);
@@ -75,8 +75,7 @@ public class BookingController {
             return "booking-form";
 
 
-
-        }catch (ResourceAccessException e){
+        } catch (ResourceAccessException e) {
             model.addAttribute("errorMessage", "Tyvärr ligger tjänsten nere, försök igen senare");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
@@ -84,13 +83,11 @@ public class BookingController {
         }
 
 
-        // lägg in en try catch
-
     }
 
     @PostMapping
     public String createBooking(
-            @SessionAttribute( value = "customerId", required = false)
+            @SessionAttribute(value = "customerId", required = false)
             Long customerId,
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
@@ -119,54 +116,42 @@ public class BookingController {
 
         Booking b = bookingService.createBooking(request);
 
-        if (b.getCustomerId() == null ) {
+        if (b.getCustomerId() == null) {
             model.addAttribute("errorMessage", "Tyvärr ligger tjänsten nere, försök igen senare");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
             return "index";
         }
 
-        model.addAttribute(
-                "message",
-                "Bokning skapad!"
-        );
+        model.addAttribute("message", "Bokning skapad!");
 
         return "booking-result";
     }
 
     @PostMapping("/cancel/{id}")
-    public String cancelBooking(
-            @PathVariable Long id,
-            Model model
-    ) {
+    public String cancelBooking(@PathVariable Long id, Model model) {
         bookingService.cancelBooking(id);
 
-        model.addAttribute(
-                "message",
-                "Bokning avbruten!"
-        );
+        model.addAttribute("message", "Bokning avbruten!");
 
         return "booking-result";
     }
 
     @GetMapping("/changedate/{id}")
-    public String changedate(
-            @PathVariable Long id,
-            Model model
-    ) {
+    public String changedate(@PathVariable Long id, Model model) {
         Booking booking = bookingService.getBookingById(id);
         model.addAttribute("booking", booking);
+
         return "customers-date-selection";
     }
 
     @PostMapping("/changedate/{id}")
     public String changeDateBooking(
-
             @PathVariable("id") Long bookingId,
             @RequestParam String startDate,
             @RequestParam String endDate,
-            Model model
-    ) {
+            Model model) {
+
         Booking booking = bookingService.getBookingById(bookingId);
 
         if (startDate.isBlank() || endDate.isBlank()) {
