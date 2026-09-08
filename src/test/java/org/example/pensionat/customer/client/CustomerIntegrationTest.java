@@ -18,6 +18,7 @@ public class CustomerIntegrationTest {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    //201 = Created
     @Test
     void registeringCustomerShouldReturn201(){
         CreateCustomerRequest request = new CreateCustomerRequest(
@@ -52,14 +53,12 @@ public class CustomerIntegrationTest {
         } finally {
             //Deletar bara customern från databasen efter testet, egentligen inte en riktig del av testet (går att bryta ut till ett separat test sen om man vill).
             if (createdCustomer != null) {
-                restTemplate.delete(
-                        "http://localhost:8081/api/customers/{id}",
-                        createdCustomer.id()
-                );
+                restTemplate.delete("http://localhost:8081/api/customers/{id}", createdCustomer.id());
             }
         }
     }
 
+    //400 = Bad Request
     @Test
     void registeringCustomerWithIncorrectEmailShouldReturn400() {
         CreateCustomerRequest request = new CreateCustomerRequest(
@@ -72,36 +71,21 @@ public class CustomerIntegrationTest {
 
         HttpClientErrorException exception = assertThrows(
                 HttpClientErrorException.class,
-                () -> restTemplate.postForEntity(
-                        "http://localhost:8081/api/customers",
-                        request,
-                        CustomerResponse.class
-                )
-        );
+                () -> restTemplate.postForEntity("http://localhost:8081/api/customers", request, CustomerResponse.class));
 
         assertEquals(400, exception.getStatusCode().value());
     }
 
+    //401 = Unauthorized
     @Test
     void loginWithIncorrectCredentialsShouldReturn401() {
-        LoginRequest request = new LoginRequest(
-                "finns-inte@testmail.se",
-                "fel-lösen"
-        );
+        LoginRequest request = new LoginRequest("finns-inte@testmail.se", "fel-lösen");
 
         //får den här Unauthorized exceptionen från logiken i CustomerService
         HttpClientErrorException.Unauthorized exception = assertThrows(
                 HttpClientErrorException.Unauthorized.class,
-                () -> restTemplate.postForEntity(
-                        "http://localhost:8081/api/customers/login",
-                        request,
-                        CustomerResponse.class
-                )
-        );
+                () -> restTemplate.postForEntity("http://localhost:8081/api/customers/login", request, CustomerResponse.class));
 
-        assertEquals(
-                401,
-                exception.getStatusCode().value()
-        );
+        assertEquals(401, exception.getStatusCode().value());
     }
 }
