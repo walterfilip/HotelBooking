@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 
 import java.util.List;
 
@@ -275,6 +279,16 @@ public class CustomerController {
             CustomerResponse customer = customerClient.login(request);
 
             session.setAttribute("customerId", customer.id());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    customer.id(),
+                    null,
+                    List.of()
+            );
+
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+
 
             return "redirect:/customers";
 
