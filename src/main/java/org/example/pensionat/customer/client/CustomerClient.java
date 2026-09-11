@@ -12,8 +12,6 @@ public interface CustomerClient {
 
     CustomerResponse updateCustomer(long customerId, UpdateCustomerRequest request);
 
-    Boolean checkPassword(CheckPasswordRequest request);
-
     void deleteCustomer(long customerId);
 
 }

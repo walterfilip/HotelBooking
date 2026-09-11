@@ -91,50 +91,38 @@ public class CustomerController {
             @RequestParam String password,
             @RequestParam String newPassword,
             RedirectAttributes redirect,
-            Model model,
             Authentication authentication
     ) {
         Long customerId = (Long) authentication.getPrincipal();
 
-        CustomerResponse customer = customerClient.getCustomer(customerId);
+        //sätts till true om någon av fälten är fyllda
+        boolean changePassword = !password.isBlank() || !newPassword.isBlank();
 
-        CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customer.email());
+        UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
+                firstName,
+                lastName,
+                phoneNumber,
+                newPassword,
+                password,
+                changePassword
+        );
 
-        Boolean success = customerClient.checkPassword(checkPassword);
-
-        if (Boolean.TRUE.equals(success)) {
-            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
-                    firstName,
-                    lastName,
-                    phoneNumber,
-                    newPassword,
-                    true
-            );
-
+        try {
             customerClient.updateCustomer(customerId, updateCustomerRequest);
 
-            redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
+            if (changePassword) {
+                redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
+            } else {
+                redirect.addFlashAttribute("message", "Profilen uppdaterad");
+            }
+
             redirect.addFlashAttribute("color", "success");
 
-        } else if (Boolean.FALSE.equals(success) && emptyCheck(password, newPassword)) {
-
-            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
-                    firstName,
-                    lastName,
-                    phoneNumber,
-                    null,
-                    false
-            );
-
-            customerClient.updateCustomer(customerId, updateCustomerRequest);
-
-            redirect.addFlashAttribute("message", "Profilen uppdaterad");
-            redirect.addFlashAttribute("color", "success");
-
-        } else {
-            redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
+        } catch (HttpClientErrorException.BadRequest exception) {
+            redirect.addFlashAttribute("message", "Profilen uppdaterades inte. Kontrollera att du har skrivit rätt lösenord.");
             redirect.addFlashAttribute("color", "error");
         }
+
         return "redirect:/customers/edit";
     }
 
@@ -248,16 +236,14 @@ public class CustomerController {
             model.addAttribute("extraBed", extraBed);
             model.addAttribute("totalPrice", totalPrice);
 
-
         } catch (HttpClientErrorException.Conflict e) {
 
             redirect.addAttribute("roomId", roomId);
             redirect.addAttribute("startDate", startDate);
             redirect.addAttribute("endDate", endDate);
             redirect.addAttribute("extraBed", extraBed);
-            redirect.addFlashAttribute("loginError",
-                    "E-post är kopplat till ett redan existerande konto"
-            );
+            redirect.addFlashAttribute("loginError", "E-post är kopplat till ett redan existerande konto");
+
             return "redirect:/customers/form";
         }
         return "booking-form";
@@ -328,7 +314,6 @@ public class CustomerController {
 
             return "index";
         } else {
-
             CustomerResponse customer = customerClient.getCustomer(customerId);
             List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
 
@@ -338,17 +323,7 @@ public class CustomerController {
             model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
 
             return "customers";
-
         }
-    }
-
-    public boolean emptyCheck(String password, String newPassword) {
-        if (password == null || password.isBlank()) {
-            if (newPassword == null || newPassword.isBlank()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean checkIfActiveCustomerHasActiveBookings(Long customerId) {

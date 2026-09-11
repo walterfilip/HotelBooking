@@ -14,6 +14,8 @@ public record UpdateCustomerRequest(
 
         String newPassword,
 
+        String currentPassword,
+
         boolean changePassword
 ) {
 }
