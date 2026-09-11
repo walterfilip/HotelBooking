@@ -56,23 +56,14 @@ public class CustomerController {
         System.out.println("Principal: " + authentication.getPrincipal());
         System.out.println("Authorities: " + authentication.getAuthorities());
 
-        try {
-            CustomerResponse customer = customerClient.getCustomer(customerId);
+        CustomerResponse customer = customerClient.getCustomer(customerId);
 
-            List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
-            model.addAttribute("bookings", currentBookings);
-            model.addAttribute("customer", customer);
-            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+        List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
+        model.addAttribute("bookings", currentBookings);
+        model.addAttribute("customer", customer);
+        model.addAttribute("activeStatus", BookingStatus.ACTIVE);
 
-            return "customers";
-        }catch (ResourceAccessException e) {
-            redirect.addFlashAttribute("title", "Välkommen till Hotellbokning");
-            redirect.addFlashAttribute("subtitle", "Sök lediga rum och boka");
-            redirect.addFlashAttribute("loginError", "Tjänsten ligger nere för tillfället");
-
-
-            return "redirect:/";
-        }
+        return "customers";
     }
 
     @GetMapping("/form")
@@ -105,54 +96,46 @@ public class CustomerController {
     ) {
       Long customerId = (Long) authentication.getPrincipal();
 
-        try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
 
-            CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customer.email());
+        CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customer.email());
 
-            Boolean success = customerClient.checkPassword(checkPassword);
+        Boolean success = customerClient.checkPassword(checkPassword);
 
-            if (Boolean.TRUE.equals(success)) {
-                UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
-                        firstName,
-                        lastName,
-                        phoneNumber,
-                        newPassword,
-                        true
-                );
+        if (Boolean.TRUE.equals(success)) {
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    newPassword,
+                    true
+            );
 
-                customerClient.updateCustomer(customerId, updateCustomerRequest);
+            customerClient.updateCustomer(customerId, updateCustomerRequest);
 
-                redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
-                redirect.addFlashAttribute("color", "success");
+            redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
+            redirect.addFlashAttribute("color", "success");
 
-            } else if (Boolean.FALSE.equals(success) && emptyCheck(password, newPassword)) {
+        } else if (Boolean.FALSE.equals(success) && emptyCheck(password, newPassword)) {
 
-                UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
-                        firstName,
-                        lastName,
-                        phoneNumber,
-                        null,
-                        false
-                );
+            UpdateCustomerRequest updateCustomerRequest = new UpdateCustomerRequest(
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    null,
+                    false
+            );
 
-                customerClient.updateCustomer(customerId, updateCustomerRequest);
+            customerClient.updateCustomer(customerId, updateCustomerRequest);
 
-                redirect.addFlashAttribute("message", "Profilen uppdaterad");
-                redirect.addFlashAttribute("color", "success");
+            redirect.addFlashAttribute("message", "Profilen uppdaterad");
+            redirect.addFlashAttribute("color", "success");
 
-            } else {
-                redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
-                redirect.addFlashAttribute("color", "error");
-            }
-            return "redirect:/customers/edit";
-        } catch (ResourceAccessException e) {
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
-
-            return "index";
+        } else {
+            redirect.addFlashAttribute("message", "Profilen uppdaterades inte, försök igen");
+            redirect.addFlashAttribute("color", "error");
         }
+        return "redirect:/customers/edit";
     }
 
     @GetMapping("/edit")
@@ -161,18 +144,10 @@ public class CustomerController {
         System.out.println("Authentication: " + authentication.isAuthenticated());
 
 
-        try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
             model.addAttribute("customer", customer);
 
-            return "customer-edit";
-        }catch (ResourceAccessException e) {
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
-
-            return "index";
-        }
+        return "customer-edit";
     }
 
     @PostMapping
@@ -239,8 +214,7 @@ public class CustomerController {
                 phoneNumber,
                 password
         );
-
-        try {
+        try{
             CustomerResponse customer = customerClient.createCustomer(request);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -259,22 +233,22 @@ public class CustomerController {
                     httpResponse
             );
 
-            Room room = roomService.getRoomById(roomId);
+        Room room = roomService.getRoomById(roomId);
 
-            int totalPrice = bookingService.getTotalPrice(
-                    room,
-                    java.time.LocalDate.parse(startDate),
-                    java.time.LocalDate.parse(endDate),
-                    extraBed
-            );
+        int totalPrice = bookingService.getTotalPrice(
+                room,
+                java.time.LocalDate.parse(startDate),
+                java.time.LocalDate.parse(endDate),
+                extraBed
+        );
 
-            model.addAttribute("customer", customer);
-            model.addAttribute("room", room);
-            model.addAttribute("roomId", roomId);
-            model.addAttribute("startDate", startDate);
-            model.addAttribute("endDate", endDate);
-            model.addAttribute("extraBed", extraBed);
-            model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("customer", customer);
+        model.addAttribute("room", room);
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("extraBed", extraBed);
+        model.addAttribute("totalPrice", totalPrice);
 
 
         } catch (HttpClientErrorException.Conflict e) {
@@ -287,12 +261,6 @@ public class CustomerController {
                     "E-post är kopplat till ett redan existerande konto"
             );
             return  "redirect:/customers/form";
-        } catch (ResourceAccessException e) {
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
-
-            return "index";
         }
         return "booking-form";
     }
@@ -313,9 +281,7 @@ public class CustomerController {
         }
 
         LoginRequest request = new LoginRequest(email, password);
-
-        try {
-            CustomerResponse customer = customerClient.login(request);
+        CustomerResponse customer = customerClient.login(request);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     customer.id(),
@@ -334,22 +300,7 @@ public class CustomerController {
             );
 
 
-            return "redirect:/customers";
-
-        } catch (HttpClientErrorException.Unauthorized e) {
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("loginError", "Fel användarnamn eller lösen");
-
-            return "index";
-
-        } catch (ResourceAccessException e) {
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
-
-            return "index";
-        }
+        return "redirect:/customers";
     }
 
     @PostMapping("/delete")
@@ -365,15 +316,8 @@ public class CustomerController {
         boolean hasActiveBooking = checkIfActiveCustomerHasActiveBookings(customerId);
 
         if (!hasActiveBooking) {
-            try {
-                customerClient.deleteCustomer(customerId);
-            } catch (ResourceAccessException e) {
-                model.addAttribute("title", "Välkommen till Hotellbokning");
-                model.addAttribute("subtitle", "Sök lediga rum och boka");
-                model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+            customerClient.deleteCustomer(customerId);
 
-                return "index";
-            }
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(
                     httpRequest,
@@ -386,24 +330,17 @@ public class CustomerController {
 
             return "index";
         } else {
-            try {
-                CustomerResponse customer = customerClient.getCustomer(customerId);
-                List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
 
-                model.addAttribute("customer", customer);
-                model.addAttribute("bookings", currentBookings);
-                model.addAttribute("activeStatus", BookingStatus.ACTIVE);
-                model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
+            CustomerResponse customer = customerClient.getCustomer(customerId);
+            List<Booking> currentBookings = bookingService.getBookingByCustomerId(customerId);
 
-                return "customers";
+            model.addAttribute("customer", customer);
+            model.addAttribute("bookings", currentBookings);
+            model.addAttribute("activeStatus", BookingStatus.ACTIVE);
+            model.addAttribute("deleteError", "Du har aktiva bokningar, du kan inte radera ditt konto");
 
-            } catch (ResourceAccessException e) {
-                model.addAttribute("title", "Välkommen till Hotellbokning");
-                model.addAttribute("subtitle", "Sök lediga rum och boka");
-                model.addAttribute("loginError", "Tjänsten ligger nere för tillfället");
+            return "customers";
 
-                return "index";
-            }
         }
     }
 

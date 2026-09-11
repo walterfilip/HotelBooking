@@ -43,7 +43,6 @@ public class BookingController {
             Authentication authentication
     ) {
         Long customerId = (Long) authentication.getPrincipal();
-        try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
 
             Room room = roomService.getRoomById(roomId);
@@ -64,16 +63,6 @@ public class BookingController {
             model.addAttribute("totalPrice", totalPrice);
 
             return "booking-form";
-
-
-        } catch (ResourceAccessException e) {
-            model.addAttribute("errorMessage", "Tyvärr ligger tjänsten nere, försök igen senare");
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            return "index";
-        }
-
-
     }
 
     @PostMapping
@@ -96,14 +85,7 @@ public class BookingController {
                         extraBed
                 );
 
-        Booking b = bookingService.createBooking(request);
-
-        if (b.getCustomerId() == null) {
-            model.addAttribute("errorMessage", "Tyvärr ligger tjänsten nere, försök igen senare");
-            model.addAttribute("title", "Välkommen till Hotellbokning");
-            model.addAttribute("subtitle", "Sök lediga rum och boka");
-            return "index";
-        }
+        bookingService.createBooking(request);
 
         model.addAttribute("message", "Bokning skapad!");
 
