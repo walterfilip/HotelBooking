@@ -42,7 +42,7 @@ public class RoomController {
 
     @GetMapping("/search")
     public String searchRooms(
-           Authentication authentication,
+            Authentication authentication,
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam RoomType roomType,
@@ -50,8 +50,8 @@ public class RoomController {
 
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             Long customerId = (Long) authentication.getPrincipal();
-                CustomerResponse customer = customerClient.getCustomer(customerId);
-                model.addAttribute("customer", customer);
+            CustomerResponse customer = customerClient.getCustomer(customerId);
+            model.addAttribute("customer", customer);
 
         }
 

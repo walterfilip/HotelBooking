@@ -28,8 +28,8 @@ HomeController {
                 && authentication.isAuthenticated()
                 && !(authentication instanceof AnonymousAuthenticationToken)) {
             Long customerId = (Long) authentication.getPrincipal();
-                CustomerResponse customer = customerClient.getCustomer(customerId);
-                model.addAttribute("customer", customer);
+            CustomerResponse customer = customerClient.getCustomer(customerId);
+            model.addAttribute("customer", customer);
         }
 
         return "index";

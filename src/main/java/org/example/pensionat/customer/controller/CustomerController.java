@@ -94,9 +94,9 @@ public class CustomerController {
             Model model,
             Authentication authentication
     ) {
-      Long customerId = (Long) authentication.getPrincipal();
+        Long customerId = (Long) authentication.getPrincipal();
 
-            CustomerResponse customer = customerClient.getCustomer(customerId);
+        CustomerResponse customer = customerClient.getCustomer(customerId);
 
         CheckPasswordRequest checkPassword = new CheckPasswordRequest(password, newPassword, customer.email());
 
@@ -143,9 +143,8 @@ public class CustomerController {
         Long customerId = (Long) authentication.getPrincipal();
         System.out.println("Authentication: " + authentication.isAuthenticated());
 
-
-            CustomerResponse customer = customerClient.getCustomer(customerId);
-            model.addAttribute("customer", customer);
+        CustomerResponse customer = customerClient.getCustomer(customerId);
+        model.addAttribute("customer", customer);
 
         return "customer-edit";
     }
@@ -171,20 +170,20 @@ public class CustomerController {
 
         CustomerResponse customer = customerClient.createCustomer(request);
 
-       Authentication authentication = new UsernamePasswordAuthenticationToken(
-               customer.id(),
-               null,
-               List.of()
-       );
-       SecurityContext context = SecurityContextHolder.createEmptyContext();
-       context.setAuthentication(authentication);
-       SecurityContextHolder.setContext(context);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                customer.id(),
+                null,
+                List.of()
+        );
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
 
-       securityContextRepository.saveContext(
-               context,
-               httpRequest,
-               httpResponse
-       );
+        securityContextRepository.saveContext(
+                context,
+                httpRequest,
+                httpResponse
+        );
 
         return "redirect:/customers";
     }
@@ -206,7 +205,6 @@ public class CustomerController {
             HttpServletResponse httpResponse
 
     ) {
-
         CreateCustomerRequest request = new CreateCustomerRequest(
                 firstName,
                 lastName,
@@ -214,7 +212,7 @@ public class CustomerController {
                 phoneNumber,
                 password
         );
-        try{
+        try {
             CustomerResponse customer = customerClient.createCustomer(request);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -233,22 +231,22 @@ public class CustomerController {
                     httpResponse
             );
 
-        Room room = roomService.getRoomById(roomId);
+            Room room = roomService.getRoomById(roomId);
 
-        int totalPrice = bookingService.getTotalPrice(
-                room,
-                java.time.LocalDate.parse(startDate),
-                java.time.LocalDate.parse(endDate),
-                extraBed
-        );
+            int totalPrice = bookingService.getTotalPrice(
+                    room,
+                    java.time.LocalDate.parse(startDate),
+                    java.time.LocalDate.parse(endDate),
+                    extraBed
+            );
 
-        model.addAttribute("customer", customer);
-        model.addAttribute("room", room);
-        model.addAttribute("roomId", roomId);
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-        model.addAttribute("extraBed", extraBed);
-        model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("customer", customer);
+            model.addAttribute("room", room);
+            model.addAttribute("roomId", roomId);
+            model.addAttribute("startDate", startDate);
+            model.addAttribute("endDate", endDate);
+            model.addAttribute("extraBed", extraBed);
+            model.addAttribute("totalPrice", totalPrice);
 
 
         } catch (HttpClientErrorException.Conflict e) {
@@ -260,7 +258,7 @@ public class CustomerController {
             redirect.addFlashAttribute("loginError",
                     "E-post är kopplat till ett redan existerande konto"
             );
-            return  "redirect:/customers/form";
+            return "redirect:/customers/form";
         }
         return "booking-form";
     }
@@ -283,21 +281,21 @@ public class CustomerController {
         LoginRequest request = new LoginRequest(email, password);
         CustomerResponse customer = customerClient.login(request);
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    customer.id(),
-                    null,
-                    List.of()
-            );
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                customer.id(),
+                null,
+                List.of()
+        );
 
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(authentication);
-            SecurityContextHolder.setContext(context);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
 
-            securityContextRepository.saveContext(
-                    context,
-                    httpRequest,
-                    httpResponse
-            );
+        securityContextRepository.saveContext(
+                context,
+                httpRequest,
+                httpResponse
+        );
 
 
         return "redirect:/customers";
@@ -311,7 +309,7 @@ public class CustomerController {
             HttpServletResponse httpResponse
 
     ) {
-       Long customerId = (Long) authentication.getPrincipal();
+        Long customerId = (Long) authentication.getPrincipal();
 
         boolean hasActiveBooking = checkIfActiveCustomerHasActiveBookings(customerId);
 

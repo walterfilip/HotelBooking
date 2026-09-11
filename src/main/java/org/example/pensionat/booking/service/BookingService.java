@@ -58,24 +58,24 @@ public class BookingService {
 
     @Transactional
     public Booking createBooking(CreateBookingRequest request) {
-            customerClient.getCustomer(request.customerId());
+        customerClient.getCustomer(request.customerId());
 
-            Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
+        Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
 
-            Validations.validateDateRange(request.startDate(), request.endDate());
-            validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), null);
-            validateExtraBed(room, request.extraBed());
+        Validations.validateDateRange(request.startDate(), request.endDate());
+        validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), null);
+        validateExtraBed(room, request.extraBed());
 
-            Booking booking = new Booking(
-                    request.customerId(),
-                    room,
-                    request.startDate(),
-                    request.endDate(),
-                    request.extraBed(),
-                    BookingStatus.ACTIVE
-            );
+        Booking booking = new Booking(
+                request.customerId(),
+                room,
+                request.startDate(),
+                request.endDate(),
+                request.extraBed(),
+                BookingStatus.ACTIVE
+        );
 
-            return bookingRepository.save(booking);
+        return bookingRepository.save(booking);
     }
 
     @Transactional
