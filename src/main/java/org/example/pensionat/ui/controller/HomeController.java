@@ -25,15 +25,8 @@ HomeController {
         model.addAttribute("subtitle", "Sök lediga rum och boka");
 
         if (customerId != null) {
-            try {
                 CustomerResponse customer = customerClient.getCustomer(customerId);
                 model.addAttribute("customer", customer);
-
-            }catch (ResourceAccessException e) {
-                model.addAttribute("customer", null);
-
-                return "index";
-            }
         }
 
         return "index";

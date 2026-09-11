@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.example.pensionat.room.RoomType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 import java.time.LocalDate;
@@ -48,17 +47,8 @@ public class RoomController {
             Model model) {
 
         if (customerId != null) {
-            try {
-                CustomerResponse customer = customerClient.getCustomer(customerId);
-                model.addAttribute("customer", customer);
-
-            } catch (ResourceAccessException e) {
-                model.addAttribute("errorMessage", "Servicen ligger nere, försök igen senare");
-                model.addAttribute("title", "Välkommen till Hotellbokning");
-                model.addAttribute("subtitle", "Sök lediga rum och boka");
-
-                return "index";
-            }
+            CustomerResponse customer = customerClient.getCustomer(customerId);
+            model.addAttribute("customer", customer);
         }
 
         if (startDate.isBlank() || endDate.isBlank()) {

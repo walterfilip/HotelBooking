@@ -58,7 +58,6 @@ public class BookingService {
 
     @Transactional
     public Booking createBooking(CreateBookingRequest request) {
-        try {
             customerClient.getCustomer(request.customerId());
 
             Room room = roomRepository.findById(request.roomId()).orElseThrow(() -> new NotFoundException("Rummet finns inte"));
@@ -77,10 +76,6 @@ public class BookingService {
             );
 
             return bookingRepository.save(booking);
-        } catch (ResourceAccessException e) {
-            return new Booking();
-        }
-
     }
 
     @Transactional

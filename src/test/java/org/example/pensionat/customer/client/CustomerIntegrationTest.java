@@ -32,12 +32,7 @@ public class CustomerIntegrationTest {
         CustomerResponse createdCustomer = null;
 
         try {
-            ResponseEntity<CustomerResponse> response =
-                    restTemplate.postForEntity(
-                            "http://localhost:8081/api/customers",
-                            request,
-                            CustomerResponse.class
-                    );
+            ResponseEntity<CustomerResponse> response = restTemplate.postForEntity("http://localhost:8081/api/customers", request, CustomerResponse.class);
 
             assertEquals(201, response.getStatusCode().value());
 
