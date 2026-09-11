@@ -1,5 +1,7 @@
 package org.example.pensionat.customer.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
@@ -8,6 +10,7 @@ import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.customer.model.*;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +31,30 @@ public class CustomerController {
     private final BookingService bookingService;
     private final RoomService roomService;
     private final CustomerClient customerClient;
+    private final SecurityContextRepository securityContextRepository;
 
-    public CustomerController(BookingService bookingService, RoomService roomService, CustomerClient customerClient) {
+    public CustomerController(BookingService bookingService,
+                              RoomService roomService,
+                              CustomerClient customerClient,
+                              SecurityContextRepository securityContextRepository
+    ) {
         this.bookingService = bookingService;
         this.roomService = roomService;
         this.customerClient = customerClient;
+        this.securityContextRepository = securityContextRepository;
     }
 
     @GetMapping
-    public String customers(@SessionAttribute(value = "customerId", required = false) Long customerId, Model model, RedirectAttributes redirect) {
+    public String customers(
+            @SessionAttribute(value = "customerId", required = false) Long customerId,
+            Model model,
+            RedirectAttributes redirect,
+            Authentication authentication) {
+        System.out.println("Authentication: " + authentication.isAuthenticated());
+        System.out.println("Principal: " + authentication.getPrincipal());
+        System.out.println("Authorities: " + authentication.getAuthorities());
+
+
         if (customerId == null) {
 
             return "redirect:/";
@@ -264,7 +282,9 @@ public class CustomerController {
             @RequestParam String email,
             @RequestParam String password,
             HttpSession session,
-            Model model
+            Model model,
+            HttpServletRequest httpRequest,
+            HttpServletResponse httpResponse
     ) {
         if (email.isEmpty() || password.isEmpty()) {
             model.addAttribute("title", "Välkommen till Hotellbokning");
@@ -279,6 +299,7 @@ public class CustomerController {
             CustomerResponse customer = customerClient.login(request);
 
             session.setAttribute("customerId", customer.id());
+
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     customer.id(),
                     null,
@@ -288,6 +309,12 @@ public class CustomerController {
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);
+
+            securityContextRepository.saveContext(
+                    context,
+                    httpRequest,
+                    httpResponse
+            );
 
 
             return "redirect:/customers";
