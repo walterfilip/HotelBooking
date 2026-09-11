@@ -7,6 +7,7 @@ import org.example.pensionat.booking.model.CreateBookingRequest;
 import org.example.pensionat.booking.repository.BookingRepository;
 import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.error.BadRequestException;
+import org.example.pensionat.error.ForbiddenException;
 import org.example.pensionat.error.NotFoundException;
 import org.example.pensionat.room.RoomType;
 import org.example.pensionat.room.model.Room;
@@ -79,9 +80,9 @@ public class BookingService {
     }
 
     @Transactional
-    public Booking cancelBooking(Long bookingId) {
+    public Booking cancelBooking(Long bookingId, Long customerId) {
 
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
+        Booking booking = getBookingById(bookingId, customerId);
 
         booking.setStatus(BookingStatus.CANCELLED);
         return bookingRepository.save(booking);
@@ -110,11 +111,12 @@ public class BookingService {
     }
 
     @Transactional
-    public Booking changeBookingDate(CreateBookingRequest request, Long bookingId) {
+    public Booking changeBookingDate(CreateBookingRequest request, Long bookingId, Long customerId) {
+        Booking booking = getBookingById(bookingId, customerId);
+
         Validations.validateDateRange(request.startDate(), request.endDate());
         validateRoomAvailability(request.roomId(), request.startDate(), request.endDate(), bookingId);
 
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
         booking.setStartDate(request.startDate());
         booking.setEndDate(request.endDate());
 
@@ -135,8 +137,14 @@ public class BookingService {
         bookingRepository.saveAll(bookings);
     }
 
-    public Booking getBookingById(Long bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
+    public Booking getBookingById(Long bookingId, Long customerId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking finns inte"));
+
+        if (!booking.getCustomerId().equals(customerId)) {
+            throw new ForbiddenException("Du har inte behörighet att hantera den här bokningen");
+        }
+
+        return booking;
     }
 
     public boolean checkIfCustomerHasActiveBookings(Long customerId) {

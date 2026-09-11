@@ -58,4 +58,16 @@ public class GlobalExceptionHandler {
 
         return modelAndView;
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ModelAndView handleForbidden(ForbiddenException exception) {
+        ModelAndView modelAndView = new ModelAndView("index");
+
+        modelAndView.setStatus(HttpStatus.FORBIDDEN);
+        modelAndView.addObject("title", "Välkommen till Hotellbokning");
+        modelAndView.addObject("subtitle", "Sök lediga rum och boka");
+        modelAndView.addObject("errorMessage", exception.getMessage());
+
+        return modelAndView;
+    }
 }

@@ -69,8 +69,7 @@ public class BookingController {
             @RequestParam LocalDate endDate,
             @RequestParam(defaultValue = "false") boolean extraBed,
             Model model,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
         Long customerId = (Long) authentication.getPrincipal();
 
         CreateBookingRequest request =
@@ -81,7 +80,6 @@ public class BookingController {
                         endDate,
                         extraBed
                 );
-
         bookingService.createBooking(request);
 
         model.addAttribute("message", "Bokning skapad!");
@@ -90,8 +88,10 @@ public class BookingController {
     }
 
     @PostMapping("/cancel/{id}")
-    public String cancelBooking(@PathVariable Long id, Model model) {
-        bookingService.cancelBooking(id);
+    public String cancelBooking(@PathVariable Long bookingId, Model model, Authentication authentication) {
+        Long customerId = (Long) authentication.getPrincipal();
+
+        bookingService.cancelBooking(bookingId, customerId);
 
         model.addAttribute("message", "Bokning avbruten!");
 
@@ -99,8 +99,9 @@ public class BookingController {
     }
 
     @GetMapping("/changedate/{id}")
-    public String changedate(@PathVariable Long id, Model model) {
-        Booking booking = bookingService.getBookingById(id);
+    public String changeDate(@PathVariable Long bookingId, Model model, Authentication authentication) {
+        Long customerId = (Long) authentication.getPrincipal();
+        Booking booking = bookingService.getBookingById(bookingId, customerId);
         model.addAttribute("booking", booking);
 
         return "customers-date-selection";
@@ -111,9 +112,10 @@ public class BookingController {
             @PathVariable("id") Long bookingId,
             @RequestParam String startDate,
             @RequestParam String endDate,
-            Model model) {
+            Model model, Authentication authentication) {
+        Long customerId = (Long) authentication.getPrincipal();
 
-        Booking booking = bookingService.getBookingById(bookingId);
+        Booking booking = bookingService.getBookingById(bookingId, customerId);
 
         if (startDate.isBlank() || endDate.isBlank()) {
 
@@ -136,7 +138,7 @@ public class BookingController {
                         booking.isExtraBed()
                 );
         try {
-            bookingService.changeBookingDate(request, bookingId);
+            bookingService.changeBookingDate(request, bookingId, customerId);
             model.addAttribute("message", "Bokning ändrad!");
 
             return "booking-result";
