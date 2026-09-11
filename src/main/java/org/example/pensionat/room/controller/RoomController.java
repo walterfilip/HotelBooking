@@ -4,6 +4,8 @@ import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.customer.model.CustomerResponse;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.example.pensionat.room.RoomType;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
@@ -40,14 +41,14 @@ public class RoomController {
 
     @GetMapping("/search")
     public String searchRooms(
-            @SessionAttribute(value = "customerId", required = false)
-            Long customerId,
+           Authentication authentication,
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam RoomType roomType,
             Model model) {
 
-        if (customerId != null) {
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            Long customerId = (Long) authentication.getPrincipal();
             try {
                 CustomerResponse customer = customerClient.getCustomer(customerId);
                 model.addAttribute("customer", customer);

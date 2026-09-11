@@ -24,9 +24,16 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/images/**",
-                                "/customers/login"
+                                "/customers/login",
+                                "/rooms/search",
+                                "/customers/form",
+                                "/customers/booking"
                         ).permitAll()
                         .anyRequest().authenticated()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/customers/logout")
+                        .logoutSuccessUrl("/")
                 );
         return http.build();
     }

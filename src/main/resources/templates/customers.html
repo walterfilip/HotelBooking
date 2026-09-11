@@ -76,9 +76,12 @@
     <a th:href="@{/}">
         <button type="button">Till startsidan</button>
     </a>
-    <a th:href="@{/customers/logout}">
-        <button type="button">Logga ut</button>
-    </a>
+    <form th:action="@{/customers/logout}" method="post">
+        <input type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}">
+        <button type="submit">Logga ut</button>
+    </form>
 
     <form th:action="@{/customers/delete}" method="post">
         <button type="submit">Radera konto</button>

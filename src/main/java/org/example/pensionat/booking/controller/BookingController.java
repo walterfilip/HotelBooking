@@ -8,6 +8,7 @@ import org.example.pensionat.error.BadRequestException;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,24 +35,14 @@ public class BookingController {
 
     @GetMapping("/form")
     public String showBookingForm(
-            @SessionAttribute(
-                    value = "customerId",
-                    required = false
-            ) Long customerId,
             @RequestParam Long roomId,
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam(defaultValue = "false") boolean extraBed,
-            Model model
+            Model model,
+            Authentication authentication
     ) {
-        if (customerId == null) {
-            model.addAttribute("roomId", roomId);
-            model.addAttribute("startDate", startDate);
-            model.addAttribute("endDate", endDate);
-            model.addAttribute("extraBed", extraBed);
-
-            return "customer-form";
-        }
+        Long customerId = (Long) authentication.getPrincipal();
         try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
 
@@ -87,23 +78,14 @@ public class BookingController {
 
     @PostMapping
     public String createBooking(
-            @SessionAttribute(value = "customerId", required = false)
-            Long customerId,
             @RequestParam Long roomId,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate,
             @RequestParam(defaultValue = "false") boolean extraBed,
-            Model model
+            Model model,
+            Authentication authentication
     ) {
-
-        if (customerId == null) {
-            model.addAttribute("roomId", roomId);
-            model.addAttribute("startDate", startDate);
-            model.addAttribute("endDate", endDate);
-            model.addAttribute("extraBed", extraBed);
-
-            return "customer-form";
-        }
+        Long customerId = (Long) authentication.getPrincipal();
 
         CreateBookingRequest request =
                 new CreateBookingRequest(

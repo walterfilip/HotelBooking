@@ -2,7 +2,7 @@ package org.example.pensionat.customer.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+
 import org.example.pensionat.booking.BookingStatus;
 import org.example.pensionat.booking.model.Booking;
 import org.example.pensionat.booking.service.BookingService;
@@ -10,6 +10,7 @@ import org.example.pensionat.customer.client.CustomerClient;
 import org.example.pensionat.customer.model.*;
 import org.example.pensionat.room.model.Room;
 import org.example.pensionat.room.service.RoomService;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,19 +47,14 @@ public class CustomerController {
 
     @GetMapping
     public String customers(
-            @SessionAttribute(value = "customerId", required = false) Long customerId,
             Model model,
             RedirectAttributes redirect,
             Authentication authentication) {
+
+        Long customerId = (Long) authentication.getPrincipal();
         System.out.println("Authentication: " + authentication.isAuthenticated());
         System.out.println("Principal: " + authentication.getPrincipal());
         System.out.println("Authorities: " + authentication.getAuthorities());
-
-
-        if (customerId == null) {
-
-            return "redirect:/";
-        }
 
         try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
@@ -98,20 +94,16 @@ public class CustomerController {
 
     @PostMapping("/edit")
     public String editCustomer(
-            @SessionAttribute(value = "customerId", required = false)
-            Long customerId,
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String phoneNumber,
             @RequestParam String password,
             @RequestParam String newPassword,
             RedirectAttributes redirect,
-            Model model
+            Model model,
+            Authentication authentication
     ) {
-
-        if (customerId == null) {
-            return "redirect:/";
-        }
+      Long customerId = (Long) authentication.getPrincipal();
 
         try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
@@ -164,10 +156,10 @@ public class CustomerController {
     }
 
     @GetMapping("/edit")
-    public String showEditCustomer(@SessionAttribute(value = "customerId", required = false) Long customerId, Model model) {
-        if (customerId == null) {
-            return "redirect:/";
-        }
+    public String showEditCustomer(Authentication authentication, Model model) {
+        Long customerId = (Long) authentication.getPrincipal();
+        System.out.println("Authentication: " + authentication.isAuthenticated());
+
 
         try {
             CustomerResponse customer = customerClient.getCustomer(customerId);
@@ -190,7 +182,8 @@ public class CustomerController {
             @RequestParam String email,
             @RequestParam String phoneNumber,
             @RequestParam String password,
-            HttpSession session
+            HttpServletRequest httpRequest,
+            HttpServletResponse httpResponse
     ) {
 
         CreateCustomerRequest request = new CreateCustomerRequest(
@@ -203,7 +196,20 @@ public class CustomerController {
 
         CustomerResponse customer = customerClient.createCustomer(request);
 
-        session.setAttribute("customerId", customer.id());
+       Authentication authentication = new UsernamePasswordAuthenticationToken(
+               customer.id(),
+               null,
+               List.of()
+       );
+       SecurityContext context = SecurityContextHolder.createEmptyContext();
+       context.setAuthentication(authentication);
+       SecurityContextHolder.setContext(context);
+
+       securityContextRepository.saveContext(
+               context,
+               httpRequest,
+               httpResponse
+       );
 
         return "redirect:/customers";
     }
@@ -219,12 +225,10 @@ public class CustomerController {
             @RequestParam String startDate,
             @RequestParam String endDate,
             @RequestParam boolean extraBed,
-            @SessionAttribute(value = "customerId", required = false)
-            //??
-            Long customerId,
             RedirectAttributes redirect,
-            HttpSession session,
-            Model model
+            Model model,
+            HttpServletRequest httpRequest,
+            HttpServletResponse httpResponse
 
     ) {
 
@@ -238,17 +242,22 @@ public class CustomerController {
 
         try {
             CustomerResponse customer = customerClient.createCustomer(request);
-            if (customer.id() == null) {
-                redirect.addAttribute("roomId", roomId);
-                redirect.addAttribute("startDate", startDate);
-                redirect.addAttribute("endDate", endDate);
-                redirect.addAttribute("extraBed", extraBed);
-                redirect.addFlashAttribute("loginError", "E-post är kopplat till ett redan existerande konto");
 
-                return "redirect:/customers/form";
-            }
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    customer.id(),
+                    null,
+                    List.of()
+            );
 
-            session.setAttribute("customerId", customer.id());
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+
+            securityContextRepository.saveContext(
+                    context,
+                    httpRequest,
+                    httpResponse
+            );
 
             Room room = roomService.getRoomById(roomId);
 
@@ -267,7 +276,17 @@ public class CustomerController {
             model.addAttribute("extraBed", extraBed);
             model.addAttribute("totalPrice", totalPrice);
 
-            return "booking-form";
+
+        } catch (HttpClientErrorException.Conflict e) {
+
+            redirect.addAttribute("roomId", roomId);
+            redirect.addAttribute("startDate", startDate);
+            redirect.addAttribute("endDate", endDate);
+            redirect.addAttribute("extraBed", extraBed);
+            redirect.addFlashAttribute("loginError",
+                    "E-post är kopplat till ett redan existerande konto"
+            );
+            return  "redirect:/customers/form";
         } catch (ResourceAccessException e) {
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
@@ -275,13 +294,13 @@ public class CustomerController {
 
             return "index";
         }
+        return "booking-form";
     }
 
     @PostMapping("/login")
     public String login(
             @RequestParam String email,
             @RequestParam String password,
-            HttpSession session,
             Model model,
             HttpServletRequest httpRequest,
             HttpServletResponse httpResponse
@@ -297,8 +316,6 @@ public class CustomerController {
 
         try {
             CustomerResponse customer = customerClient.login(request);
-
-            session.setAttribute("customerId", customer.id());
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     customer.id(),
@@ -338,13 +355,12 @@ public class CustomerController {
     @PostMapping("/delete")
     public String deleteCustomer(
             Model model,
-            @SessionAttribute(value = "customerId", required = false)
-            Long customerId,
-            HttpSession session
+            Authentication authentication,
+            HttpServletRequest httpRequest,
+            HttpServletResponse httpResponse
+
     ) {
-        if (customerId == null) {
-            return "redirect:/";
-        }
+       Long customerId = (Long) authentication.getPrincipal();
 
         boolean hasActiveBooking = checkIfActiveCustomerHasActiveBookings(customerId);
 
@@ -358,7 +374,12 @@ public class CustomerController {
 
                 return "index";
             }
-            session.setAttribute("customerId", null);
+            SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+            logoutHandler.logout(
+                    httpRequest,
+                    httpResponse,
+                    authentication
+            );
             model.addAttribute("successMessage", "Ditt konto har raderats");
             model.addAttribute("title", "Välkommen till Hotellbokning");
             model.addAttribute("subtitle", "Sök lediga rum och boka");
@@ -384,12 +405,6 @@ public class CustomerController {
                 return "index";
             }
         }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
     }
 
     public boolean emptyCheck(String password, String newPassword) {
