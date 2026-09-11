@@ -91,7 +91,8 @@ public class CustomerController {
             @RequestParam String password,
             @RequestParam String newPassword,
             RedirectAttributes redirect,
-            Authentication authentication
+            Authentication authentication,
+            HttpServletRequest httpRequest
     ) {
         Long customerId = (Long) authentication.getPrincipal();
 
@@ -108,7 +109,10 @@ public class CustomerController {
         );
 
         try {
-            customerClient.updateCustomer(customerId, updateCustomerRequest);
+            CustomerResponse updatedCustomer = customerClient.updateCustomer(customerId, updateCustomerRequest);
+
+            //spara namnet för frontend/enkel error hantering
+            httpRequest.getSession().setAttribute("customerFirstName", updatedCustomer.firstName());
 
             if (changePassword) {
                 redirect.addFlashAttribute("message", "Profilen uppdaterad och lösenord ändrat");
@@ -267,6 +271,9 @@ public class CustomerController {
         LoginRequest request = new LoginRequest(email, password);
         CustomerResponse customer = customerClient.login(request);
 
+        //spara namnet för frontend/enkel error hantering
+        httpRequest.getSession().setAttribute("customerFirstName", customer.firstName());
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 customer.id(),
                 null,
@@ -282,7 +289,6 @@ public class CustomerController {
                 httpRequest,
                 httpResponse
         );
-
 
         return "redirect:/customers";
     }

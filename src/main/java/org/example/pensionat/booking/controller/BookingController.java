@@ -88,10 +88,10 @@ public class BookingController {
     }
 
     @PostMapping("/cancel/{id}")
-    public String cancelBooking(@PathVariable Long bookingId, Model model, Authentication authentication) {
+    public String cancelBooking(@PathVariable Long id, Model model, Authentication authentication) {
         Long customerId = (Long) authentication.getPrincipal();
 
-        bookingService.cancelBooking(bookingId, customerId);
+        bookingService.cancelBooking(id, customerId);
 
         model.addAttribute("message", "Bokning avbruten!");
 
@@ -99,9 +99,9 @@ public class BookingController {
     }
 
     @GetMapping("/changedate/{id}")
-    public String changeDate(@PathVariable Long bookingId, Model model, Authentication authentication) {
+    public String changeDate(@PathVariable Long id, Model model, Authentication authentication) {
         Long customerId = (Long) authentication.getPrincipal();
-        Booking booking = bookingService.getBookingById(bookingId, customerId);
+        Booking booking = bookingService.getBookingById(id, customerId);
         model.addAttribute("booking", booking);
 
         return "customers-date-selection";
@@ -109,13 +109,13 @@ public class BookingController {
 
     @PostMapping("/changedate/{id}")
     public String changeDateBooking(
-            @PathVariable("id") Long bookingId,
+            @PathVariable("id") Long id,
             @RequestParam String startDate,
             @RequestParam String endDate,
             Model model, Authentication authentication) {
         Long customerId = (Long) authentication.getPrincipal();
 
-        Booking booking = bookingService.getBookingById(bookingId, customerId);
+        Booking booking = bookingService.getBookingById(id, customerId);
 
         if (startDate.isBlank() || endDate.isBlank()) {
 
@@ -138,7 +138,7 @@ public class BookingController {
                         booking.isExtraBed()
                 );
         try {
-            bookingService.changeBookingDate(request, bookingId, customerId);
+            bookingService.changeBookingDate(request, id, customerId);
             model.addAttribute("message", "Bokning ändrad!");
 
             return "booking-result";

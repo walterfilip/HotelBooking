@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="sv" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="sv"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Hotellbokning</title>
@@ -41,7 +42,7 @@
 </div>
 <br>
 
-<div th:if="${customer == null}">
+<div sec:authorize="isAnonymous()">
 
     <p th:if="${successMessage}"  th:text="${successMessage}" style="color: green; text-align: center">
     </p>
@@ -67,8 +68,8 @@
     </form>
 </div>
 
-<div th:if="${customer != null}">
-    <h2 class="login-row" th:text="${'Inloggad som ' + customer.firstName}"></h2>
+<div sec:authorize="isAuthenticated()">
+    <h2 class="login-row" th:text="${session.customerFirstName != null? 'Inloggad som ' + session.customerFirstName: 'Du är inloggad'}"></h2>
 
     <div class="login-row">
         <a th:href="@{/customers}">
