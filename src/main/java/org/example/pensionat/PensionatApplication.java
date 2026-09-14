@@ -13,6 +13,8 @@ public class PensionatApplication {
         SpringApplication.run(PensionatApplication.class, args);
     }
 
+    //pull request test
+
     @Bean
     CommandLineRunner updateBoookings(BookingService bookingService) {
         return args -> bookingService.updateExpiredBookings();
