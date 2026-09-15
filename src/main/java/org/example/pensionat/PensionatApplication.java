@@ -14,6 +14,7 @@ public class PensionatApplication {
     }
 
     //pull request test
+    // Test
 
     @Bean
     CommandLineRunner updateBoookings(BookingService bookingService) {
